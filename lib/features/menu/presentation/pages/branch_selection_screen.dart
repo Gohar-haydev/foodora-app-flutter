@@ -161,7 +161,12 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                   }
 
                   return ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: const EdgeInsets.only(
+                      top: 24.0,
+                      left: 24.0,
+                      right: 24.0,
+                      bottom: 50.0, // Add bottom padding to avoid cart button overlap
+                    ),
                     itemCount: viewModel.branches.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 16),
                     itemBuilder: (context, index) {
