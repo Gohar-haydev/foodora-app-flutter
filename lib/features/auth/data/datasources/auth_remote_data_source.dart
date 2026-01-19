@@ -23,6 +23,8 @@ abstract class AuthRemoteDataSource {
   });
   Future<Result<void>> forgotPassword(String email);
   Future<Result<void>> resetPassword({
+    required String otp,
+    required String email,
     required String password,
     required String confirmPassword,
   });
@@ -154,16 +156,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<Result<void>> resetPassword({
-    // required String token,
-    // required String email,
+    required String otp,
+    required String email,
     required String password,
     required String confirmPassword,
   }) async {
     return await apiService.post<void>(
       endpoint: '/auth/reset-password',
       body: {
-        // 'token': token,
-        // 'email': email,
+        'otp': otp,
+        'email': email,
         'password': password,
         'password_confirmation': confirmPassword,
       },

@@ -172,7 +172,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                         }
 
                         final success = await viewModel.resetPassword(
-                          token: token,
+                          otp: token,
                           email: email,
                           password: newPass,
                           confirmPassword: confirmPass,

@@ -275,7 +275,7 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<bool> resetPassword({
-    required String token,
+    required String otp,
     required String email,
     required String password,
     required String confirmPassword,
@@ -285,8 +285,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     final result = await resetPasswordUseCase(
-      // token: token,
-      // email: email,
+      otp: otp,
+      email: email,
       password: password,
       confirmPassword: confirmPassword,
     );
