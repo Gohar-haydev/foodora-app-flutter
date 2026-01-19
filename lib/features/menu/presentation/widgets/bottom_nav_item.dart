@@ -24,14 +24,16 @@ class BottomNavItem extends StatelessWidget {
           Icon(
             icon,
             color: Colors.white,
-            size: 24,
+            size: isActive ? 26 : 24,
+            weight: isActive ? 700 : 400,
           ),
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: TextStyle(
+              fontSize: isActive ? 13 : 12,
               color: Colors.white,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
           ),
         ],

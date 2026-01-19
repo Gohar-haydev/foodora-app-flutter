@@ -161,15 +161,17 @@ class _MainLayoutState extends State<MainLayout> {
                     children: [
                       Icon(
                         Icons.shopping_cart_outlined,
-                        color: _currentIndex == 2 ? Colors.white : Colors.white70,
-                        size: 26,
+                        color: Colors.white,
+                        size: _currentIndex == 2 ? 28 : 26,
+                        weight: _currentIndex == 2 ? 700 : 400,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         AppStrings.cart,
                         style: TextStyle(
-                          color: _currentIndex == 2 ? Colors.white : Colors.white70,
-                          fontSize: 11,
+                          color: Colors.white,
+                          fontSize: _currentIndex == 2 ? 12 : 11,
+                          fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
                         ),
                       ),
                     ],
