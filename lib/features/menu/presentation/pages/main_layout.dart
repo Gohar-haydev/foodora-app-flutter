@@ -5,7 +5,7 @@ import 'package:foodora/features/menu/presentation/pages/profile_menu_screen.dar
 import 'package:foodora/features/menu/presentation/pages/search_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/notification_screen.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
-import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
+
 
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
 
@@ -111,26 +111,26 @@ class _MainLayoutState extends State<MainLayout> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         BottomNavItem(
-                          icon: Icons.home,
+                          imagePath: 'assets/images/home.png',
                           label: AppStrings.home,
                           isActive: _currentIndex == 0,
                           onTap: () => _onTabTapped(0),
                         ),
                         BottomNavItem(
-                          icon: Icons.search,
+                          imagePath: 'assets/images/search.png',
                           label: AppStrings.search,
                           isActive: _currentIndex == 1,
                           onTap: () => _onTabTapped(1),
                         ),
                         const SizedBox(width: 60), // Space for cart button
                         BottomNavItem(
-                          icon: Icons.notifications_outlined,
+                          imagePath: 'assets/images/notification.png',
                           label: AppStrings.notification,
                           isActive: _currentIndex == 3,
                           onTap: () => _onTabTapped(3),
                         ),
                         BottomNavItem(
-                          icon: Icons.person_outline,
+                          imagePath: 'assets/images/profile.png',
                           label: AppStrings.profile,
                           isActive: _currentIndex == 4,
                           onTap: () => _onTabTapped(4),
@@ -185,6 +185,77 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BottomNavClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(size.width / 2 - 40, 0);
+    path.quadraticBezierTo(size.width / 2 - 40, 33, size.width / 2, 33);
+    path.quadraticBezierTo(size.width / 2 + 40, 33, size.width / 2 + 40, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class BottomNavItem extends StatelessWidget {
+  final IconData? icon;
+  final String? imagePath;
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const BottomNavItem({
+    Key? key,
+    this.icon,
+    this.imagePath,
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided'),
+       super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (imagePath != null)
+            Image.asset(
+              imagePath!,
+              width: 24,
+              height: 24,
+              color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+            )
+          else
+            Icon(
+              icon,
+              color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+              size: 24,
+            ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+              fontSize: 12,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }

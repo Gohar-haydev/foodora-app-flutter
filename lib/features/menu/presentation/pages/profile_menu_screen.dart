@@ -40,7 +40,7 @@ class ProfileMenuScreen extends StatelessWidget {
               children: [
                 // Profile Menu Item
                 ProfileMenuItem(
-                  icon: Icons.person_outline,
+                  imagePath: 'assets/images/user.png',
                   iconColor: const Color(0xFF4CAF50),
                   iconBackground: const Color(0xFFE8F5E9),
                   title: AppStrings.profile,
@@ -58,7 +58,7 @@ class ProfileMenuScreen extends StatelessWidget {
 
                 // Orders Menu Item
                 ProfileMenuItem(
-                  icon: Icons.shopping_bag_outlined,
+                  imagePath: 'assets/images/order.png',
                   iconColor: const Color(0xFF4CAF50),
                   iconBackground: const Color(0xFFE8F5E9),
                   title: AppStrings.orders,

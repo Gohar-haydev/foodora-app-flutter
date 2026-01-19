@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProfileMenuItem extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? imagePath;
   final Color iconColor;
   final Color iconBackground;
   final String title;
@@ -9,12 +10,14 @@ class ProfileMenuItem extends StatelessWidget {
 
   const ProfileMenuItem({
     Key? key,
-    required this.icon,
+    this.icon,
+    this.imagePath,
     required this.iconColor,
     required this.iconBackground,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided'),
+       super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +34,19 @@ class ProfileMenuItem extends StatelessWidget {
                 color: iconBackground,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 24,
+              child: Center(
+                child: imagePath != null
+                    ? Image.asset(
+                        imagePath!,
+                        width: 24,
+                        height: 24,
+                        color: iconColor,
+                      )
+                    : Icon(
+                        icon,
+                        color: iconColor,
+                        size: 24,
+                      ),
               ),
             ),
             const SizedBox(width: 16),
