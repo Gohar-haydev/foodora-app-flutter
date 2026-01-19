@@ -91,30 +91,6 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                           ),
                         ],
                       ),
-                      // Logout Icon
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: IconButton(
-                          onPressed: () async {
-                            final authViewModel = context.read<AuthViewModel>();
-                            await authViewModel.logout();
-                            // Navigate to LoginScreen
-                            if (mounted) {
-                               Navigator.of(context).pushAndRemoveUntil(
-                                 MaterialPageRoute(builder: (_) => const LoginScreen()),
-                                 (route) => false
-                               );
-                            }
-                          },
-                          icon: const Icon(Icons.logout_rounded),
-                          iconSize: 20,
-                          color: Colors.red[400],
-                          tooltip: 'Logout',
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
