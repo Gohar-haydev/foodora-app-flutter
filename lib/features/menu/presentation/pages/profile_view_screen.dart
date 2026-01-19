@@ -8,14 +8,14 @@ import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
 
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class ProfileViewScreen extends StatefulWidget {
+  const ProfileViewScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileViewScreen> createState() => _ProfileViewScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileViewScreenState extends State<ProfileViewScreen> {
   // Controllers
   late TextEditingController _nameController;
   late TextEditingController _emailController;
