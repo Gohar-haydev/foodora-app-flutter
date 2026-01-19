@@ -39,6 +39,8 @@ dependencies:
   equatable: ^2.0.8
   shared_preferences: ^2.3.5
   intl:
+  geolocator: ^12.0.0
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:

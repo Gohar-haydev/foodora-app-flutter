@@ -119,7 +119,6 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                 ],
               ),
             ),
-            
             // Branch List
             Expanded(
               child: Consumer<MenuViewModel>(

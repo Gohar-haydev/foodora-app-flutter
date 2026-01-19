@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class ChangeAddressScreen extends StatefulWidget {
   final String? currentAddress;
@@ -26,6 +28,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   
   String _selectedAddressType = 'Home';
   final List<String> _addressTypes = ['Home', 'Work', 'Other'];
+  bool _isLoadingLocation = false;
 
   @override
   void initState() {
@@ -74,6 +77,104 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
         'label': _selectedAddressType,
         'address': fullAddress,
       });
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    setState(() => _isLoadingLocation = true);
+
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Location services are disabled. Please enable them.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        setState(() => _isLoadingLocation = false);
+        return;
+      }
+
+      // Check location permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Location permissions are denied'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          setState(() => _isLoadingLocation = false);
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Location permissions are permanently denied. Please enable them in settings.'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+            ),
+          );
+        }
+        setState(() => _isLoadingLocation = false);
+        return;
+      }
+
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Reverse geocode to get address
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks[0];
+        
+        setState(() {
+          // Populate address fields
+          _streetController.text = '${place.street ?? ''}';
+          _cityController.text = place.locality ?? '';
+          _stateController.text = place.administrativeArea ?? '';
+          _zipController.text = place.postalCode ?? '';
+          _countryController.text = place.country ?? '';
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Location fetched successfully!'),
+              backgroundColor: AppColors.primaryAccent,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error fetching location: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      setState(() => _isLoadingLocation = false);
     }
   }
 
@@ -160,6 +261,37 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                     ),
                   );
                 }).toList(),
+              ),
+              const SizedBox(height: 24),
+
+              // Use Current Location Button
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: OutlinedButton.icon(
+                  onPressed: _isLoadingLocation ? null : _getCurrentLocation,
+                  icon: _isLoadingLocation
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
+                          ),
+                        )
+                      : const Icon(Icons.my_location, size: 20),
+                  label: Text(
+                    _isLoadingLocation ? 'Fetching Location...' : 'Use Current Location',
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primaryAccent,
+                    side: const BorderSide(color: AppColors.primaryAccent, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
 

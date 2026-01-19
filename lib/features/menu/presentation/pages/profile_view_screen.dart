@@ -282,70 +282,70 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                 const SizedBox(height: 16),
 
                 // Order History Link
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(Icons.history, color: Colors.black),
-                  title: const Text(
-                    AppStrings.orderHistory,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                  onTap: () {
-                    // Navigate to Order History
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const OrderHistoryScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Divider(), // Visual separator
-                const SizedBox(height: 16),
+                // ListTile(
+                //   contentPadding: EdgeInsets.zero,
+                //   leading: const Icon(Icons.history, color: Colors.black),
+                //   title: const Text(
+                //     AppStrings.orderHistory,
+                //     style: TextStyle(
+                //       fontSize: 16,
+                //       fontWeight: FontWeight.w500,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                //   trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                //   onTap: () {
+                //     // Navigate to Order History
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (context) => const OrderHistoryScreen(),
+                //       ),
+                //     );
+                //   },
+                // ),
+                // const Divider(), // Visual separator
+                // const SizedBox(height: 16),
 
                 // Logout Button
-                LogoutButton(
-                  text: AppStrings.logoutButton,
-                  onPressed: () async {
-                    // Show confirmation dialog
-                    final shouldLogout = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text(AppStrings.logoutConfirmTitle),
-                        content: const Text(AppStrings.logoutConfirmMessage),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text(AppStrings.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text(
-                              AppStrings.logout,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    if (shouldLogout == true) {
-                      await viewModel.logout();
-                      if (!context.mounted) return;
-
-                      // Navigate to login screen and clear navigation stack
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                        (route) => false,
-                      );
-                    }
-                  },
-                ),
+                // LogoutButton(
+                //   text: AppStrings.logoutButton,
+                //   onPressed: () async {
+                //     // Show confirmation dialog
+                //     final shouldLogout = await showDialog<bool>(
+                //       context: context,
+                //       builder: (context) => AlertDialog(
+                //         title: const Text(AppStrings.logoutConfirmTitle),
+                //         content: const Text(AppStrings.logoutConfirmMessage),
+                //         actions: [
+                //           TextButton(
+                //             onPressed: () => Navigator.of(context).pop(false),
+                //             child: const Text(AppStrings.cancel),
+                //           ),
+                //           TextButton(
+                //             onPressed: () => Navigator.of(context).pop(true),
+                //             child: const Text(
+                //               AppStrings.logout,
+                //               style: TextStyle(color: Colors.red),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     );
+                //
+                //     if (shouldLogout == true) {
+                //       await viewModel.logout();
+                //       if (!context.mounted) return;
+                //
+                //       // Navigate to login screen and clear navigation stack
+                //       Navigator.of(context).pushAndRemoveUntil(
+                //         MaterialPageRoute(
+                //           builder: (context) => const LoginScreen(),
+                //         ),
+                //         (route) => false,
+                //       );
+                //     }
+                //   },
+                // ),
 
                 // Bottom padding for scrolling comfort
                 const SizedBox(height: 24),

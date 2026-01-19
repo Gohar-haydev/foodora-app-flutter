@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
+import 'package:foodora/features/menu/presentation/pages/profile_menu_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/search_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/notification_screen.dart';
-import 'package:foodora/features/menu/presentation/pages/profile_screen.dart';
+import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
@@ -86,7 +87,7 @@ class _MainLayoutState extends State<MainLayout> {
             _buildTabNavigator(1, const SearchScreen()),
             _buildTabNavigator(2, const CartScreen()),
             _buildTabNavigator(3, const NotificationScreen()),
-            _buildTabNavigator(4, const ProfileScreen()),
+            _buildTabNavigator(4, const ProfileMenuScreen()),
           ],
         ),
         bottomNavigationBar: Stack(
