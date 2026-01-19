@@ -4,14 +4,24 @@ import '../../domain/entities/cart_item_entity.dart';
 import '../../../menu/domain/entities/menu_item_entity.dart';
 import '../../../menu/domain/entities/addon_entity.dart';
 import '../../../order/domain/entities/order_entity.dart';
+import '../../domain/repositories/cart_repository.dart';
+import '../../../../core/utils/token_storage.dart';
 
 class CartViewModel extends ChangeNotifier {
+  final CartRepository cartRepository;
+  
+  CartViewModel({required this.cartRepository}) {
+    _loadCartFromStorage();
+  }
+
   final List<CartItemEntity> _cartItems = [];
+  bool _isLoading = false;
+  
   // simple ID generator (timestamp + random)
   String _generateId() => '${DateTime.now().millisecondsSinceEpoch}_${(DateTime.now().microsecond)}';
 
-
   List<CartItemEntity> get cartItems => List.unmodifiable(_cartItems);
+  bool get isLoading => _isLoading;
 
   double get totalAmount {
     return _cartItems.fold(0.0, (sum, item) => sum + item.totalPrice);
@@ -22,7 +32,39 @@ class CartViewModel extends ChangeNotifier {
   
   double get grandTotal => totalAmount + deliveryFee + tax;
 
-  void addToCart(MenuItemEntity menuItem, int quantity, List<AddonEntity> selectedAddons) {
+  // Load cart from storage on initialization
+  Future<void> _loadCartFromStorage() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final userId = await TokenStorage.getUserId();
+      if (userId != null) {
+        final items = await cartRepository.loadCartItems(userId);
+        _cartItems.clear();
+        _cartItems.addAll(items);
+      }
+    } catch (e) {
+      debugPrint('Error loading cart from storage: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Save cart to storage
+  Future<void> _saveCartToStorage() async {
+    try {
+      final userId = await TokenStorage.getUserId();
+      if (userId != null) {
+        await cartRepository.saveCartItems(userId, _cartItems);
+      }
+    } catch (e) {
+      debugPrint('Error saving cart to storage: $e');
+    }
+  }
+
+  void addToCart(MenuItemEntity menuItem, int quantity, List<AddonEntity> selectedAddons) async {
     // Calculate price for this specific item configuration
     double basePrice = double.tryParse(menuItem.price) ?? 0.0;
     double addonsPrice = selectedAddons.fold(0.0, (sum, addon) {
@@ -43,19 +85,35 @@ class CartViewModel extends ChangeNotifier {
 
     _cartItems.add(cartItem);
     notifyListeners();
+    
+    // Save to storage
+    await _saveCartToStorage();
   }
 
-  void removeFromCart(String cartItemId) {
+  void removeFromCart(String cartItemId) async {
     _cartItems.removeWhere((item) => item.id == cartItemId);
     notifyListeners();
+    
+    // Save to storage
+    await _saveCartToStorage();
   }
 
-  void clearCart() {
+  void clearCart() async {
     _cartItems.clear();
     notifyListeners();
+    
+    // Clear from storage
+    try {
+      final userId = await TokenStorage.getUserId();
+      if (userId != null) {
+        await cartRepository.clearCartItems(userId);
+      }
+    } catch (e) {
+      debugPrint('Error clearing cart from storage: $e');
+    }
   }
 
-  void incrementItem(String cartItemId) {
+  void incrementItem(String cartItemId) async {
     final index = _cartItems.indexWhere((item) => item.id == cartItemId);
     if (index != -1) {
       final currentItem = _cartItems[index];
@@ -76,10 +134,13 @@ class CartViewModel extends ChangeNotifier {
         totalPrice: newTotal,
       );
       notifyListeners();
+      
+      // Save to storage
+      await _saveCartToStorage();
     }
   }
 
-  void decrementItem(String cartItemId) {
+  void decrementItem(String cartItemId) async {
     final index = _cartItems.indexWhere((item) => item.id == cartItemId);
     if (index != -1) {
       final currentItem = _cartItems[index];
@@ -99,16 +160,13 @@ class CartViewModel extends ChangeNotifier {
           totalPrice: newTotal,
         );
         notifyListeners();
+        
+        // Save to storage
+        await _saveCartToStorage();
       } else {
         // Option: remove if quantity goes to 0? Or just stay at 1?
         // Usually decrementing at 1 does nothing or removes. 
-        // Let's remove for better UX or just keep at 1. 
-        // User asked "adjust price with increment or decrement".
-        // Let's keeping it at 1 for now, they can use delete button for removal, 
-        // OR we can make decrement at 1 remove the item.
-        // The static design had a delete button AND +/-. 
-        // Screenshot shows +/-. 
-        // I'll keep it min 1 to avoid accidental deletion.
+        // Let's keep it at 1 for now, they can use delete button for removal
       }
     }
   }

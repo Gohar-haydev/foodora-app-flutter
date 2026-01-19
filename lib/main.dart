@@ -28,6 +28,8 @@ import 'features/menu/domain/usecases/search_menu_items_usecase.dart';
 import 'features/menu/domain/usecases/get_menu_items_by_category_filter_usecase.dart';
 import 'features/menu/domain/usecases/get_menu_item_details_usecase.dart';
 import 'features/menu/presentation/viewmodels/menu_viewmodel.dart';
+import 'features/cart/data/datasources/cart_local_datasource.dart';
+import 'features/cart/data/repositories/cart_repository_impl.dart';
 import 'features/cart/presentation/viewmodels/cart_viewmodel.dart';
 import 'features/order/presentation/viewmodels/order_viewmodel.dart';
 
@@ -74,6 +76,10 @@ class FoodieApp extends StatelessWidget {
     final getMenuItemsByCategoryFilterUseCase = GetMenuItemsByCategoryFilterUseCase(menuRepository);
     final getMenuItemDetailsUseCase = GetMenuItemDetailsUseCase(menuRepository);
 
+    // Cart Feature Dependencies
+    final cartLocalDataSource = CartLocalDataSource();
+    final cartRepository = CartRepositoryImpl(localDataSource: cartLocalDataSource);
+
     // 5. Initialize ViewModels (Providers)
     return MultiProvider(
       providers: [
@@ -104,7 +110,7 @@ class FoodieApp extends StatelessWidget {
             getMenuItemDetailsUseCase: getMenuItemDetailsUseCase,
           ),
         ),
-        ChangeNotifierProvider(create: (_) => CartViewModel()),
+        ChangeNotifierProvider(create: (_) => CartViewModel(cartRepository: cartRepository)),
         ChangeNotifierProvider(create: (_) => OrderViewModel()),
       ],
       child: MaterialApp(

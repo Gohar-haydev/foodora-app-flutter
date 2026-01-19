@@ -5,6 +5,7 @@ class TokenStorage {
   static const String _tokenTypeKey = 'token_type';
   static const String _expiresAtKey = 'expires_at';
   static const String _userNameKey = 'user_name';
+  static const String _userIdKey = 'user_id';
 
   // Save token with expiration time
   static Future<void> saveToken({
@@ -30,6 +31,18 @@ class TokenStorage {
   static Future<String?> getUserName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_userNameKey);
+  }
+
+  // Save user ID
+  static Future<void> saveUserId(int userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_userIdKey, userId);
+  }
+
+  // Get user ID
+  static Future<int?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_userIdKey);
   }
 
   // Get stored token
@@ -75,6 +88,7 @@ class TokenStorage {
     await prefs.remove(_tokenTypeKey);
     await prefs.remove(_expiresAtKey);
     await prefs.remove(_userNameKey);
+    await prefs.remove(_userIdKey);
   }
 
   // Check if user is authenticated

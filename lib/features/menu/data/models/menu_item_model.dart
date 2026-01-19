@@ -64,6 +64,9 @@ class MenuItemModel extends MenuItemEntity {
       'image': image,
       'is_active': isActive,
       'sort_order': sortOrder,
+      'category_name': categoryName,
+      'ingredients': ingredients,
+      'addons': addons?.map((addon) => (addon as AddonModel).toJson()).toList(),
     };
   }
 }

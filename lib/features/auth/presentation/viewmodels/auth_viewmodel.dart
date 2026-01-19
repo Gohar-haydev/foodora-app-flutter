@@ -99,6 +99,7 @@ class AuthViewModel extends ChangeNotifier {
           expiresIn: user.expiresIn,
         );
         await TokenStorage.saveUserName(user.name);
+        await TokenStorage.saveUserId(user.id);
         notifyListeners();
         return true;
       },
@@ -140,6 +141,7 @@ class AuthViewModel extends ChangeNotifier {
           expiresIn: user.expiresIn,
         );
         await TokenStorage.saveUserName(user.name);
+        await TokenStorage.saveUserId(user.id);
         notifyListeners();
         return true;
       },
@@ -165,6 +167,7 @@ class AuthViewModel extends ChangeNotifier {
           expiresIn: user.expiresIn,
         );
         await TokenStorage.saveUserName(user.name);
+        await TokenStorage.saveUserId(user.id);
         notifyListeners();
         return true;
       },
