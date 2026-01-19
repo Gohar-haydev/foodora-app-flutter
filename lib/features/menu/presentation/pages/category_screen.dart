@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
-import 'package:foodora/core/network/api_service.dart';
+// import 'package:foodora/core/network/api_service.dart'; // Unused
 import 'package:foodora/core/constants/app_constants.dart';
+import 'package:foodora/core/constants/app_strings.dart';
+import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
 class CategoryScreen extends StatefulWidget {
   final int branchId;
@@ -45,7 +47,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Category',
+          AppStrings.category,
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -75,7 +77,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => viewModel.fetchCategories(widget.branchId),
-                    child: const Text('Retry'),
+                    child: const Text(AppStrings.retry),
                   ),
                 ],
               ),
@@ -84,7 +86,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
           if (viewModel.categories.isEmpty) {
             return const Center(
-              child: Text('No categories available'),
+              child: Text(AppStrings.noCategoriesAvailable),
             );
           }
 
@@ -98,7 +100,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Category',
+                      AppStrings.category,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -112,7 +114,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         });
                       },
                       child: const Text(
-                        'Clear',
+                        AppStrings.clear,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -135,28 +137,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             spacing: 12,
                             runSpacing: 12,
                             children: viewModel.categories.map((category) {
-                              final isSelected = _selectedCategoryId == category.id;
-                              return GestureDetector(
+                              return CategoryChip(
+                                label: category.name,
+                                isSelected: _selectedCategoryId == category.id,
                                 onTap: () {
                                   setState(() {
                                     _selectedCategoryId = category.id;
                                   });
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: isSelected ? const Color(0xFF4FAF5A) : const Color(0xFFF5F5F5),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Text(
-                                    category.name,
-                                    style: TextStyle(
-                                      color: isSelected ? Colors.white : const Color(0xFF1A1A1A),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
                               );
                             }).toList(),
                           ),
@@ -165,31 +153,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         const SizedBox(height: 40),
 
                         // Apply Filters Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Apply logic - pass selected category back
-                              Navigator.of(context).pop(_selectedCategoryId);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.backgroundLight,
-                              foregroundColor: AppColors.primaryText,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: const Text(
-                              'APPLY FILTERS',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                          ),
+                        ApplyFilterButton(
+                          label: AppStrings.applyFilters,
+                          onPressed: () {
+                            // Apply logic - pass selected category back
+                            Navigator.of(context).pop(_selectedCategoryId);
+                          },
                         ),
                         const SizedBox(height: 20),
                       ],

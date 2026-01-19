@@ -204,5 +204,13 @@ class AppStrings {
   static const String qty = 'Qty';
 
   static const String changeBranch = 'Change Branch';
+  static const String clear = 'Clear';
+  static const String applyFilters = 'APPLY FILTERS';
+  static const String noCategoriesAvailable = 'No categories available';
+  
+  static const String myFavorites = 'My Favorites';
+  static const String noFavoritesYet = 'No Favorites Yet';
+  static const String startAddingFavorites = 'Start adding your favorite items!';
+  static const String favoriteItemRemoved = 'Item removed from favorites';
 }
 

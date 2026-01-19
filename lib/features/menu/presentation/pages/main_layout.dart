@@ -83,6 +83,7 @@ class _MainLayoutState extends State<MainLayout> {
         }
       },
       child: Scaffold(
+
         body: IndexedStack(
           index: _currentIndex,
           children: [
@@ -93,6 +94,42 @@ class _MainLayoutState extends State<MainLayout> {
             _buildTabNavigator(4, const ProfileMenuScreen()),
           ],
         ),
+        floatingActionButton: Material(
+          color: const Color(0xFF1E3A2E), // Dark green
+          shape: const CircleBorder(),
+          elevation: 6,
+          shadowColor: Colors.black.withOpacity(0.4),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => _onTabTapped(2),
+            child: Container(
+              width: 60,
+              height: 60,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Colors.white,
+                    size: _currentIndex == 2 ? 28 : 26,
+                    weight: _currentIndex == 2 ? 700 : 400,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    AppStrings.cart,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: _currentIndex == 2 ? 12 : 11,
+                      fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: Stack(
           clipBehavior: Clip.none,
           alignment: Alignment.bottomCenter,
@@ -137,48 +174,6 @@ class _MainLayoutState extends State<MainLayout> {
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ),
-            ),
-            // Cart button positioned above the notch
-            Positioned(
-              top: -40,
-              child: GestureDetector(
-                onTap: () => _onTabTapped(2),
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1E3A2E), // Dark green
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Colors.white,
-                        size: _currentIndex == 2 ? 28 : 26,
-                        weight: _currentIndex == 2 ? 700 : 400,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        AppStrings.cart,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: _currentIndex == 2 ? 12 : 11,
-                          fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ),
