@@ -9,6 +9,8 @@ import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 
+import '../widgets/branch_card.dart';
+
 class BranchSelectionScreen extends StatefulWidget {
   const BranchSelectionScreen({super.key});
 

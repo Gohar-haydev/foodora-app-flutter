@@ -203,5 +203,6 @@ class AppStrings {
   static const String totalPaid = 'Total Paid';
   static const String qty = 'Qty';
 
+  static const String changeBranch = 'Change Branch';
 }
 

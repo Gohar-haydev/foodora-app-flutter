@@ -9,6 +9,9 @@ import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
 
+import '../widgets/bottom_nav_clipper.dart';
+import '../widgets/bottom_nav_item.dart';
+
 class MainLayout extends StatefulWidget {
   final int initialIndex;
 

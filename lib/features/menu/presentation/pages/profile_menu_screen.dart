@@ -7,7 +7,9 @@ import 'package:foodora/features/menu/presentation/pages/profile_view_screen.dar
 import 'package:foodora/features/order/presentation/pages/order_history_screen.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
+import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import '../../../../core/widgets/logout_button.dart';
+import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
 
 class ProfileMenuScreen extends StatelessWidget {
   const ProfileMenuScreen({Key? key}) : super(key: key);
@@ -18,7 +20,7 @@ class ProfileMenuScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Profile',
+          AppStrings.profile,
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -37,11 +39,11 @@ class ProfileMenuScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               children: [
                 // Profile Menu Item
-                _ProfileMenuItem(
+                ProfileMenuItem(
                   icon: Icons.person_outline,
                   iconColor: const Color(0xFF4CAF50),
                   iconBackground: const Color(0xFFE8F5E9),
-                  title: 'Profile',
+                  title: AppStrings.profile,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -50,14 +52,16 @@ class ProfileMenuScreen extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 12),
+                
+                // Divider after Profile
+                const Divider(height: 1, thickness: 1),
 
                 // Orders Menu Item
-                _ProfileMenuItem(
+                ProfileMenuItem(
                   icon: Icons.shopping_bag_outlined,
                   iconColor: const Color(0xFF4CAF50),
                   iconBackground: const Color(0xFFE8F5E9),
-                  title: 'Orders',
+                  title: AppStrings.orders,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -66,6 +70,27 @@ class ProfileMenuScreen extends StatelessWidget {
                     );
                   },
                 ),
+                
+                // Divider after Orders
+                const Divider(height: 1, thickness: 1),
+
+                // Change Branch Menu Item
+                ProfileMenuItem(
+                  icon: Icons.store_outlined,
+                  iconColor: const Color(0xFF4CAF50),
+                  iconBackground: const Color(0xFFE8F5E9),
+                  title: AppStrings.changeBranch,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const BranchSelectionScreen(),
+                      ),
+                    );
+                  },
+                ),
+                
+                // Divider after Change Branch
+                const Divider(height: 1, thickness: 1),
               ],
             ),
           ),
@@ -199,71 +224,6 @@ class ProfileMenuScreen extends StatelessWidget {
           ),
           SizedBox(height: 25,)
         ],
-      ),
-    );
-  }
-}
-
-class _ProfileMenuItem extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final Color iconBackground;
-  final String title;
-  final VoidCallback onTap;
-
-  const _ProfileMenuItem({
-    required this.icon,
-    required this.iconColor,
-    required this.iconBackground,
-    required this.title,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[200]!, width: 1),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: iconBackground,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.grey[400],
-            ),
-          ],
-        ),
       ),
     );
   }
