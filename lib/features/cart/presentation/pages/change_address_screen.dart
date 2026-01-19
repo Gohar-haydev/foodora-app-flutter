@@ -29,6 +29,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   String _selectedAddressType = 'Home';
   final List<String> _addressTypes = ['Home', 'Work', 'Other'];
   bool _isLoadingLocation = false;
+  double? _latitude;
+  double? _longitude;
 
   @override
   void initState() {
@@ -72,10 +74,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
         _countryController.text,
       ].join(', ');
 
-      // Return the address data
+      // Return the address data with coordinates
       Navigator.of(context).pop({
         'label': _selectedAddressType,
         'address': fullAddress,
+        if (_latitude != null) 'latitude': _latitude.toString(),
+        if (_longitude != null) 'longitude': _longitude.toString(),
       });
     }
   }
@@ -135,6 +139,10 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+
+      // Store latitude and longitude
+      _latitude = position.latitude;
+      _longitude = position.longitude;
 
       // Reverse geocode to get address
       List<Placemark> placemarks = await placemarkFromCoordinates(
