@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/widgets.dart';
-import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
+import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../widgets/widgets.dart';
@@ -59,9 +59,9 @@ class _SignupScreenState extends State<SignupScreen> {
     context.hideLoading();
 
     if (success) {
-      // Navigate to Branch Selection on successful registration
+      // Navigate to MainLayout on successful registration
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const BranchSelectionScreen()),
+        MaterialPageRoute(builder: (_) => const MainLayout()),
         (route) => false,
       );
     } else {
