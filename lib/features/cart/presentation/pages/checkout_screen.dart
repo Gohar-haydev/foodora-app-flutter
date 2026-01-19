@@ -5,6 +5,7 @@ import 'package:foodora/features/cart/presentation/viewmodels/cart_viewmodel.dar
 import 'package:foodora/features/cart/presentation/pages/order_confirmation_screen.dart';
 import 'package:foodora/features/cart/presentation/pages/change_address_screen.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class CheckoutScreen extends StatefulWidget {
@@ -17,8 +18,40 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String _addressLabel = 'Home';
   String _addressText = '123 Main Street, New York, USA';
-  String _paymentMethod = 'Cash on Delivery';
+  String _paymentMethod = AppStrings.cashOnDelivery;
   final TextEditingController _notesController = TextEditingController();
+  double? _latitude;
+  double? _longitude;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedAddress();
+  }
+
+  Future<void> _loadSavedAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _addressLabel = prefs.getString('delivery_address_label') ?? 'Home';
+      _addressText = prefs.getString('delivery_address_text') ?? '123 Main Street, New York, USA';
+      final lat = prefs.getString('delivery_latitude');
+      final lng = prefs.getString('delivery_longitude');
+      if (lat != null) _latitude = double.tryParse(lat);
+      if (lng != null) _longitude = double.tryParse(lng);
+    });
+  }
+
+  Future<void> _saveAddress(String label, String address, {String? latitude, String? longitude}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('delivery_address_label', label);
+    await prefs.setString('delivery_address_text', address);
+    if (latitude != null) {
+      await prefs.setString('delivery_latitude', latitude);
+    }
+    if (longitude != null) {
+      await prefs.setString('delivery_longitude', longitude);
+    }
+  }
 
   @override
   void dispose() {
@@ -37,10 +70,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     if (result != null) {
+      final label = result['label'] ?? 'Home';
+      final address = result['address'] ?? _addressText;
+      final latitude = result['latitude'];
+      final longitude = result['longitude'];
+
       setState(() {
-        _addressLabel = result['label'] ?? 'Home';
-        _addressText = result['address'] ?? _addressText;
+        _addressLabel = label;
+        _addressText = address;
+        if (latitude != null) _latitude = double.tryParse(latitude);
+        if (longitude != null) _longitude = double.tryParse(longitude);
       });
+
+      // Save address to SharedPreferences
+      await _saveAddress(label, address, latitude: latitude, longitude: longitude);
     }
   }
 
@@ -75,7 +118,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Select Payment Method',
+              AppStrings.selectPaymentMethod,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -87,10 +130,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             // PayPal Option
             _buildPaymentOption(
               icon: Icons.paypal,
-              title: 'PayPal',
-              isSelected: _paymentMethod == 'PayPal',
+              title: AppStrings.paypal,
+              isSelected: _paymentMethod == AppStrings.paypal,
               onTap: () {
-                setState(() => _paymentMethod = 'PayPal');
+                setState(() => _paymentMethod = AppStrings.paypal);
                 Navigator.pop(context);
               },
             ),
@@ -99,10 +142,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             // Klarna Option
             _buildPaymentOption(
               icon: Icons.credit_score,
-              title: 'Klarna',
-              isSelected: _paymentMethod == 'Klarna',
+              title: AppStrings.klarna,
+              isSelected: _paymentMethod == AppStrings.klarna,
               onTap: () {
-                setState(() => _paymentMethod = 'Klarna');
+                setState(() => _paymentMethod = AppStrings.klarna);
                 Navigator.pop(context);
               },
             ),
@@ -111,10 +154,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             // Cash on Delivery Option
             _buildPaymentOption(
               icon: Icons.money,
-              title: 'Cash on Delivery',
-              isSelected: _paymentMethod == 'Cash on Delivery',
+              title: AppStrings.cashOnDelivery,
+              isSelected: _paymentMethod == AppStrings.cashOnDelivery,
               onTap: () {
-                setState(() => _paymentMethod = 'Cash on Delivery');
+                setState(() => _paymentMethod = AppStrings.cashOnDelivery);
                 Navigator.pop(context);
               },
             ),
@@ -213,7 +256,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Delivery Address Section (Static for now)
-                _SectionHeader(title: 'Delivery Address'),
+                _SectionHeader(title: AppStrings.deliveryAddress),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -250,7 +293,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       TextButton(
                         onPressed: _changeAddress,
-                        child: const Text('Change'),
+                        child: const Text(AppStrings.change),
                       ),
                     ],
                   ),
@@ -258,7 +301,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 24),
 
                 // Payment Method Section (Static for now)
-                _SectionHeader(title: 'Payment Method'),
+                _SectionHeader(title: AppStrings.paymentMethod),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -276,9 +319,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Row(
                     children: [
                       Icon(
-                        _paymentMethod == 'PayPal'
+                        _paymentMethod == AppStrings.paypal
                             ? Icons.paypal
-                            : _paymentMethod == 'Klarna'
+                            : _paymentMethod == AppStrings.klarna
                                 ? Icons.credit_score
                                 : Icons.money,
                         color: AppColors.primaryAccent,
@@ -292,7 +335,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       TextButton(
                         onPressed: _showPaymentMethodBottomSheet,
-                        child: const Text('Change'),
+                        child: const Text(AppStrings.change),
                       ),
                     ],
                   ),
@@ -300,7 +343,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 24),
 
                 // Order Notes Section
-                _SectionHeader(title: 'Order Notes'),
+                _SectionHeader(title: AppStrings.orderNotes),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -344,7 +387,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 24),
 
                 // Order Summary
-                _SectionHeader(title: 'Order Summary'),
+                _SectionHeader(title: AppStrings.orderSummary),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -374,13 +417,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                       )).toList(),
                       const Divider(height: 24),
-                      _SummaryRow(label: 'Subtotal', amount: viewModel.totalAmount),
+                      _SummaryRow(label: AppStrings.subtotal, amount: viewModel.totalAmount),
                       const SizedBox(height: 8),
-                      _SummaryRow(label: 'Delivery Fee', amount: viewModel.deliveryFee),
+                      _SummaryRow(label: AppStrings.deliveryFee, amount: viewModel.deliveryFee),
                       const SizedBox(height: 8),
-                      _SummaryRow(label: 'Tax', amount: viewModel.tax),
+                      _SummaryRow(label: AppStrings.tax, amount: viewModel.tax),
                       const Divider(height: 24),
-                      _SummaryRow(label: 'Total', amount: viewModel.grandTotal, isTotal: true),
+                      _SummaryRow(label: AppStrings.total, amount: viewModel.grandTotal, isTotal: true),
                     ],
                   ),
                 ),
@@ -413,7 +456,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       elevation: 5,
                     ),
-                    child: const Text('PLACE ORDER', style: TextStyle(
+                    child: const Text(AppStrings.placeOrder, style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,

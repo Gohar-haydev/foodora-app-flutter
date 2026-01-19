@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/order/domain/entities/order_entity.dart';
+import 'package:foodora/features/order/presentation/widgets/widgets.dart';
 import 'package:intl/intl.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
@@ -23,7 +24,7 @@ class OrderDetailsScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Order Details',
+          AppStrings.orderDetails,
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -62,7 +63,7 @@ class OrderDetailsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      'Completed',
+                      AppStrings.completed,
                       style: TextStyle(
                         color: Color(0xFF4CAF50),
                         fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
             // Restaurant Branch Title
             const Text(
-              'Restaurant Branch',
+              AppStrings.restaurantBranch,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -164,7 +165,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
             // Items Ordered Title
             const Text(
-              'Items Ordered',
+              AppStrings.itemsOrdered,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -191,9 +192,9 @@ class OrderDetailsScreen extends StatelessWidget {
                 children: order.items.map((item) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
-                    child: _OrderItem(
+                    child: OrderItemWidget(
                       name: item.menuItem.name,
-                      code: 'Qty: ${item.quantity}', // Showing Quantity as code/subtitle
+                      code: '${AppStrings.qty}: ${item.quantity}',
                       price: item.totalPrice,
                       imageUrl: item.menuItem.image ?? '',
                     ),
@@ -206,7 +207,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
             // Order Summary Title
             const Text(
-              'Order Summary',
+              AppStrings.orderSummary,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -231,11 +232,11 @@ class OrderDetailsScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _PriceRow(label: 'Delivery Fee', amount: order.deliveryFee),
+                  PriceRowWidget(label: AppStrings.deliveryFee, amount: order.deliveryFee),
                   const SizedBox(height: 12),
-                  _PriceRow(label: 'Tax', amount: order.tax),
+                  PriceRowWidget(label: AppStrings.tax, amount: order.tax),
                   const SizedBox(height: 12),
-                  _PriceRow(label: 'Total', amount: order.totalAmount, isBold: true),
+                  PriceRowWidget(label: AppStrings.total, amount: order.totalAmount, isBold: true),
                 ],
               ),
             ),
@@ -255,7 +256,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Paid',
+                    AppStrings.totalPaid,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -279,115 +280,6 @@ class OrderDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _OrderItem extends StatelessWidget {
-  final String name;
-  final String code;
-  final double price;
-  final String imageUrl;
-
-  const _OrderItem({
-    required this.name,
-    required this.code,
-    required this.price,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            width: 60,
-            height: 60,
-            color: Colors.grey[300],
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.fastfood, color: Colors.grey),
-                );
-              },
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                code,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[500],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Text(
-          '\$${price.toStringAsFixed(2)}',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _PriceRow extends StatelessWidget {
-  final String label;
-  final double amount;
-  final bool isBold;
-
-  const _PriceRow({
-    required this.label,
-    required this.amount,
-    this.isBold = false, // Default false, only Total is bold in mockup summary card
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.w600, // Matching dark text
-            color: Colors.black,
-          ),
-        ),
-        Text(
-          '\$${amount.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }

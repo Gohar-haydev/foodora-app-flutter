@@ -176,6 +176,32 @@ class AppStrings {
   static const String proteins = 'proteins';
   static const String fats = 'fats';
   static const String item = 'Item'; // e.g. "6 Item"
+  
+  // Checkout Screen
+  static const String deliveryAddress = 'Delivery Address';
+  static const String change = 'Change';
+  static const String paymentMethod = 'Payment Method';
+  static const String orderNotes = 'Order Notes';
+  static const String orderSummary = 'Order Summary';
+  static const String subtotal = 'Subtotal';
+  static const String deliveryFee = 'Delivery Fee';
+  static const String tax = 'Tax';
+  static const String total = 'Total';
+  static const String placeOrder = 'PLACE ORDER';
+  
+  // Payment Methods
+  static const String paypal = 'PayPal';
+  static const String klarna = 'Klarna';
+  static const String cashOnDelivery = 'Cash on Delivery';
+  static const String selectPaymentMethod = 'Select Payment Method';
+  
+  // Order Details Screen
+  static const String orderDetails = 'Order Details';
+  static const String completed = 'Completed';
+  static const String restaurantBranch = 'Restaurant Branch';
+  static const String itemsOrdered = 'Items Ordered';
+  static const String totalPaid = 'Total Paid';
+  static const String qty = 'Qty';
 
 }
 
