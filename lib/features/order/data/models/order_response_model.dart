@@ -15,12 +15,13 @@ class OrderResponseModel {
     return OrderResponseModel(
       success: json['success'] as bool,
       message: json['message'] as String,
-      data: OrderResponseData.fromJson(json),
+      data: OrderResponseData.fromJson(
+          json['data'] != null ? json['data'] as Map<String, dynamic> : {}),
     );
   }
 }
 
-class OrderResponseData {
+class OrderResponseData { 
   final OrderModel order;
 
   OrderResponseData({
