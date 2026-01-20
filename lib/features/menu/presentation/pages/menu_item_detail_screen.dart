@@ -74,9 +74,6 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
         }
       }
     }
-    // Total = (Base Price + Addons Price) * Quantity
-    // Or normally (Base * Qty) + (Addons * Qty)? 
-    // Usually addons are per item.
     return (basePrice + addonsTotal) * _quantity;
   }
 
@@ -86,8 +83,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
       builder: (context, viewModel, child) {
         if (viewModel.isMenuItemDetailsLoading) {
            return const Scaffold(
-             backgroundColor: Colors.white,
-             body: Center(child: CircularProgressIndicator()),
+             backgroundColor: AppColors.white,
+             body: Center(child: CircularProgressIndicator(color: AppColors.primaryAccent)),
            );
         }
 
@@ -95,16 +92,17 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
         if (item == null) {
            return Scaffold(
-             backgroundColor: Colors.white,
-             body: Center(child: Text(viewModel.menuItemDetailsError ?? 'Item not found')),
+             backgroundColor: AppColors.white,
+             body: Center(child: Text(viewModel.menuItemDetailsError ?? 'Item not found', style: const TextStyle(color: AppColors.primaryText))),
            );
         }
 
         final basePrice = double.tryParse(item.price) ?? 0.0;
-        final totalPrice = _calculateTotal(basePrice, item.addons);
+        // ignore: unused_local_variable
+        final totalPrice = _calculateTotal(basePrice, item.addons); 
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           body: Stack(
             children: [
               // Background Image (Top)
@@ -152,7 +150,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                 top: 280,
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                   ),
                   child: Column(
@@ -170,7 +168,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   width: 40,
                                   height: 4,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[300],
+                                    color: Colors.grey[300], // Keep mild grey for handle
                                     borderRadius: BorderRadius.circular(2),
                                   ),
                                 ),
@@ -196,7 +194,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                       const Icon(Icons.access_time, size: 16, color: Colors.grey),
                                       const SizedBox(width: 4),
                                       Text(
-                                        '30 Min', 
+                                        '30 ${AppStrings.min}', 
                                         style: TextStyle(color: Colors.grey[600]),
                                       ),
                                     ],
@@ -218,15 +216,16 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               // Nutrition Info Grid
                               LayoutBuilder(
                                 builder: (context, constraints) {
+                                  // ignore: unused_local_variable
                                   double itemWidth = (constraints.maxWidth - 16) / 2;
                                   return Wrap(
                                     spacing: 16,
                                     runSpacing: 16,
                                     children: const [
-                                      NutritionItem(icon: Icons.grass, value: '65g', label: 'carbs'), // AppStrings.carbs
-                                      NutritionItem(icon: Icons.local_fire_department, value: '120', label: 'Kcal'), // AppStrings.kcal
-                                      NutritionItem(icon: Icons.egg_alt_outlined, value: '27g', label: 'proteins'), // AppStrings.proteins
-                                      NutritionItem(icon: Icons.pie_chart_outline, value: '91g', label: 'fats'), // AppStrings.fats
+                                      NutritionItem(icon: Icons.grass, value: '65g', label: AppStrings.carbs), 
+                                      NutritionItem(icon: Icons.local_fire_department, value: '120', label: AppStrings.kcal), 
+                                      NutritionItem(icon: Icons.egg_alt_outlined, value: '27g', label: AppStrings.proteins), 
+                                      NutritionItem(icon: Icons.pie_chart_outline, value: '91g', label: AppStrings.fats), 
                                     ],
                                   );
                                 }
@@ -235,7 +234,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
                               // Ingredients Header
                               const Text(
-                                "Ingredients",
+                                AppStrings.ingredients,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -245,11 +244,10 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               const SizedBox(height: 16),
 
                               // Ingredients List (Static/Free items)
-                              // Using item.ingredients if available, otherwise just placeholder if needed or verify
                               if (item.ingredients != null && item.ingredients!.isNotEmpty) ...[
                                 ...item.ingredients!.map((ing) => IngredientRow(name: ing)).toList(),
                               ] else ...[
-                                // Placeholder if empty just to show UI (remove in production if strict)
+                                // Placeholder
                                 const IngredientRow(name: "Tortilla Chips"),
                                 const IngredientRow(name: "Avocado"),
                                 const IngredientRow(name: "Red Cabbage"),
@@ -260,7 +258,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
                               // Add-ons Header
                               const Text(
-                                "Add-ons",
+                                AppStrings.addons,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -274,21 +272,20 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 ...item.addons!.map((addon) {
                                   return AddonRow(
                                     name: addon.name,
-                                    price: addon.formattedPrice, // Assuming formattedPrice returns e.g. "+ 130 kr" or similar
+                                    price: addon.formattedPrice, 
                                     count: _addonCounts[addon.id] ?? 0,
                                     onAdd: () => _incrementAddon(addon.id),
                                     onRemove: () => _decrementAddon(addon.id),
                                   );
                                 }).toList(),
                               ] else ...[
-                                // If no addons, show message or hidden? Design implies addons section is prominent.
-                                Text("No add-ons available", style: TextStyle(color: Colors.grey[500])),
+                                Text(AppStrings.noAddonsAvailable, style: TextStyle(color: Colors.grey[500])),
                               ],
                               const SizedBox(height: 32),
 
                               // Special Instructions
                               const Text(
-                                "Special instructions",
+                                AppStrings.specialInstructions,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -297,7 +294,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               ),
                               const SizedBox(height: 8),
                               const Text(
-                                "Please let us know if you are allergic to anything or if we need to avoid anything",
+                                AppStrings.specialInstructionsHint,
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: Colors.grey,
@@ -307,7 +304,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(color: Colors.grey.withOpacity(0.2)),
                                   boxShadow: [
@@ -324,12 +321,11 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   minLines: 3,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: 'e.g. no mayo',
+                                    hintText: AppStrings.instructionsExample,
                                     hintStyle: TextStyle(color: Colors.grey[400]),
-                                    labelText: 'Instructions',
+                                    labelText: AppStrings.instructionsLabel,
                                     labelStyle: TextStyle(color: Colors.grey[600]),
                                     floatingLabelBehavior: FloatingLabelBehavior.always, 
-                                    // Align label to look like the design (notch or just top text)
                                   ),
                                 ),
                               ),
@@ -342,7 +338,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.05),
@@ -358,7 +354,6 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               height: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                // border: Border.all(color: Colors.grey.withOpacity(0.3)),
                               ),
                               child: Row(
                                 children: [
@@ -371,6 +366,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
+                                          color: AppColors.primaryText,
                                         ),
                                       ),
                                     )
@@ -394,21 +390,18 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                     }
                                   }
                                   
-                                  // Instructions? ViewModel might need update to accept instructions or cart item entity update.
-                                  // For now, logic remains same as before for cart addition.
-                                  
                                   context.read<CartViewModel>().addToCart(item, _quantity, selectedAddons);
                                   
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Added ${item.name} to cart'),
-                                      backgroundColor: Colors.green,
+                                      content: Text(AppStrings.formatItemAddedToCart(item.name)),
+                                      backgroundColor: AppColors.primaryAccent,
                                       duration: const Duration(seconds: 1),
                                     ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF53B175), // Green color from image
+                                  backgroundColor: AppColors.primaryAccent,
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
@@ -416,11 +409,11 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   elevation: 0,
                                 ),
                                 child: const Text(
-                                  "ADD TO CART",
+                                  AppStrings.addToCartButton, 
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                   ),
                                 ),
                               ),
@@ -446,10 +439,10 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
         width: 40,
         height: 40,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, size: 20, color: Colors.black),
+        child: Icon(icon, size: 20, color: AppColors.primaryText),
       ),
     );
   }
@@ -467,13 +460,12 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
         child: Icon(
           icon, 
           size: 20, 
-          color: isPlus ? Colors.green : Colors.grey[700]
+          color: isPlus ? AppColors.primaryAccent : Colors.grey[700]
         ),
       ),
     );
   }
 }
-
 
 // --- WIDGETS ---
 
@@ -491,17 +483,13 @@ class NutritionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Width should be approx half minus spacing.
-    // We'll rely on Wrap in the parent or use flexible.
-    // Hardcoding width slightly to match grid feel if Flexible doesn't work well in Wrap without constraints.
-    // Parent LayoutBuilder provides constraints.
     double width = (MediaQuery.of(context).size.width - 48 - 16) / 2; 
 
     return Container(
       width: width,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.backgroundLight.withOpacity(0.5), // Very light grey
+        color: AppColors.backgroundLight.withOpacity(0.5), 
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.withOpacity(0.1)),
       ),
@@ -510,7 +498,7 @@ class NutritionItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white, // Icon background
+              color: AppColors.white, 
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, size: 20, color: Colors.black54),
@@ -553,7 +541,7 @@ class IngredientRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.withOpacity(0.1)),
         boxShadow: [
@@ -566,7 +554,6 @@ class IngredientRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Image Placeholder (Circle/Rounded Square)
           Container(
             width: 40,
             height: 40,
@@ -574,7 +561,7 @@ class IngredientRow extends StatelessWidget {
               color: AppColors.backgroundLight,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.image, color: Colors.green, size: 20), // Placeholder icon
+            child: const Icon(Icons.image, color: AppColors.mutedText, size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -591,17 +578,15 @@ class IngredientRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              // border: Border.all(color: Colors.green),
-              // borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               children: [
-                Icon(Icons.radio_button_unchecked, color: Colors.green, size: 16),
-                 SizedBox(width: 4),
-                const Text(
-                  "Free",
-                  style: TextStyle(
-                    color: Colors.green,
+                const Icon(Icons.radio_button_unchecked, color: AppColors.primaryAccent, size: 16),
+                 const SizedBox(width: 4),
+                Text(
+                  AppStrings.free,
+                  style: const TextStyle(
+                    color: AppColors.primaryAccent,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -636,7 +621,7 @@ class AddonRow extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.withOpacity(0.1)),
         boxShadow: [
@@ -672,7 +657,7 @@ class AddonRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  price, // e.g. "+ 130 kr"
+                  price, 
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],
@@ -692,6 +677,7 @@ class AddonRow extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    color: AppColors.primaryText,
                   ),
                 ),
               ),
@@ -713,14 +699,14 @@ class AddonRow extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: isPlus 
-            ? Border.all(color: Colors.green) 
+            ? Border.all(color: AppColors.primaryAccent) 
             : Border.all(color: Colors.grey.withOpacity(0.4)),
-          color: isPlus ? Colors.white : Colors.white,
+          color: AppColors.white,
         ),
         child: Icon(
           icon, 
           size: 16, 
-          color: isPlus ? Colors.green : Colors.grey[600]
+          color: isPlus ? AppColors.primaryAccent : Colors.grey[600]
         ),
       ),
     );

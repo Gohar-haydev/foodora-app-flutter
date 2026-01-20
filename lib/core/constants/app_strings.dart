@@ -176,6 +176,14 @@ class AppStrings {
   static const String proteins = 'proteins';
   static const String fats = 'fats';
   static const String item = 'Item'; // e.g. "6 Item"
+  static const String addons = 'Add-ons';
+  static const String noAddonsAvailable = 'No add-ons available';
+  static const String specialInstructions = 'Special instructions';
+  static const String specialInstructionsHint = 'Please let us know if you are allergic to anything or if we need to avoid anything';
+  static const String instructionsLabel = 'Instructions';
+  static const String instructionsExample = 'e.g. no mayo';
+  static const String free = 'Free';
+
   
   // Checkout Screen
   static const String deliveryAddress = 'Delivery Address';
