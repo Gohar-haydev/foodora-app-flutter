@@ -23,7 +23,7 @@ class AppStrings {
   static const String logIn = 'Log In';
   static const String signUp = 'SIGN UP';
   static const String continueAsGuest = 'Continue as Guest';
-  static const String createNewAccount = 'Create new account.';
+  static const String createNewAccount = 'Sign Up';
   static const String dontHaveAccount = 'Don\'t have account?';
   static const String alreadyHaveAccount = 'Already have account?';
   static const String termsAndConditions = 'By Signing up you agree to our Terms Conditions & Privacy Policy.';

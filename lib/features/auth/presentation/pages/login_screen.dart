@@ -76,12 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              
               // Header with back button and title
               AuthHeader(title: AppStrings.signIn),
-
               const SizedBox(height: 40),
-
               // Welcome back heading
               const Center(
                 child: Text(
@@ -93,33 +90,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 40),
-
               // Email input field
               AuthTextField(
                 controller: _emailController,
                 hintText: AppStrings.emailAddress,
                 keyboardType: TextInputType.emailAddress,
               ),
-
               const SizedBox(height: 16),
-
               // Password input field with visibility toggle
               PasswordTextField(
                 controller: _passwordController,
                 hintText: AppStrings.passwordPlaceholder,
               ),
-
               const SizedBox(height: 8),
-
               // Forget Password link
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => const ForgotPasswordScreen()),
                     );
                   },
                   child: const Text(
@@ -131,42 +123,48 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 24),
-
               // Sign In button
               AuthButton(
                 text: AppStrings.signIn,
                 onPressed: _onLoginPressed,
               ),
-
+              const SizedBox(height: 16),
               // Bottom text links
               Padding(
                 padding: const EdgeInsets.only(bottom: 24.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SignupScreen()),
-                        );
-                      },
-                      child: const Text(
-                        AppStrings.createNewAccount,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF4FAF5A),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
                     const Text(
                       AppStrings.dontHaveAccount,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const SignupScreen()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: const Text(
+                        AppStrings.createNewAccount,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF4FAF5A),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
