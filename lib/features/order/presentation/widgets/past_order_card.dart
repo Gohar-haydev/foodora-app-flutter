@@ -40,14 +40,21 @@ class PastOrderCard extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(imageUrl), // Use NetworkImage for remote or AssetImage for local
-                fit: BoxFit.cover,
-                // Fallback/error builder could be added here for robustness
-              ),
-              // Fallback color if image fails (temporary)
               color: Colors.grey[200],
+              image: imageUrl.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
+            child: imageUrl.isEmpty
+                ? const Icon(
+                    Icons.restaurant,
+                    color: Colors.grey,
+                    size: 30,
+                  )
+                : null,
           ),
           const SizedBox(width: 16),
           // Order Details

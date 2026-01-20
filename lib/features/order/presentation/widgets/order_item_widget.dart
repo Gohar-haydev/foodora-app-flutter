@@ -24,16 +24,18 @@ class OrderItemWidget extends StatelessWidget {
             width: 60,
             height: 60,
             color: Colors.grey[300],
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.fastfood, color: Colors.grey),
-                );
-              },
-            ),
+            child: imageUrl.isNotEmpty
+                ? Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.fastfood, color: Colors.grey),
+                      );
+                    },
+                  )
+                : const Icon(Icons.fastfood, color: Colors.grey),
           ),
         ),
         const SizedBox(width: 12),

@@ -31,6 +31,11 @@ import 'features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'features/cart/data/datasources/cart_local_datasource.dart';
 import 'features/cart/data/repositories/cart_repository_impl.dart';
 import 'features/cart/presentation/viewmodels/cart_viewmodel.dart';
+import 'features/order/data/datasources/order_remote_data_source_impl.dart';
+import 'features/order/data/repositories/order_repository_impl.dart';
+import 'features/order/domain/usecases/create_order_usecase.dart';
+import 'features/order/domain/usecases/get_order_by_id_usecase.dart';
+import 'features/order/domain/usecases/get_orders_usecase.dart';
 import 'features/order/presentation/viewmodels/order_viewmodel.dart';
 
 void main() {
@@ -80,6 +85,13 @@ class FoodieApp extends StatelessWidget {
     final cartLocalDataSource = CartLocalDataSource();
     final cartRepository = CartRepositoryImpl(localDataSource: cartLocalDataSource);
 
+    // Order Feature Dependencies
+    final orderRemoteDataSource = OrderRemoteDataSourceImpl(apiService);
+    final orderRepository = OrderRepositoryImpl(orderRemoteDataSource);
+    final createOrderUseCase = CreateOrderUseCase(orderRepository);
+    final getOrderByIdUseCase = GetOrderByIdUseCase(orderRepository);
+    final getOrdersUseCase = GetOrdersUseCase(orderRepository);
+
     // 5. Initialize ViewModels (Providers)
     return MultiProvider(
       providers: [
@@ -111,7 +123,13 @@ class FoodieApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(create: (_) => CartViewModel(cartRepository: cartRepository)),
-        ChangeNotifierProvider(create: (_) => OrderViewModel()),
+        ChangeNotifierProvider(
+          create: (_) => OrderViewModel(
+            createOrderUseCase: createOrderUseCase,
+            getOrderByIdUseCase: getOrderByIdUseCase,
+            getOrdersUseCase: getOrdersUseCase,
+          ),
+        ),
       ],
       child: MaterialApp(
         title: AppStrings.appName,

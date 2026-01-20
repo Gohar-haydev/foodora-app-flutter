@@ -171,20 +171,4 @@ class CartViewModel extends ChangeNotifier {
     }
   }
 
-  OrderEntity? placeOrder() {
-     if (_cartItems.isEmpty) return null;
-
-     final order = OrderEntity(
-       id: _generateId(),
-       items: List.from(_cartItems),
-       totalAmount: grandTotal,
-       deliveryFee: deliveryFee,
-       tax: tax,
-       placedAt: DateTime.now(),
-       status: 'Preparing',
-     );
-
-     clearCart();
-     return order;
-  }
 }

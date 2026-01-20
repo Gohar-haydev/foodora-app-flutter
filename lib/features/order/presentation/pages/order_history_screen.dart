@@ -5,8 +5,22 @@ import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.d
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/presentation/widgets/past_order_card.dart';
 
-class OrderHistoryScreen extends StatelessWidget {
+class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
+
+  @override
+  State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
+}
+
+class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch orders when screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OrderViewModel>().fetchOrders();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +58,42 @@ class OrderHistoryScreen extends StatelessWidget {
               // List of Orders
               Consumer<OrderViewModel>(
                 builder: (context, viewModel, child) {
+                  // Show loading indicator
+                  if (viewModel.isLoading) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(48.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+
+                  // Show error message
+                  if (viewModel.errorMessage != null) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          children: [
+                            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                            const SizedBox(height: 16),
+                            Text(
+                              viewModel.errorMessage!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () => viewModel.fetchOrders(),
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  // Show empty state
                   if (viewModel.orders.isEmpty) {
                     return const Center(
                       child: Padding(
@@ -61,23 +111,60 @@ class OrderHistoryScreen extends StatelessWidget {
                       final order = viewModel.orders[index];
                       final firstItem = order.items.first;
                       final title = order.items.length > 1 
-                        ? '${firstItem.menuItem.name} + ${order.items.length - 1} more'
-                        : firstItem.menuItem.name;
+                        ? '${firstItem.itemName} + ${order.items.length - 1} more'
+                        : firstItem.itemName;
                       
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => OrderDetailsScreen(order: order),
-                            ),
-                          );
+                        onTap: () async {
+                          print('🔵 [ORDER_TAP] Order tapped - ID: ${order.id}');
+                          print('🔵 [ORDER_TAP] Order Number: ${order.orderNumber}');
+                          
+                          // Check if context is mounted before starting
+                          if (!context.mounted) {
+                            print('⚠️ [ORDER_TAP] Context not mounted at start, aborting');
+                            return;
+                          }
+                          
+                          // Capture navigator and scaffold messenger before async call
+                          final navigator = Navigator.of(context);
+                          final scaffoldMessenger = ScaffoldMessenger.of(context);
+                          
+                          // Fetch fresh order details from API
+                          print('🔵 [ORDER_TAP] Calling getOrderById(${order.id})...');
+                          final orderDetails = await viewModel.getOrderById(order.id);
+                          
+                          print('🔵 [ORDER_TAP] API Response received');
+                          print('🔵 [ORDER_TAP] orderDetails is null: ${orderDetails == null}');
+                          print('🔵 [ORDER_TAP] errorMessage: ${viewModel.errorMessage}');
+                          
+                          if (orderDetails != null) {
+                            print('✅ [ORDER_TAP] Navigating to OrderDetailsScreen');
+                            print('✅ [ORDER_TAP] Order ID: ${orderDetails.id}');
+                            print('✅ [ORDER_TAP] Order Number: ${orderDetails.orderNumber}');
+                            print('✅ [ORDER_TAP] Items count: ${orderDetails.items.length}');
+                            
+                            // Navigate with fresh data using captured navigator
+                            navigator.push(
+                              MaterialPageRoute(
+                                builder: (_) => OrderDetailsScreen(order: orderDetails),
+                              ),
+                            );
+                            print('✅ [ORDER_TAP] Navigation push completed');
+                          } else if (viewModel.errorMessage != null) {
+                            print('❌ [ORDER_TAP] Error occurred: ${viewModel.errorMessage}');
+                            // Show error if fetch failed using captured scaffold messenger
+                            scaffoldMessenger.showSnackBar(
+                              SnackBar(
+                                content: Text(viewModel.errorMessage!),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         },
                         child: PastOrderCard(
                           title: title,
                           price: '\$${order.totalAmount.toStringAsFixed(2)}',
-                          imageUrl: firstItem.menuItem.image != null 
-                            ? firstItem.menuItem.image! 
-                            : '',
+                          imageUrl: firstItem.branchImageUrl ?? '',
                         ),
                       );
                     },

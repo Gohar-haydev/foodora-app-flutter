@@ -82,7 +82,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    DateFormat('MMM d, yyyy, h:mm a').format(order.placedAt),
+                    DateFormat('MMM d, yyyy, h:mm a').format(order.createdAt),
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[500],
@@ -193,10 +193,10 @@ class OrderDetailsScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: OrderItemWidget(
-                      name: item.menuItem.name,
+                      name: item.itemName,
                       code: '${AppStrings.qty}: ${item.quantity}',
                       price: item.totalPrice,
-                      imageUrl: item.menuItem.image ?? '',
+                      imageUrl: item.branchImageUrl ?? '',
                     ),
                   );
                 }).toList(),
@@ -234,7 +234,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 children: [
                   PriceRowWidget(label: AppStrings.deliveryFee, amount: order.deliveryFee),
                   const SizedBox(height: 12),
-                  PriceRowWidget(label: AppStrings.tax, amount: order.tax),
+                  PriceRowWidget(label: AppStrings.tax, amount: order.taxAmount),
                   const SizedBox(height: 12),
                   PriceRowWidget(label: AppStrings.total, amount: order.totalAmount, isBold: true),
                 ],
