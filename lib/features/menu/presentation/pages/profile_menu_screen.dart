@@ -183,44 +183,47 @@ class ProfileMenuScreen extends StatelessWidget {
           // const SizedBox(height: 16),
 
           // Logout Button
-          LogoutButton(
-            text: AppStrings.logoutButton,
-            onPressed: () async {
-              // Show confirmation dialog
-              final shouldLogout = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text(AppStrings.logoutConfirmTitle),
-                  content: const Text(AppStrings.logoutConfirmMessage),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text(AppStrings.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text(
-                        AppStrings.logout,
-                        style: TextStyle(color: Colors.red),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: LogoutButton(
+              text: AppStrings.logoutButton,
+              onPressed: () async {
+                // Show confirmation dialog
+                final shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text(AppStrings.logoutConfirmTitle),
+                    content: const Text(AppStrings.logoutConfirmMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text(AppStrings.cancel),
                       ),
-                    ),
-                  ],
-                ),
-              );
-
-              if (shouldLogout == true) {
-                await context.read<AuthViewModel>().logout();
-                if (!context.mounted) return;
-
-                // Navigate to login screen and clear navigation stack
-                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text(
+                          AppStrings.logout,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
                   ),
-                  (route) => false,
                 );
-              }
-            },
+
+                if (shouldLogout == true) {
+                  await context.read<AuthViewModel>().logout();
+                  if (!context.mounted) return;
+
+                  // Navigate to login screen and clear navigation stack
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (route) => false,
+                  );
+                }
+              },
+            ),
           ),
           SizedBox(height: 25,)
         ],
