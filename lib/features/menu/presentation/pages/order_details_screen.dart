@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/order/domain/entities/order_entity.dart';
 import 'package:foodora/features/order/presentation/widgets/widgets.dart';
+import 'package:foodora/features/order/presentation/pages/order_tracking_screen.dart';
 import 'package:intl/intl.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
@@ -246,6 +247,40 @@ class OrderDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   PriceRowWidget(label: AppStrings.total, amount: order.totalAmount, isBold: true),
                 ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // Track Order Button
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderTrackingScreen(orderId: order.id),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF4CAF50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: Color(0xFF4CAF50)),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  'Track Order',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
 

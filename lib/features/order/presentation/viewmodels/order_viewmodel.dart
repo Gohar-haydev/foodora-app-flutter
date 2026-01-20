@@ -3,17 +3,21 @@ import 'package:foodora/features/order/domain/entities/order_entity.dart';
 import 'package:foodora/features/order/domain/usecases/create_order_usecase.dart';
 import 'package:foodora/features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'package:foodora/features/order/domain/usecases/get_orders_usecase.dart';
+import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
+import 'package:foodora/features/order/domain/usecases/track_order_usecase.dart';
 import 'package:foodora/features/order/data/models/order_request_model.dart';
 
 class OrderViewModel extends ChangeNotifier {
   final CreateOrderUseCase createOrderUseCase;
   final GetOrderByIdUseCase getOrderByIdUseCase;
   final GetOrdersUseCase getOrdersUseCase;
+  final TrackOrderUseCase trackOrderUseCase;
   
   OrderViewModel({
     required this.createOrderUseCase,
     required this.getOrderByIdUseCase,
     required this.getOrdersUseCase,
+    required this.trackOrderUseCase,
   });
   
   final List<OrderEntity> _orders = [];
@@ -25,6 +29,8 @@ class OrderViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   OrderEntity? get lastCreatedOrder => _lastCreatedOrder;
+  OrderTrackingEntity? _orderTracking;
+  OrderTrackingEntity? get orderTracking => _orderTracking;
 
   void addOrder(OrderEntity order) {
     _orders.insert(0, order); // Add to top
@@ -114,6 +120,33 @@ class OrderViewModel extends ChangeNotifier {
         _orders.clear();
         _orders.addAll(orders);
         notifyListeners();
+      },
+    );
+  }
+
+  Future<OrderTrackingEntity?> trackOrder(int orderId) async {
+    print('🟡 [ViewModel] trackOrder called with orderId: $orderId');
+    _isLoading = true;
+    _errorMessage = null;
+    _orderTracking = null;
+    notifyListeners();
+
+    final result = await trackOrderUseCase(orderId);
+
+    return result.fold(
+      (failure) {
+        print('❌ [ViewModel] Track order failure: ${failure.message}');
+        _isLoading = false;
+        _errorMessage = failure.message;
+        notifyListeners();
+        return null;
+      },
+      (trackingData) {
+        print('✅ [ViewModel] Track order success: ${trackingData.status}');
+        _isLoading = false;
+        _orderTracking = trackingData;
+        notifyListeners();
+        return trackingData;
       },
     );
   }

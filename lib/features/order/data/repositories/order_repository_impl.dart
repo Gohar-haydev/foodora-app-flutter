@@ -3,6 +3,7 @@ import 'package:foodora/core/utils/result.dart';
 import 'package:foodora/features/order/data/datasources/order_remote_data_source.dart';
 import 'package:foodora/features/order/data/models/order_request_model.dart';
 import 'package:foodora/features/order/domain/entities/order_entity.dart';
+import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
 import 'package:foodora/features/order/domain/repositories/order_repository.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
@@ -47,6 +48,19 @@ class OrderRepositoryImpl implements OrderRepository {
       final orderEntities = orderModels.map((model) => model.toEntity()).toList();
       return Result.success(orderEntities);
     } catch (e) {
+      return Result.failure(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<OrderTrackingEntity>> trackOrder(int orderId) async {
+    print('🟠 [Repository] trackOrder called with orderId: $orderId');
+    try {
+      final trackingModel = await remoteDataSource.trackOrder(orderId);
+      print('✅ [Repository] Parsed tracking model successfully');
+      return Result.success(trackingModel.toEntity());
+    } catch (e) {
+      print('❌ [Repository] Track order exception: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }

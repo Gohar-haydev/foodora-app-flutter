@@ -36,6 +36,7 @@ import 'features/order/data/repositories/order_repository_impl.dart';
 import 'features/order/domain/usecases/create_order_usecase.dart';
 import 'features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'features/order/domain/usecases/get_orders_usecase.dart';
+import 'features/order/domain/usecases/track_order_usecase.dart';
 import 'features/order/presentation/viewmodels/order_viewmodel.dart';
 
 void main() {
@@ -91,6 +92,7 @@ class FoodieApp extends StatelessWidget {
     final createOrderUseCase = CreateOrderUseCase(orderRepository);
     final getOrderByIdUseCase = GetOrderByIdUseCase(orderRepository);
     final getOrdersUseCase = GetOrdersUseCase(orderRepository);
+    final trackOrderUseCase = TrackOrderUseCase(orderRepository);
 
     // 5. Initialize ViewModels (Providers)
     return MultiProvider(
@@ -128,6 +130,7 @@ class FoodieApp extends StatelessWidget {
             createOrderUseCase: createOrderUseCase,
             getOrderByIdUseCase: getOrderByIdUseCase,
             getOrdersUseCase: getOrdersUseCase,
+            trackOrderUseCase: trackOrderUseCase,
           ),
         ),
       ],

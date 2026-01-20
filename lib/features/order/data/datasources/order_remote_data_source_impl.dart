@@ -3,6 +3,7 @@ import '../models/order_model.dart';
 import '../models/order_request_model.dart';
 import '../models/order_response_model.dart';
 import '../models/order_list_response_model.dart';
+import '../models/order_tracking_model.dart';
 import 'order_remote_data_source.dart';
 
 class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
@@ -65,6 +66,27 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
     return result.fold(
       (failure) => throw Exception(failure.message),
       (response) => response.data,
+    );
+  }
+
+  @override
+  Future<OrderTrackingModel> trackOrder(int orderId) async {
+    print('🟣 [DataSource] trackOrder called with orderId: $orderId');
+    final result = await apiService.get<OrderTrackingResponseModel>(
+      endpoint: '/orders/$orderId/track',
+      requireAuth: true,
+      fromJson: (json) => OrderTrackingResponseModel.fromJson(json),
+    );
+
+    return result.fold(
+      (failure) {
+        print('❌ [DataSource] Track API failure: ${failure.message}');
+        throw Exception(failure.message);
+      },
+      (response) {
+        print('✅ [DataSource] Track API success for order ${response.data.orderNumber}');
+        return response.data;
+      },
     );
   }
 }
