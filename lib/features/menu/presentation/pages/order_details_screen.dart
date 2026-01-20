@@ -127,20 +127,28 @@ class OrderDetailsScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFFE8F5E9),
                       borderRadius: BorderRadius.circular(12),
+                      image: order.branchImageUrl != null && order.branchImageUrl!.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(order.branchImageUrl!),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
                     ),
-                    child: const Icon(
-                      Icons.restaurant,
-                      color: Color(0xFF4CAF50),
-                    ),
+                    child: order.branchImageUrl != null && order.branchImageUrl!.isNotEmpty
+                        ? null
+                        : const Icon(
+                            Icons.restaurant,
+                            color: Color(0xFF4CAF50),
+                          ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Green Bites - Branch A',
-                          style: TextStyle(
+                        Text(
+                          order.branchName,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -148,7 +156,7 @@ class OrderDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '123 Foodie Lane, Downtown',
+                          order.branchAddress ?? 'No address available',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[500],
