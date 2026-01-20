@@ -60,13 +60,13 @@ class OrderDetailsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE8F5E9), // Light green
+                      color: _getStatusColor(order.status).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      AppStrings.completed,
+                    child: Text(
+                      _formatStatus(order.status),
                       style: TextStyle(
-                        color: Color(0xFF4CAF50),
+                        color: _getStatusColor(order.status),
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
@@ -324,5 +324,35 @@ class OrderDetailsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.orange;
+      case 'confirmed':
+        return Colors.blue;
+      case 'preparing':
+        return Colors.purple;
+      case 'ready':
+        return Colors.indigo;
+      case 'out_for_delivery':
+      case 'out for delivery':
+        return Colors.teal;
+      case 'delivered':
+        return const Color(0xFF4CAF50);
+      case 'cancelled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String _formatStatus(String status) {
+    if (status.isEmpty) return 'Unknown';
+    return status
+        .split('_')
+        .map((word) => word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '')
+        .join(' ');
   }
 }
