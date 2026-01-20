@@ -340,9 +340,14 @@ class _MenuScreenState extends State<MenuScreen> {
                               title: itemsToShow[i].name,
                               price: 'from ${itemsToShow[i].price} kr',
                               image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
-                              menuItemId: itemsToShow[i].id,
+                                menuItemId: itemsToShow[i].id,
                               isFavorite: viewModel.isFavorite(itemsToShow[i].id),
                               onFavoriteTap: () async {
+                                // Verify status first as requested
+                                await viewModel.checkFavoriteStatus(itemsToShow[i].id);
+                                
+                                if (!context.mounted) return;
+                                
                                 final message = await viewModel.toggleFavorite(itemsToShow[i].id);
                                 if (context.mounted && message != null) {
                                   ScaffoldMessenger.of(context).showSnackBar(

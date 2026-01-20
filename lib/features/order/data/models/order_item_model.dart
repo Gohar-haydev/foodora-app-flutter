@@ -38,18 +38,18 @@ class OrderItemModel extends Equatable {
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) {
     return OrderItemModel(
-      id: json['id'] as int,
-      orderId: json['order_id'] as int,
-      branchId: json['branch_id'] as int,
-      menuItemId: json['menu_item_id'] as int,
-      itemName: json['item_name'] as String,
-      unitPrice: json['unit_price'] as String,
-      quantity: json['quantity'] as int,
-      specialInstructions: json['special_instructions'] as String?,
-      subtotal: json['subtotal'] as String,
-      addonsTotal: json['addons_total'] as String,
-      createdAt: json['created_at'] as String,
-      updatedAt: json['updated_at'] as String,
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      orderId: (json['order_id'] as num?)?.toInt() ?? 0,
+      branchId: (json['branch_id'] as num?)?.toInt() ?? 0,
+      menuItemId: (json['menu_item_id'] as num?)?.toInt() ?? 0,
+      itemName: json['item_name']?.toString() ?? 'Unknown Item',
+      unitPrice: json['unit_price']?.toString() ?? '0.00',
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      specialInstructions: json['special_instructions']?.toString(),
+      subtotal: json['subtotal']?.toString() ?? '0.00',
+      addonsTotal: json['addons_total']?.toString() ?? '0.00',
+      createdAt: json['created_at']?.toString() ?? DateTime.now().toIso8601String(),
+      updatedAt: json['updated_at']?.toString() ?? DateTime.now().toIso8601String(),
       branch: json['branch'] != null 
           ? BranchInfoModel.fromJson(json['branch'] as Map<String, dynamic>)
           : null,

@@ -16,4 +16,5 @@ abstract class MenuRepository {
   Future<Result<List<MenuItemEntity>>> searchMenuItems(String query);
   Future<Result<List<MenuItemEntity>>> getMenuItemsByCategoryFilter(int categoryId);
   Future<Result<MenuItemEntity>> getMenuItemDetails(int id);
+  Future<Result<bool>> checkFavoriteStatus(int menuItemId);
 }

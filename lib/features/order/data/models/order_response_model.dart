@@ -28,8 +28,13 @@ class OrderResponseData {
   });
 
   factory OrderResponseData.fromJson(Map<String, dynamic> json) {
+    if (json['order'] != null) {
+      return OrderResponseData(
+        order: OrderModel.fromJson(json['order'] as Map<String, dynamic>),
+      );
+    }
     return OrderResponseData(
-      order: OrderModel.fromJson(json['data'] as Map<String, dynamic>),
+      order: OrderModel.fromJson(json['data'] != null ? json['data'] as Map<String, dynamic> : json),
     );
   }
 }

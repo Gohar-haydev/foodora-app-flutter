@@ -54,30 +54,34 @@ class OrderModel extends Equatable {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
-      id: json['id'] as int,
-      userId: json['user_id'] as int,
-      branchId: json['branch_id'] as int,
-      subtotal: json['subtotal'] as String,
-      taxAmount: json['tax_amount'] as String,
-      deliveryFee: json['delivery_fee'] as String,
-      totalAmount: json['total_amount'] as String,
-      status: json['status'] as String,
-      deliveryType: json['delivery_type'] as String,
-      deliveryAddress: json['delivery_address'] as String?,
-      deliveryLat: json['delivery_lat'] as String?,
-      deliveryLng: json['delivery_lng'] as String?,
-      paymentMethod: json['payment_method'] as String,
-      paymentStatus: json['payment_status'] as String,
-      customerName: json['customer_name'] as String,
-      customerPhone: json['customer_phone'] as String,
-      notes: json['notes'] as String?,
-      orderNumber: json['order_number'] as String,
-      createdAt: json['created_at'] as String,
-      updatedAt: json['updated_at'] as String,
-      branch: BranchInfoModel.fromJson(json['branch'] as Map<String, dynamic>),
-      items: (json['items'] as List<dynamic>)
-          .map((item) => OrderItemModel.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      userId: (json['user_id'] as num?)?.toInt() ?? 0,
+      branchId: (json['branch_id'] as num?)?.toInt() ?? 0,
+      subtotal: json['subtotal']?.toString() ?? '0.00',
+      taxAmount: json['tax_amount']?.toString() ?? '0.00',
+      deliveryFee: json['delivery_fee']?.toString() ?? '0.00',
+      totalAmount: json['total_amount']?.toString() ?? '0.00',
+      status: json['status']?.toString() ?? 'Unknown',
+      deliveryType: json['delivery_type']?.toString() ?? 'Unknown',
+      deliveryAddress: json['delivery_address']?.toString(),
+      deliveryLat: json['delivery_lat']?.toString(),
+      deliveryLng: json['delivery_lng']?.toString(),
+      paymentMethod: json['payment_method']?.toString() ?? 'Unknown',
+      paymentStatus: json['payment_status']?.toString() ?? 'Unknown',
+      customerName: json['customer_name']?.toString() ?? 'Unknown',
+      customerPhone: json['customer_phone']?.toString() ?? '',
+      notes: json['notes']?.toString(),
+      orderNumber: json['order_number']?.toString() ?? '',
+      createdAt: json['created_at']?.toString() ?? DateTime.now().toIso8601String(),
+      updatedAt: json['updated_at']?.toString() ?? DateTime.now().toIso8601String(),
+      branch: json['branch'] != null 
+          ? BranchInfoModel.fromJson(json['branch'] as Map<String, dynamic>)
+          : const BranchInfoModel(id: 0, name: 'Unknown'),
+      items: json['items'] != null
+          ? (json['items'] as List<dynamic>)
+              .map((item) => OrderItemModel.fromJson(item as Map<String, dynamic>))
+              .toList()
+          : [],
     );
   }
 

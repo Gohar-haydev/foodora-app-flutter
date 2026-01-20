@@ -27,6 +27,7 @@ import 'features/menu/domain/usecases/get_favorites_usecase.dart';
 import 'features/menu/domain/usecases/search_menu_items_usecase.dart';
 import 'features/menu/domain/usecases/get_menu_items_by_category_filter_usecase.dart';
 import 'features/menu/domain/usecases/get_menu_item_details_usecase.dart';
+import 'features/menu/domain/usecases/check_favorite_status_usecase.dart';
 import 'features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'features/cart/data/datasources/cart_local_datasource.dart';
 import 'features/cart/data/repositories/cart_repository_impl.dart';
@@ -81,6 +82,7 @@ class FoodieApp extends StatelessWidget {
     final searchMenuItemsUseCase = SearchMenuItemsUseCase(menuRepository);
     final getMenuItemsByCategoryFilterUseCase = GetMenuItemsByCategoryFilterUseCase(menuRepository);
     final getMenuItemDetailsUseCase = GetMenuItemDetailsUseCase(menuRepository);
+    final checkFavoriteStatusUseCase = CheckFavoriteStatusUseCase(menuRepository);
 
     // Cart Feature Dependencies
     final cartLocalDataSource = CartLocalDataSource();
@@ -122,6 +124,7 @@ class FoodieApp extends StatelessWidget {
             searchMenuItemsUseCase: searchMenuItemsUseCase,
             getMenuItemsByCategoryFilterUseCase: getMenuItemsByCategoryFilterUseCase,
             getMenuItemDetailsUseCase: getMenuItemDetailsUseCase,
+            checkFavoriteStatusUseCase: checkFavoriteStatusUseCase,
           ),
         ),
         ChangeNotifierProvider(create: (_) => CartViewModel(cartRepository: cartRepository)),

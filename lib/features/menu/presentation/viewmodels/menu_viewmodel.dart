@@ -13,6 +13,7 @@ import 'package:foodora/features/menu/domain/usecases/get_favorites_usecase.dart
 import 'package:foodora/features/menu/domain/usecases/search_menu_items_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_items_by_category_filter_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_item_details_usecase.dart';
+import 'package:foodora/features/menu/domain/usecases/check_favorite_status_usecase.dart';
 
 class MenuViewModel extends ChangeNotifier {
   final GetBranchesUseCase getBranchesUseCase;
@@ -25,6 +26,7 @@ class MenuViewModel extends ChangeNotifier {
   final SearchMenuItemsUseCase searchMenuItemsUseCase;
   final GetMenuItemsByCategoryFilterUseCase getMenuItemsByCategoryFilterUseCase;
   final GetMenuItemDetailsUseCase getMenuItemDetailsUseCase;
+  final CheckFavoriteStatusUseCase checkFavoriteStatusUseCase;
 
   MenuViewModel({
     required this.getBranchesUseCase,
@@ -37,6 +39,7 @@ class MenuViewModel extends ChangeNotifier {
     required this.searchMenuItemsUseCase,
     required this.getMenuItemsByCategoryFilterUseCase,
     required this.getMenuItemDetailsUseCase,
+    required this.checkFavoriteStatusUseCase,
   });
 
   List<BranchEntity> _branches = [];
@@ -369,5 +372,25 @@ class MenuViewModel extends ChangeNotifier {
       },
     );
     notifyListeners();
+  }
+
+  // Check specific item favorite status from server
+  Future<void> checkFavoriteStatus(int menuItemId) async {
+    final result = await checkFavoriteStatusUseCase(menuItemId);
+
+    result.fold(
+      (failure) {
+        // Log failure but don't disrupt UI flow significantly as this is often a background check
+        print('Check favorite status failed: ${failure.message}');
+      },
+      (isFavorite) {
+        if (isFavorite) {
+          _favoriteItemIds.add(menuItemId);
+        } else {
+          _favoriteItemIds.remove(menuItemId);
+        }
+        notifyListeners();
+      },
+    );
   }
 }

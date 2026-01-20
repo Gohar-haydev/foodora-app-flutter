@@ -112,4 +112,13 @@ class MenuRepositoryImpl implements MenuRepository {
       return Result.failure(ServerFailure(e.toString()));
     }
   }
+  @override
+  Future<Result<bool>> checkFavoriteStatus(int menuItemId) async {
+    try {
+      final response = await remoteDataSource.checkFavoriteStatus(menuItemId);
+      return Result.success(response.data.isFavorite);
+    } catch (e) {
+      return Result.failure(ServerFailure(e.toString()));
+    }
+  }
 }

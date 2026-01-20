@@ -17,11 +17,11 @@ class BranchInfoModel extends Equatable {
 
   factory BranchInfoModel.fromJson(Map<String, dynamic> json) {
     return BranchInfoModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      address: json['address'] as String?,
-      phone: json['phone'] as String?,
-      imageUrl: json['image_url'] as String?,
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      name: json['name']?.toString() ?? 'Unknown Branch',
+      address: json['address']?.toString(),
+      phone: json['phone']?.toString(),
+      imageUrl: json['image_url']?.toString(),
     );
   }
 

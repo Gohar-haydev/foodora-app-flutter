@@ -6,6 +6,7 @@ import 'package:foodora/features/menu/data/models/favorite_request_model.dart';
 import 'package:foodora/features/menu/data/models/favorite_response_model.dart';
 import 'package:foodora/features/menu/data/models/remove_favorite_response_model.dart';
 import 'package:foodora/features/menu/data/models/favorites_list_response_model.dart';
+import 'package:foodora/features/menu/data/models/favorite_check_response_model.dart';
 import 'package:foodora/features/menu/data/datasources/menu_remote_data_source.dart';
 
 class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
@@ -166,6 +167,19 @@ class MenuRemoteDataSourceImpl implements MenuRemoteDataSource {
       fromJson: (json) {
         return MenuItemModel.fromJson(json['data']);
       },
+    );
+    
+    return result.fold(
+      (failure) => throw Exception(failure.message),
+      (data) => data,
+    );
+  }
+  @override
+  Future<FavoriteCheckResponseModel> checkFavoriteStatus(int menuItemId) async {
+    final result = await apiService.get<FavoriteCheckResponseModel>(
+      endpoint: '/favorites/check/$menuItemId',
+      requireAuth: true,
+      fromJson: (json) => FavoriteCheckResponseModel.fromJson(json),
     );
     
     return result.fold(

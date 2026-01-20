@@ -213,7 +213,7 @@ class ProfileMenuScreen extends StatelessWidget {
                 if (!context.mounted) return;
 
                 // Navigate to login screen and clear navigation stack
-                Navigator.of(context).pushAndRemoveUntil(
+                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (context) => const LoginScreen(),
                   ),

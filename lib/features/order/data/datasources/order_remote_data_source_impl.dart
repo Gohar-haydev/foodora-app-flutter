@@ -60,7 +60,10 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
     final result = await apiService.get<OrderListResponseModel>(
       endpoint: '/orders?page=$page',
       requireAuth: true,
-      fromJson: (json) => OrderListResponseModel.fromJson(json),
+      fromJson: (json) {
+        print('🟣 [DataSource] Raw Orders List JSON: $json');
+        return OrderListResponseModel.fromJson(json);
+      },
     );
 
     return result.fold(

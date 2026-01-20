@@ -4,6 +4,7 @@ import 'package:foodora/features/menu/data/models/menu_item_model.dart';
 import 'package:foodora/features/menu/data/models/favorite_response_model.dart';
 import 'package:foodora/features/menu/data/models/remove_favorite_response_model.dart';
 import 'package:foodora/features/menu/data/models/favorites_list_response_model.dart';
+import 'package:foodora/features/menu/data/models/favorite_check_response_model.dart';
 
 abstract class MenuRemoteDataSource {
   Future<List<BranchModel>> getBranches();
@@ -16,4 +17,5 @@ abstract class MenuRemoteDataSource {
   Future<List<MenuItemModel>> searchMenuItems(String query);
   Future<List<MenuItemModel>> getMenuItemsByCategoryFilter(int categoryId);
   Future<MenuItemModel> getMenuItemDetails(int id);
+  Future<FavoriteCheckResponseModel> checkFavoriteStatus(int menuItemId);
 }
