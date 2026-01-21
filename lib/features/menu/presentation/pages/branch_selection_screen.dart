@@ -113,7 +113,7 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                   const Text(
                     AppStrings.selectBranchTitle,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),

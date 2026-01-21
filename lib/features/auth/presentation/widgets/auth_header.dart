@@ -4,23 +4,28 @@ import 'package:flutter/material.dart';
 class AuthHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onBackPressed;
+  final bool showBackButton;
 
   const AuthHeader({
     super.key,
     required this.title,
     this.onBackPressed,
+    this.showBackButton = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-          onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios, size: 20),
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
+        if (showBackButton)
+          IconButton(
+            onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_back_ios, size: 20),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          )
+        else
+          const SizedBox(width: 40), // Balance the title when back button is hidden
         Expanded(
           child: Center(
             child: Text(
@@ -33,7 +38,7 @@ class AuthHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 40), // Balance the back button
+        if (showBackButton) const SizedBox(width: 40), // Balance the back button
       ],
     );
   }
