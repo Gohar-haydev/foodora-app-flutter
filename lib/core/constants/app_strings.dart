@@ -6,7 +6,7 @@ class AppStrings {
   static const String appTagline = 'Order from your favorite restaurants';
 
   // Auth Screens
-  static const String signIn = 'SIGN IN';
+  static const String signIn = 'Sign In';
   static const String welcomeBack = 'Welcome back';
   static const String createAccount = 'Create Account';
   static const String signUpSubtitle = 'Enter your Name, Email and Password for sign up.';

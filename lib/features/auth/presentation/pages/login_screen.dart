@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     AppStrings.forgetPassword,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppStrings.dontHaveAccount,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(

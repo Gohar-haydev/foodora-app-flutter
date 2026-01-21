@@ -27,7 +27,7 @@ class AuthTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(
           fontSize: 14,
-          color: Colors.grey[400],
+          color: Color(0XFF868686),
           letterSpacing: 0.5,
         ),
         filled: true,
@@ -39,6 +39,7 @@ class AuthTextField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 24,
           vertical: 18,
+          
         ),
         suffixIcon: suffixIcon,
       ),
@@ -69,6 +70,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return AuthTextField(
       controller: widget.controller,
       hintText: widget.hintText,
+      
       obscureText: _obscurePassword,
       suffixIcon: IconButton(
         icon: Icon(

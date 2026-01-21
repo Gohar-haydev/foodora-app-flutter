@@ -181,7 +181,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Password input field with visibility toggle
                 PasswordTextField(
                   controller: _passwordController,
-                  hintText: '******',
+                  hintText: 'New Password',
                 ),
 
                 const SizedBox(height: 32),
@@ -192,7 +192,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: _onSignupPressed,
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Already have account link
                 TextButton(
@@ -213,7 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Terms and Conditions
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0),
+                  padding: const EdgeInsets.only(bottom: 24.0,left: 25,right: 25),
                   child: Text(
                     AppStrings.termsAndConditions,
                     textAlign: TextAlign.center,
