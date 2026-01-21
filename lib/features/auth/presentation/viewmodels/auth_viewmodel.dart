@@ -110,6 +110,7 @@ class AuthViewModel extends ChangeNotifier {
     required String name,
     required String email,
     required String password,
+    required String confirmPassword,
     required String phone,
   }) async {
     _isLoading = true;
@@ -120,6 +121,7 @@ class AuthViewModel extends ChangeNotifier {
       name: name,
       email: email,
       password: password,
+      confirmPassword: confirmPassword,
       phone: phone,
     );
 

@@ -15,7 +15,10 @@ class AuthTextField extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.suffixIcon,
+    this.hintTextColor, // Add parameter
   });
+
+  final Color? hintTextColor; // Add field
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class AuthTextField extends StatelessWidget {
         hintText: hintText,
         hintStyle: TextStyle(
           fontSize: 14,
-          color: Color(0XFF868686),
+          color: hintTextColor ?? const Color(0XFF868686), // Use parameter
           letterSpacing: 0.5,
         ),
         filled: true,
@@ -56,7 +59,10 @@ class PasswordTextField extends StatefulWidget {
     super.key,
     required this.controller,
     required this.hintText,
+    this.hintTextColor, // Add parameter
   });
+
+  final Color? hintTextColor; // Add field
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -70,6 +76,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return AuthTextField(
       controller: widget.controller,
       hintText: widget.hintText,
+      hintTextColor: widget.hintTextColor, // Pass parameter
       
       obscureText: _obscurePassword,
       suffixIcon: IconButton(

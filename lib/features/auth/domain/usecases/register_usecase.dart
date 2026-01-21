@@ -14,6 +14,7 @@ class RegisterUseCase {
     required String name,
     required String email,
     required String password,
+    required String confirmPassword,
     required String phone,
   }) async {
     // Validation logic
@@ -29,6 +30,10 @@ class RegisterUseCase {
       return Result.failure(const ValidationFailure('Password must be at least 6 characters'));
     }
     
+    if (password != confirmPassword) {
+      return Result.failure(const ValidationFailure('Passwords do not match'));
+    }
+    
     if (phone.isEmpty) {
       return Result.failure(const ValidationFailure('Phone number is required'));
     }
@@ -37,6 +42,7 @@ class RegisterUseCase {
       name: name,
       email: email,
       password: password,
+      confirmPassword: confirmPassword,
       phone: phone,
     );
   }

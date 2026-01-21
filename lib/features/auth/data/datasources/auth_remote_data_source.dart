@@ -11,6 +11,7 @@ abstract class AuthRemoteDataSource {
     required String name,
     required String email,
     required String password,
+    required String confirmPassword,
     required String phone,
   });
   Future<Result<UserModel>> refreshToken();
@@ -53,6 +54,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
     required String email,
     required String password,
+    required String confirmPassword,
     required String phone,
   }) async {
     return await apiService.post<UserModel>(
@@ -61,7 +63,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'name': name,
         'email': email,
         'password': password,
-        'password_confirmation': password, // Add password confirmation
+        'password_confirmation': confirmPassword,
         'phone': phone,
       },
       fromJson: (json) => UserModel.fromJson(json),

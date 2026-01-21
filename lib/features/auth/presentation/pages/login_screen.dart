@@ -77,7 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 16),
               // Header with back button and title
-              AuthHeader(title: AppStrings.signIn),
+              AuthHeader(
+                title: AppStrings.signIn,
+                showBackButton: false,
+              ),
               const SizedBox(height: 40),
               // Welcome back heading
               const Center(

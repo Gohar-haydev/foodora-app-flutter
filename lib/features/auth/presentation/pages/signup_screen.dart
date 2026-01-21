@@ -18,6 +18,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
@@ -25,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
     _emailController.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -33,11 +35,20 @@ class _SignupScreenState extends State<SignupScreen> {
     final email = _emailController.text;
     final phone = _phoneController.text;
     final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
+    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       context.showError(
         title: 'Missing Information',
         message: AppStrings.pleaseFillAllFields,
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      context.showError(
+        title: 'Validation Error',
+        message: 'Passwords do not match',
       );
       return;
     }
@@ -50,6 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
       name: name,
       email: email,
       password: password,
+      confirmPassword: confirmPassword,
       phone: phone,
     );
 
@@ -181,7 +193,17 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Password input field with visibility toggle
                 PasswordTextField(
                   controller: _passwordController,
-                  hintText: 'New Password',
+                  hintText: AppStrings.newPassword,
+                  hintTextColor: Colors.black, // Set hint color to black
+                ),
+
+                const SizedBox(height: 16),
+
+                // Confirm Password input field
+                PasswordTextField(
+                  controller: _confirmPasswordController,
+                  hintText: AppStrings.confirmPassword,
+                  hintTextColor: Colors.black, // Set hint color to black
                 ),
 
                 const SizedBox(height: 32),
@@ -192,7 +214,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: _onSignupPressed,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
                 // Already have account link
                 TextButton(
