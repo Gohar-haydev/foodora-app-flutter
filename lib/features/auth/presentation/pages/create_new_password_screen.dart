@@ -6,6 +6,7 @@ import 'package:foodora/core/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
+import 'package:foodora/features/auth/presentation/pages/password_changed_success_screen.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
   final String? email; // Email passed from previous screen
@@ -184,9 +185,8 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                            ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text(AppStrings.passwordResetSuccess)),
                           );
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (_) => const LoginScreen()),
-                            (route) => false,
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) => const PasswordChangedSuccessScreen()),
                           );
                         } else {
                            ScaffoldMessenger.of(context).showSnackBar(

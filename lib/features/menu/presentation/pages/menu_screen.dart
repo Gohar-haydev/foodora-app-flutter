@@ -148,7 +148,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
-                        Icons.favorite,
+                        Icons.favorite_border,
                         color: Color(0xFF4CAF50),
                         size: 24,
                       ),

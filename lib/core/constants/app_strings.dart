@@ -220,5 +220,8 @@ class AppStrings {
   static const String noFavoritesYet = 'No Favorites Yet';
   static const String startAddingFavorites = 'Start adding your favorite items!';
   static const String favoriteItemRemoved = 'Item removed from favorites';
+  static const String passwordChangedTitle = 'Password Changed!';
+  static const String passwordChangedSubtitle = 'Your Password has been changed\nsuccessfully.';
+  static const String backToLogin = 'BACK TO LOGIN';
 }
 
