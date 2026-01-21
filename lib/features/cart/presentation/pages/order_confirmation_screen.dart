@@ -39,17 +39,11 @@ class OrderConfirmationScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             // Success Icon
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primaryAccent, 
-              ),
-              padding: const EdgeInsets.all(24),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 64,
-              ),
+            // Success Image
+            Image.asset(
+              'assets/images/success.png',
+              height: 200, 
+              fit: BoxFit.contain,
             ),
              // A more specific "Badge" shape could be used if strict adherence to image is needed, 
              // but a circle with check is standard and close. 
