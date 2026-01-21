@@ -25,14 +25,6 @@ class CartScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.black),
-            onPressed: () {
-               context.read<CartViewModel>().clearCart();
-            },
-          )
-        ],
       ),
       body: Consumer<CartViewModel>(
         builder: (context, viewModel, child) {
