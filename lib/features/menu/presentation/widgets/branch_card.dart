@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_strings.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class BranchCard extends StatelessWidget {
   final String name;
@@ -123,9 +124,9 @@ class BranchCard extends StatelessWidget {
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       ),
-                      child: const Text(
-                        AppStrings.selectButton,
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('select_button'),
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

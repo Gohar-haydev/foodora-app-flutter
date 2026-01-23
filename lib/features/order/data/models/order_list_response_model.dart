@@ -33,8 +33,8 @@ class PaginationMeta {
   final int lastPage;
   final int perPage;
   final int total;
-  final int from;
-  final int to;
+  final int? from;
+  final int? to;
 
   PaginationMeta({
     required this.currentPage,
@@ -51,8 +51,8 @@ class PaginationMeta {
       lastPage: json['last_page'] as int,
       perPage: json['per_page'] as int,
       total: json['total'] as int,
-      from: json['from'] as int,
-      to: json['to'] as int,
+      from: json['from'] as int?,
+      to: json['to'] as int?,
     );
   }
 }

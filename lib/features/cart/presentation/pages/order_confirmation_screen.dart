@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/pages/order_details_screen.dart';
 import 'package:foodora/features/order/domain/entities/order_entity.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   final OrderEntity order;
@@ -16,9 +17,9 @@ class OrderConfirmationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Order Confirmation', 
-          style: TextStyle(
+        title: Text(
+          context.tr('order_confirmation'), 
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -51,9 +52,9 @@ class OrderConfirmationScreen extends StatelessWidget {
             
             const SizedBox(height: 32),
             
-            const Text(
-              'Order Placed Successfully!',
-              style: TextStyle(
+            Text(
+              context.tr('order_placed_successfully'),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF1F2937),
@@ -61,9 +62,9 @@ class OrderConfirmationScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Your order has been received and is being prepared. You will receive a notification when it\'s ready for pickup.',
-              style: TextStyle(
+            Text(
+              context.tr('order_placed_subtitle'),
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
                 height: 1.5,
@@ -74,10 +75,10 @@ class OrderConfirmationScreen extends StatelessWidget {
             const SizedBox(height: 48),
             
             // Order Details Header
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Order Details',
+                context.tr('order_details'),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -88,11 +89,11 @@ class OrderConfirmationScreen extends StatelessWidget {
             const SizedBox(height: 24),
             
             // Details Rows
-            _DetailRow(label: 'Order Number', value: '#${order.id}'),
+            _DetailRow(label: context.tr('order_number'), value: '#${order.id}'),
             const SizedBox(height: 16),
-            const _DetailRow(label: 'Estimated Time', value: '30 minutes'),
+            _DetailRow(label: context.tr('estimated_time'), value: '30 ${context.tr('min')}'),
             const SizedBox(height: 16),
-            const _DetailRow(label: 'Payment Method', value: 'Cash'),
+            _DetailRow(label: context.tr('payment_method'), value: context.tr('cash')),
 
             
             const SizedBox(height: 48),
@@ -118,9 +119,9 @@ class OrderConfirmationScreen extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'VIEW ORDER',
-                  style: TextStyle(
+                child: Text(
+                  context.tr('view_order'),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,

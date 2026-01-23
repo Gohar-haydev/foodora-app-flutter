@@ -8,6 +8,7 @@ import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
 
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 import '../widgets/bottom_nav_clipper.dart';
 import '../widgets/bottom_nav_item.dart';
@@ -112,7 +113,7 @@ class _MainLayoutState extends State<MainLayout> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  AppStrings.cart,
+                  context.tr('cart'),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -136,26 +137,26 @@ class _MainLayoutState extends State<MainLayout> {
               children: [
                  BottomNavItem(
                     imagePath: 'assets/images/home.png',
-                    label: AppStrings.home,
+                    label: context.tr('home'),
                     isActive: _currentIndex == 0,
                     onTap: () => _onTabTapped(0),
                   ),
                   BottomNavItem(
                     imagePath: 'assets/images/search.png',
-                    label: AppStrings.search,
+                    label: context.tr('search'),
                     isActive: _currentIndex == 1,
                     onTap: () => _onTabTapped(1),
                   ),
                   const SizedBox(width: 48), // Gap for FAB
                   BottomNavItem(
                     imagePath: 'assets/images/notification.png',
-                    label: AppStrings.notification,
+                    label: context.tr('notification'),
                     isActive: _currentIndex == 3,
                     onTap: () => _onTabTapped(3),
                   ),
                   BottomNavItem(
                     imagePath: 'assets/images/profile.png',
-                    label: AppStrings.profile,
+                    label: context.tr('profile'),
                     isActive: _currentIndex == 4,
                     onTap: () => _onTabTapped(4),
                   ),

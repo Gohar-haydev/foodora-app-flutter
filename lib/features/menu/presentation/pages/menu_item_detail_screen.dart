@@ -9,6 +9,7 @@ import 'package:foodora/core/constants/app_colors.dart';
 import 'package:foodora/features/menu/presentation/widgets/addon_row.dart';
 import 'package:foodora/features/menu/presentation/widgets/ingredient_row.dart';
 import 'package:foodora/features/menu/presentation/widgets/nutrition_item.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 
 class MenuItemDetailScreen extends StatefulWidget {
@@ -198,7 +199,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                       const Icon(Icons.access_time, size: 16, color: Colors.grey),
                                       const SizedBox(width: 4),
                                       Text(
-                                        '30 ${AppStrings.min}', 
+                                        '30 ${context.tr('min')}', 
                                         style: TextStyle(color: Colors.grey[600]),
                                       ),
                                     ],
@@ -225,11 +226,11 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   return Wrap(
                                     spacing: 16,
                                     runSpacing: 16,
-                                    children: const [
-                                      NutritionItem(icon: Icons.grass, value: '65g', label: AppStrings.carbs), 
-                                      NutritionItem(icon: Icons.local_fire_department, value: '120', label: AppStrings.kcal), 
-                                      NutritionItem(icon: Icons.egg_alt_outlined, value: '27g', label: AppStrings.proteins), 
-                                      NutritionItem(icon: Icons.pie_chart_outline, value: '91g', label: AppStrings.fats), 
+                                    children: [
+                                      NutritionItem(icon: Icons.grass, value: '65g', label: context.tr('carbs')), 
+                                      NutritionItem(icon: Icons.local_fire_department, value: '120', label: context.tr('kcal')), 
+                                      NutritionItem(icon: Icons.egg_alt_outlined, value: '27g', label: context.tr('proteins')), 
+                                      NutritionItem(icon: Icons.pie_chart_outline, value: '91g', label: context.tr('fats')), 
                                     ],
                                   );
                                 }
@@ -237,8 +238,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               const SizedBox(height: 32),
 
                               // Ingredients Header
-                              const Text(
-                                AppStrings.ingredients,
+                              Text(
+                                context.tr('ingredients'),
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -261,8 +262,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                               const SizedBox(height: 32),
 
                               // Add-ons Header
-                              const Text(
-                                AppStrings.addons,
+                              Text(
+                                context.tr('addons'),
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -283,13 +284,13 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   );
                                 }).toList(),
                               ] else ...[
-                                Text(AppStrings.noAddonsAvailable, style: TextStyle(color: Colors.grey[500])),
+                                Text(context.tr('no_addons_available'), style: TextStyle(color: Colors.grey[500])),
                               ],
                               const SizedBox(height: 32),
 
                               // Special Instructions
-                              const Text(
-                                AppStrings.specialInstructions,
+                              Text(
+                                context.tr('special_instructions'),
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -297,8 +298,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                AppStrings.specialInstructionsHint,
+                              Text(
+                                context.tr('special_instructions_hint'),
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: Colors.grey,
@@ -325,9 +326,9 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   minLines: 3,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: AppStrings.instructionsExample,
+                                    hintText: context.tr('instructions_example'),
                                     hintStyle: TextStyle(color: Colors.grey[400]),
-                                    labelText: AppStrings.instructionsLabel,
+                                    labelText: context.tr('instructions_label'),
                                     labelStyle: TextStyle(color: Colors.grey[600]),
                                     floatingLabelBehavior: FloatingLabelBehavior.always, 
                                   ),
@@ -398,7 +399,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(AppStrings.formatItemAddedToCart(item.name)),
+                                      content: Text('${item.name} ${context.tr('added_to_cart')}'),
                                       backgroundColor: AppColors.primaryAccent,
                                       duration: const Duration(seconds: 1),
                                     ),
@@ -412,8 +413,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   ),
                                   elevation: 0,
                                 ),
-                                child: const Text(
-                                  AppStrings.addToCartButton, 
+                                child: Text(
+                                  context.tr('add_to_cart'),
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

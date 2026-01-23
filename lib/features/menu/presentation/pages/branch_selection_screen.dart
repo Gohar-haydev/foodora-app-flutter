@@ -8,6 +8,7 @@ import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dar
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 import '../widgets/branch_card.dart';
 
@@ -33,13 +34,13 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
     final hour = DateTime.now().hour;
     
     if (hour >= 5 && hour < 12) {
-      return AppStrings.goodMorning;
+      return context.tr('good_morning');
     } else if (hour >= 12 && hour < 17) {
-      return AppStrings.goodAfternoon;
+      return context.tr('good_afternoon');
     } else if (hour >= 17 && hour < 21) {
-      return AppStrings.goodEvening;
+      return context.tr('good_evening');
     } else {
-      return AppStrings.goodNight;
+      return context.tr('good_night');
     }
   }
 
@@ -110,8 +111,8 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                   const SizedBox(height: 24),
                   
                   // Select Branch Title
-                  const Text(
-                    AppStrings.selectBranchTitle,
+                  Text(
+                    context.tr('select_branch_title'),
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -143,7 +144,7 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                           ),
                           const SizedBox(height: 16),
                           PrimaryButton(
-                            text: AppStrings.retry,
+                            text: context.tr('retry'),
                             width: 120,
                             height: 40,
                             onPressed: () => viewModel.fetchBranches(),
@@ -156,7 +157,7 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                   if (viewModel.branches.isEmpty) {
                     return Center(
                       child: Text(
-                        AppStrings.noBranchesAvailable,
+                        context.tr('no_branches_available'),
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     );

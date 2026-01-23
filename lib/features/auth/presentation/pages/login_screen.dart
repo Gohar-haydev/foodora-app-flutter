@@ -7,6 +7,7 @@ import '../viewmodels/auth_viewmodel.dart';
 import '../widgets/widgets.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,14 +33,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (email.isEmpty || password.isEmpty) {
       context.showError(
-        title: AppStrings.missingInformation,
-        message: AppStrings.pleaseFillAllFields,
+        title: context.tr('missing_information'),
+        message: context.tr('please_fill_all_fields'),
       );
       return;
     }
 
     // Show loading overlay
-    context.showLoading(message: AppStrings.signingIn);
+    context.showLoading(message: context.tr('signing_in'));
 
     // Call ViewModel
     final success = await context.read<AuthViewModel>().login(email, password);
@@ -59,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       final error = context.read<AuthViewModel>().errorMessage;
       context.showError(
-        title: AppStrings.loginFailed,
-        message: error ?? AppStrings.loginFailed,
+        title: context.tr('login_failed'),
+        message: error ?? context.tr('login_failed'),
       );
     }
   }
@@ -78,15 +79,15 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 16),
               // Header with back button and title
               AuthHeader(
-                title: AppStrings.signIn,
+                title: context.tr('sign_in'),
                 showBackButton: false,
               ),
               const SizedBox(height: 40),
               // Welcome back heading
-              const Center(
+              Center(
                 child: Text(
-                  AppStrings.welcomeBack,
-                  style: TextStyle(
+                  context.tr('welcome_back'),
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -97,14 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
               // Email input field
               AuthTextField(
                 controller: _emailController,
-                hintText: AppStrings.emailAddress,
+                hintText: context.tr('email_address'),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
               // Password input field with visibility toggle
               PasswordTextField(
                 controller: _passwordController,
-                hintText: AppStrings.passwordPlaceholder,
+                hintText: context.tr('password_placeholder'),
               ),
               const SizedBox(height: 8),
               // Forget Password link
@@ -117,9 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (_) => const ForgotPasswordScreen()),
                     );
                   },
-                  child: const Text(
-                    AppStrings.forgetPassword,
-                    style: TextStyle(
+                  child: Text(
+                    context.tr('forgot_password'),
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black,
                     ),
@@ -129,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
               // Sign In button
               AuthButton(
-                text: AppStrings.signIn,
+                text: context.tr('sign_in'),
                 onPressed: _onLoginPressed,
               ),
               const SizedBox(height: 16),
@@ -139,9 +140,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      AppStrings.dontHaveAccount,
-                      style: TextStyle(
+                    Text(
+                      context.tr('dont_have_account'),
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                       ),
@@ -161,9 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      child: const Text(
-                        AppStrings.createNewAccount,
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('create_account'),
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Color(0xFF4FAF5A),
                           fontWeight: FontWeight.bold,

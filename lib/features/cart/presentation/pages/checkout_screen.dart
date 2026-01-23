@@ -10,6 +10,7 @@ import 'package:foodora/features/order/data/models/order_item_request_model.dart
 import 'package:foodora/features/order/data/models/order_addon_request_model.dart';
 import 'package:foodora/core/utils/token_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 
 class CheckoutScreen extends StatefulWidget {
@@ -126,8 +127,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  AppStrings.selectPaymentMethod,
+                Text(
+                  context.tr('select_payment_method'),
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -139,10 +140,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 // PayPal Option
                 _buildPaymentOption(
                   icon: Icons.paypal,
-                  title: AppStrings.paypal,
-                  isSelected: _paymentMethod == AppStrings.paypal,
+                  title: context.tr('paypal'),
+                  isSelected: _paymentMethod == context.tr('paypal'),
                   onTap: () {
-                    setState(() => _paymentMethod = AppStrings.paypal);
+                    setState(() => _paymentMethod = context.tr('paypal'));
                     Navigator.pop(context);
                   },
                 ),
@@ -151,10 +152,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 // Klarna Option
                 _buildPaymentOption(
                   icon: Icons.credit_score,
-                  title: AppStrings.klarna,
-                  isSelected: _paymentMethod == AppStrings.klarna,
+                  title: context.tr('klarna'),
+                  isSelected: _paymentMethod == context.tr('klarna'),
                   onTap: () {
-                    setState(() => _paymentMethod = AppStrings.klarna);
+                    setState(() => _paymentMethod = context.tr('klarna'));
                     Navigator.pop(context);
                   },
                 ),
@@ -163,10 +164,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 // Cash on Delivery Option
                 _buildPaymentOption(
                   icon: Icons.money,
-                  title: AppStrings.cashOnDelivery,
-                  isSelected: _paymentMethod == AppStrings.cashOnDelivery,
+                  title: context.tr('cash_on_delivery'),
+                  isSelected: _paymentMethod == context.tr('cash_on_delivery'),
                   onTap: () {
-                    setState(() => _paymentMethod = AppStrings.cashOnDelivery);
+                    setState(() => _paymentMethod = context.tr('cash_on_delivery'));
                     Navigator.pop(context);
                   },
                 ),
@@ -239,7 +240,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(AppStrings.checkout),
+        title: Text(context.tr('checkout')),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
@@ -251,11 +252,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.remove_shopping_cart, size: 64,
+                children: [
+                  const Icon(Icons.remove_shopping_cart, size: 64,
                       color: AppColors.mutedText),
-                  SizedBox(height: 16),
-                  Text('Your cart is empty', style: TextStyle(
+                  const SizedBox(height: 16),
+                  Text(context.tr('your_cart_is_empty'), style: const TextStyle(
                       color: AppColors.mutedText, fontSize: 18)),
                 ],
               ),
@@ -268,7 +269,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 // Delivery Address Section (Static for now)
-                _SectionHeader(title: AppStrings.deliveryAddress),
+                _SectionHeader(title: context.tr('delivery_address')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -307,7 +308,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   TextButton(
                     onPressed: _changeAddress,
-                    child: const Text(AppStrings.change),
+                    child: Text(context.tr('change')),
                   ),
                 ],
               ),
@@ -315,7 +316,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 24),
 
             // Payment Method Section (Static for now)
-            _SectionHeader(title: AppStrings.paymentMethod),
+            _SectionHeader(title: context.tr('payment_method')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -350,7 +351,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   TextButton(
                     onPressed: _showPaymentMethodBottomSheet,
-                    child: const Text(AppStrings.change),
+                    child: Text(context.tr('change')),
                   ),
                 ],
               ),
@@ -358,7 +359,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 24),
 
             // Order Notes Section
-            _SectionHeader(title: AppStrings.orderNotes),
+            _SectionHeader(title: context.tr('order_notes')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -377,7 +378,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 controller: _notesController,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Add any special instructions or notes for your order...',
+                  hintText: context.tr('order_notes_hint'),
                   hintStyle: TextStyle(color: Colors.grey[400]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -404,7 +405,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 24),
 
             // Order Summary
-            _SectionHeader(title: AppStrings.orderSummary),
+            _SectionHeader(title: context.tr('order_summary')),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -438,15 +439,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                       )).toList(),
                   const Divider(height: 24),
-                  _SummaryRow(label: AppStrings.subtotal,
+                  _SummaryRow(label: context.tr('subtotal'),
                       amount: viewModel.totalAmount),
                   const SizedBox(height: 8),
-                  _SummaryRow(label: AppStrings.deliveryFee,
+                  _SummaryRow(label: context.tr('delivery_fee'),
                       amount: viewModel.deliveryFee),
                   const SizedBox(height: 8),
-                  _SummaryRow(label: AppStrings.tax, amount: viewModel.tax),
+                  _SummaryRow(label: context.tr('tax'), amount: viewModel.tax),
                   const Divider(height: 24),
-                  _SummaryRow(label: AppStrings.total,
+                  _SummaryRow(label: context.tr('total'),
                       amount: viewModel.grandTotal,
                       isTotal: true),
                 ],
@@ -537,8 +538,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         strokeWidth: 2,
                       ),
                     )
-                        : const Text(
-                      AppStrings.placeOrder,
+                        : Text(
+                      context.tr('place_order'),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

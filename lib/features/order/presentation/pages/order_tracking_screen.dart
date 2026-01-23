@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class OrderTrackingScreen extends StatelessWidget {
   final int orderId;
@@ -15,9 +16,9 @@ class OrderTrackingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Track Order',
-          style: TextStyle(
+        title: Text(
+          context.tr('track_order'),
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
           ),
@@ -53,7 +54,7 @@ class OrderTrackingScreen extends StatelessWidget {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () => viewModel.trackOrder(orderId),
-                        child: const Text('Retry'),
+                        child: Text(context.tr('retry')),
                       ),
                     ],
                   ),
@@ -62,7 +63,7 @@ class OrderTrackingScreen extends StatelessWidget {
 
               final trackingData = viewModel.orderTracking;
               if (trackingData == null) {
-                return const Center(child: Text('No tracking data available'));
+                return Center(child: Text(context.tr('no_tracking_data')));
               }
 
               return SingleChildScrollView(
@@ -75,7 +76,7 @@ class OrderTrackingScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            'Order #${trackingData.orderNumber}',
+                            '${context.tr('order_number')} #${trackingData.orderNumber}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -96,7 +97,7 @@ class OrderTrackingScreen extends StatelessWidget {
                     const SizedBox(height: 32),
 
                     // Horizontal Stepper
-                    _buildHorizontalStepper(trackingData.status),
+                    _buildHorizontalStepper(context, trackingData.status),
                     
                     const SizedBox(height: 32),
 
@@ -118,8 +119,8 @@ class OrderTrackingScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Delivery Status',
+                          Text(
+                            context.tr('delivery_status'),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -128,37 +129,37 @@ class OrderTrackingScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           _buildTimelineItem(
-                            'Placed',
+                            context.tr('timeline_placed'),
                             trackingData.timeline.placedAt,
                             isCompleted: trackingData.timeline.placedAt != null,
                             isLast: false,
                           ),
                           _buildTimelineItem(
-                            'Confirmed',
+                            context.tr('status_confirmed'),
                             trackingData.timeline.confirmedAt,
                             isCompleted: trackingData.timeline.confirmedAt != null,
                             isLast: false,
                           ),
                           _buildTimelineItem(
-                            'Preparing',
+                            context.tr('status_preparing'),
                             trackingData.timeline.preparingAt,
                             isCompleted: trackingData.timeline.preparingAt != null,
                             isLast: false,
                           ),
                           _buildTimelineItem(
-                            'Ready',
+                            context.tr('status_ready'),
                             trackingData.timeline.readyAt,
                             isCompleted: trackingData.timeline.readyAt != null,
                             isLast: false,
                           ),
                           _buildTimelineItem(
-                            trackingData.deliveryType == 'pickup' ? 'Ready for Pickup' : 'Out for Delivery',
+                            trackingData.deliveryType == 'pickup' ? context.tr('timeline_ready_pickup') : context.tr('status_out_for_delivery'),
                             trackingData.deliveryType == 'pickup' ? trackingData.timeline.readyAt : null, // Logic might differ
                             isCompleted: trackingData.status == 'delivered' || trackingData.status == 'out_for_delivery',
                             isLast: false,
                           ),
                           _buildTimelineItem(
-                            'Delivered',
+                            context.tr('status_delivered'),
                             trackingData.timeline.deliveredAt,
                             isCompleted: trackingData.timeline.deliveredAt != null,
                             isLast: true,
@@ -170,8 +171,8 @@ class OrderTrackingScreen extends StatelessWidget {
                      const SizedBox(height: 24),
 
                     // Branch Info
-                    const Text(
-                      'Branch Information',
+                    Text(
+                      context.tr('branch_information'),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -248,9 +249,16 @@ class OrderTrackingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHorizontalStepper(String currentStatus) {
+  Widget _buildHorizontalStepper(BuildContext context, String currentStatus) {
     final steps = ['pending', 'confirmed', 'preparing', 'ready', 'out_for_delivery', 'delivered'];
-    final labels = ['Pending', 'Confirmed', 'Cooking', 'Ready', 'On Way', 'Delivered'];
+    final labels = [
+      context.tr('status_pending'),
+      context.tr('status_confirmed'),
+      context.tr('stepper_cooking'),
+      context.tr('status_ready'),
+      context.tr('stepper_on_way'),
+      context.tr('status_delivered')
+    ];
     
     int currentIndex = steps.indexOf(currentStatus);
     if (currentIndex == -1) currentIndex = 0; // Default or cancelled

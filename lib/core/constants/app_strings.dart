@@ -92,6 +92,7 @@ class AppStrings {
   // Cart Screen
   static const String myCart = 'My Cart';
   static const String cartContent = 'Cart Content';
+  static const String emptyCart = 'Your cart is empty';
 
   // Checkout Screen
   static const String checkout = 'Checkout';
@@ -223,5 +224,11 @@ class AppStrings {
   static const String passwordChangedTitle = 'Password Changed!';
   static const String passwordChangedSubtitle = 'Your Password has been changed\nsuccessfully.';
   static const String backToLogin = 'BACK TO LOGIN';
+  static const String noMenuItems = 'No menu items available';
+  static const String from = 'from';
+  static const String featuredCardTitle1 = 'Asian white noodle\nwith extra seafood';
+  static const String featuredCardTime1 = '20 Min';
+  static const String featuredCardTitle2 = 'Healthy recipe\nwith fresh vegetables';
+  static const String featuredCardTime2 = '15 Min';
 }
 

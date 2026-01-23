@@ -7,6 +7,11 @@ import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dar
 import 'package:foodora/features/menu/presentation/pages/category_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/favorites_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/menu_item_detail_screen.dart';
+import 'package:foodora/features/menu/presentation/widgets/section_header.dart';
+import 'package:foodora/features/menu/presentation/widgets/featured_card.dart';
+import 'package:foodora/features/menu/presentation/widgets/category_chip.dart';
+import 'package:foodora/features/menu/presentation/widgets/recipe_card.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class MenuScreen extends StatefulWidget {
   final int branchId;
@@ -37,13 +42,13 @@ class _MenuScreenState extends State<MenuScreen> {
     final hour = DateTime.now().hour;
     
     if (hour >= 5 && hour < 12) {
-      return AppStrings.goodMorning;
+      return context.tr('good_morning');
     } else if (hour >= 12 && hour < 17) {
-      return AppStrings.goodAfternoon;
+      return context.tr('good_afternoon');
     } else if (hour >= 17 && hour < 21) {
-      return AppStrings.goodEvening;
+      return context.tr('good_evening');
     } else {
-      return AppStrings.goodNight;
+      return context.tr('good_night');
     }
   }
 
@@ -160,8 +165,8 @@ class _MenuScreenState extends State<MenuScreen> {
               const SizedBox(height: 24),
 
               // Featured Section
-              const Text(
-                AppStrings.featured,
+              Text(
+                context.tr('featured'),
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -177,18 +182,18 @@ class _MenuScreenState extends State<MenuScreen> {
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
                   children: [
-                    _FeaturedCard(
-                      title: 'Asian white noodle\nwith extra seafood',
-                      time: '20 Min',
+                    FeaturedCard(
+                      title: context.tr('featured_card_title_1'),
+                      time: context.tr('featured_card_time_1'),
                       authorName: 'Olivia',
                       authorImage: 'assets/images/user_avatar.jpg', // Placeholder
                       foodImage: 'assets/images/noodle_bowl.png', // Placeholder
                       backgroundColor: const Color(0xFF4CAF50),
                     ),
                     const SizedBox(width: 16),
-                    _FeaturedCard(
-                      title: 'Healthy recipe\nwith fresh vegetables',
-                      time: '15 Min',
+                    FeaturedCard(
+                      title: context.tr('featured_card_title_2'),
+                      time: context.tr('featured_card_time_2'),
                       authorName: 'Olivia',
                       authorImage: 'assets/images/user_avatar.jpg',
                       foodImage: 'assets/images/salad_bowl.png',
@@ -201,8 +206,8 @@ class _MenuScreenState extends State<MenuScreen> {
               const SizedBox(height: 24),
 
               // Category Section
-              _SectionHeader(
-                title: AppStrings.category,
+              SectionHeader(
+                title: context.tr('category'),
                 onSeeAll: () async {
                   final selectedCategoryId = await Navigator.of(context).push<int?>(
                     MaterialPageRoute(
@@ -254,7 +259,9 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: Row(
                       children: [
                         for (int i = 0; i < categoriesToShow.length; i++) ...[
-                          GestureDetector(
+                          CategoryChip(
+                            label: categoriesToShow[i].name,
+                            isSelected: _selectedCategoryId == categoriesToShow[i].id,
                             onTap: () {
                               setState(() {
                                 _selectedCategoryId = categoriesToShow[i].id;
@@ -262,10 +269,6 @@ class _MenuScreenState extends State<MenuScreen> {
                               // Fetch menu items for the selected category
                               viewModel.fetchMenuItemsByCategory(categoriesToShow[i].id);
                             },
-                            child: _CategoryChip(
-                              label: categoriesToShow[i].name,
-                              isSelected: _selectedCategoryId == categoriesToShow[i].id,
-                            ),
                           ),
                           if (i < categoriesToShow.length - 1) const SizedBox(width: 12),
                         ],
@@ -278,7 +281,7 @@ class _MenuScreenState extends State<MenuScreen> {
               const SizedBox(height: 24),
 
               // Popular Recipes Section
-              _SectionHeader(title: AppStrings.popularRecipes, onSeeAll: () {}),
+              SectionHeader(title: context.tr('popular_recipes'), onSeeAll: () {}),
               const SizedBox(height: 16),
               
               Consumer<MenuViewModel>(
@@ -311,10 +314,10 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
 
                   if (viewModel.menuItems.isEmpty) {
-                    return const SizedBox(
+                    return SizedBox(
                       height: 200,
                       child: Center(
-                        child: Text('No menu items available'),
+                        child: Text(context.tr('no_menu_items')),
                       ),
                     );
                   }
@@ -336,9 +339,9 @@ class _MenuScreenState extends State<MenuScreen> {
                                 ),
                               );
                             },
-                            child: _RecipeCard(
+                            child: RecipeCard(
                               title: itemsToShow[i].name,
-                              price: 'from ${itemsToShow[i].price} kr',
+                              price: '${context.tr('from')} ${itemsToShow[i].price} kr',
                               image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
                                 menuItemId: itemsToShow[i].id,
                               isFavorite: viewModel.isFavorite(itemsToShow[i].id),
@@ -380,289 +383,10 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  final String title;
-  final VoidCallback onSeeAll;
 
-  const _SectionHeader({required this.title, required this.onSeeAll});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-        GestureDetector(
-          onTap: onSeeAll,
-          child: const Text(
-            'See All',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF4CAF50),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
 
-class _FeaturedCard extends StatelessWidget {
-  final String title;
-  final String time;
-  final String authorName;
-  final String authorImage;
-  final String foodImage;
-  final Color backgroundColor;
 
-  const _FeaturedCard({
-    required this.title,
-    required this.time,
-    required this.authorName,
-    required this.authorImage,
-    required this.foodImage,
-    required this.backgroundColor,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 280,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Stack(
-        children: [
-           // Circle decorations for background texture
-           Positioned(
-             top: -10,
-             left: 20,
-             child: Container(
-               width: 10,
-               height: 10,
-               decoration: BoxDecoration(color: Colors.white.withOpacity(0.6), shape: BoxShape.circle),
-             )
-           ),
-           
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.access_time, color: Colors.white, size: 16),
-                  const SizedBox(width: 4),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              SizedBox(
-                width: 160,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    height: 1.2,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundImage: AssetImage('assets/images/user_avatar.jpg'), // Fallback needed
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    authorName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          
-          // Food Image on the right
-           Positioned(
-            right: -30,
-            top: 10,
-            bottom: 10,
-            child: Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                 shape: BoxShape.circle,
-                 color: Colors.white.withOpacity(0.2),
-              ),
-               child: const Icon(Icons.rice_bowl, color: Colors.white70, size: 60), // Placeholder for image
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
 
-class _CategoryChip extends StatelessWidget {
-  final String label;
-  final bool isSelected;
 
-  const _CategoryChip({required this.label, required this.isSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF4CAF50) : const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? Colors.white : const Color(0xFF757575),
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-}
-
-class _RecipeCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String image;
-  final int menuItemId;
-  final bool isFavorite;
-  final VoidCallback onFavoriteTap;
-
-  const _RecipeCard({
-    required this.title,
-    required this.price,
-    required this.image,
-    required this.menuItemId,
-    required this.isFavorite,
-    required this.onFavoriteTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-             color: Colors.black.withOpacity(0.05),
-             blurRadius: 10,
-             offset: const Offset(0, 4),
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    color: Colors.grey[100],
-                    child: Image.asset(
-                      image,
-                      fit: BoxFit.cover,
-                      errorBuilder: (ctx, err, stack) => const Center(
-                        child: Icon(Icons.local_pizza, color: Colors.grey, size: 40),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 12,
-                right: 12,
-                child: GestureDetector(
-                  onTap: onFavoriteTap,
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      size: 18,
-                      color: isFavorite ? Colors.red : Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.local_fire_department_outlined, 
-                      size: 14, 
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      price,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

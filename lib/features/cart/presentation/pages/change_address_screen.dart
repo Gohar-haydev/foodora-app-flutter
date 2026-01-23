@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class ChangeAddressScreen extends StatefulWidget {
   final String? currentAddress;
@@ -191,7 +192,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Change Address'),
+        title: Text(context.tr('change_address_title')),
         backgroundColor: Colors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
@@ -221,7 +222,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                         )
                       : const Icon(Icons.my_location, size: 20),
                   label: Text(
-                    _isLoadingLocation ? 'Fetching Location...' : 'Use Current Location',
+                    _isLoadingLocation ? context.tr('fetching_location') : context.tr('use_current_location'),
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -238,8 +239,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
               // Street Address
               _buildTextField(
                 controller: _streetController,
-                label: 'Street Address',
-                hint: 'Enter your street address',
+                label: context.tr('street_address'),
+                hint: context.tr('street_address_hint'),
                 icon: Icons.location_on_outlined,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -253,8 +254,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
               // City
               _buildTextField(
                 controller: _cityController,
-                label: 'City',
-                hint: 'Enter city',
+                label: context.tr('city'),
+                hint: context.tr('city_hint'),
                 icon: Icons.location_city,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -271,8 +272,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                   Expanded(
                     child: _buildTextField(
                       controller: _stateController,
-                      label: 'State/Province',
-                      hint: 'State',
+                      label: context.tr('state_province'),
+                      hint: context.tr('state_hint'),
                       icon: Icons.map_outlined,
                     ),
                   ),
@@ -280,8 +281,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                   Expanded(
                     child: _buildTextField(
                       controller: _zipController,
-                      label: 'ZIP Code',
-                      hint: 'ZIP',
+                      label: context.tr('zip_code'),
+                      hint: context.tr('zip_hint'),
                       icon: Icons.pin_outlined,
                       keyboardType: TextInputType.number,
                     ),
@@ -293,8 +294,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
               // Country
               _buildTextField(
                 controller: _countryController,
-                label: 'Country',
-                hint: 'Enter country',
+                label: context.tr('country'),
+                hint: context.tr('country_hint'),
                 icon: Icons.public,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -319,8 +320,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    'SAVE ADDRESS',
+                  child: Text(
+                    context.tr('save_address_button'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

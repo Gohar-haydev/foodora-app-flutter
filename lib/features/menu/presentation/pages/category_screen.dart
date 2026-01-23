@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 // import 'package:foodora/core/network/api_service.dart'; // Unused
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class CategoryScreen extends StatefulWidget {
   final int branchId;
@@ -46,9 +46,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          AppStrings.category,
-          style: TextStyle(
+        title: Text(
+          context.tr('category'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -77,7 +77,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => viewModel.fetchCategories(widget.branchId),
-                    child: const Text(AppStrings.retry),
+                    child: Text(context.tr('retry')),
                   ),
                 ],
               ),
@@ -85,8 +85,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
           }
 
           if (viewModel.categories.isEmpty) {
-            return const Center(
-              child: Text(AppStrings.noCategoriesAvailable),
+            return Center(
+              child: Text(context.tr('no_categories_available')),
             );
           }
 
@@ -99,9 +99,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      AppStrings.category,
-                      style: TextStyle(
+                    Text(
+                      context.tr('category'),
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF1A1A1A),
@@ -113,9 +113,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           _selectedCategoryId = null;
                         });
                       },
-                      child: const Text(
-                        AppStrings.clear,
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('clear'),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF4FAF5A),
@@ -154,7 +154,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
                         // Apply Filters Button
                         ApplyFilterButton(
-                          label: AppStrings.applyFilters,
+                          label: context.tr('apply_filters'),
                           onPressed: () {
                             // Apply logic - pass selected category back
                             Navigator.of(context).pop(_selectedCategoryId);

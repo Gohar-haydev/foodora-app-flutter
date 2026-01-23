@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/custom_text_field.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
@@ -28,8 +29,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          AppStrings.forgotPassword,
+        title: Text(
+          context.tr('forgot_password'),
           style: TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -52,10 +53,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             children: [
               const SizedBox(height: 40),
               
-              const Center(
+              Center(
                 child: Text(
-                  AppStrings.forgotPasswordTitle,
-                  style: TextStyle(
+                  context.tr('forgot_password_title'),
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -66,9 +67,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               
               const SizedBox(height: 16),
 
-              const Center(
+              Center(
                 child: Text(
-                  AppStrings.forgotPasswordSubtitle,
+                  context.tr('forgot_password_subtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
@@ -82,7 +83,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               
               CustomTextField(
                 controller: _emailController,
-                hintText: AppStrings.emailAddressPlaceholder,
+                hintText: context.tr('email_address'),
                 keyboardType: TextInputType.emailAddress,
               ),
               
@@ -91,13 +92,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Consumer<AuthViewModel>(
                 builder: (context, viewModel, child) {
                   return PrimaryButton(
-                    text: AppStrings.resetPassword,
+                    text: context.tr('reset_password'),
                     isLoading: viewModel.isLoading,
                     onPressed: () async {
                       final email = _emailController.text.trim();
                       if (email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text(AppStrings.pleaseEnterEmail)),
+                          SnackBar(content: Text(context.tr('please_enter_email'))),
                         );
                         return;
                       }
@@ -108,14 +109,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                       if (success) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text(AppStrings.sendResetInstructions)),
+                          SnackBar(content: Text(context.tr('send_reset_instructions'))),
                         );
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => CreateNewPasswordScreen(email: email)),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(viewModel.errorMessage ?? AppStrings.failedToSendResetEmail)),
+                          SnackBar(content: Text(viewModel.errorMessage ?? context.tr('failed_to_send_reset_email'))),
                         );
                       }
                     },

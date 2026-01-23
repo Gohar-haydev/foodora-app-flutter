@@ -7,6 +7,7 @@ import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dar
 import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
 
 import 'login_screen.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,26 +22,25 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _isCheckingAuth = true; // Track if we're checking authentication
 
   // Define your onboarding pages data
-  final List<OnboardingPage> _pages = [
-    OnboardingPage(
-      image: 'assets/images/splash_bg.png',
-      title: 'Foodora',
-      description:
-          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard',
-    ),
-    OnboardingPage(
-      image: 'assets/images/splash_bg.png', // Replace with your second image
-      title: 'Fast Delivery',
-      description:
-          'Get your favorite food delivered to your doorstep in minutes. Fresh and hot, just the way you like it.',
-    ),
-    OnboardingPage(
-      image: 'assets/images/splash_bg.png', // Replace with your third image
-      title: 'Easy Payment',
-      description:
-          'Multiple payment options available. Pay with cash, card, or digital wallets. Safe and secure transactions.',
-    ),
-  ];
+  List<OnboardingPage> _getPages(BuildContext context) {
+    return [
+      OnboardingPage(
+        image: 'assets/images/splash_bg.png',
+        title: context.tr('onboarding_title_1'),
+        description: context.tr('onboarding_desc_1'),
+      ),
+      OnboardingPage(
+        image: 'assets/images/splash_bg.png', // Replace with your second image
+        title: context.tr('onboarding_title_2'),
+        description: context.tr('onboarding_desc_2'),
+      ),
+      OnboardingPage(
+        image: 'assets/images/splash_bg.png', // Replace with your third image
+        title: context.tr('onboarding_title_3'),
+        description: context.tr('onboarding_desc_3'),
+      ),
+    ];
+  }
 
   @override
   void initState() {
@@ -99,9 +99,9 @@ class _SplashScreenState extends State<SplashScreen> {
   // Show session expired dialog
   void _showSessionExpiredDialog() {
     context.showError(
-      title: AppStrings.sessionExpired,
-      message: AppStrings.sessionExpiredMessage,
-      buttonText: AppStrings.pleaseLoginAgain,
+      title: context.tr('session_expired'),
+      message: context.tr('session_expired_message'),
+      buttonText: context.tr('please_login_again'),
     );
   }
 
@@ -121,7 +121,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _nextPage() {
-    if (_currentPage < _pages.length - 1) {
+    final pages = _getPages(context);
+    if (_currentPage < pages.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -141,7 +142,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Foodora',
                 style: TextStyle(
                   fontSize: 48,
@@ -161,6 +162,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     // Show onboarding carousel
+    final pages = _getPages(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -174,9 +176,9 @@ class _SplashScreenState extends State<SplashScreen> {
                     _currentPage = index;
                   });
                 },
-                itemCount: _pages.length,
+                itemCount: pages.length,
                 itemBuilder: (context, index) {
-                  return _buildPage(_pages[index]);
+                  return _buildPage(pages[index]);
                 },
               ),
             ),
@@ -198,7 +200,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     elevation: 0,
                   ),
                   child: Text(
-                    _currentPage == _pages.length - 1 ? 'Get started' : 'Next',
+                    _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -214,6 +216,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildPage(OnboardingPage page) {
+    // Need access to pages length for indicator (passed in? or accessed via context method?)
+    // Actually indicator is rebuilt in build() which calls _getPages.
+    // _buildPage only builds content.
+    // However, _buildIndicatorDot is separate.
+    // We fixed usage in build() so that's fine.
+    // Wait, _buildPage is used in PageView.builder.
+    // We need to fix _buildPage signature? No, it takes OnboardingPage.
+    
     return Column(
       children: [
         // Top Section: Image with visual appeal
@@ -256,7 +266,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: List.generate(
-                        _pages.length,
+                        _getPages(context).length,
                         (index) => _buildIndicatorDot(isActive: index == _currentPage),
                       ),
                     ),

@@ -6,6 +6,7 @@ import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dar
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 
 class ProfileViewScreen extends StatefulWidget {
@@ -92,9 +93,9 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
         //     }
         //   },
         // ),
-        title: const Text(
-          AppStrings.profileTitle,
-          style: TextStyle(
+        title: Text(
+          context.tr('profile_title'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -153,7 +154,7 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        viewModel.user?.name ?? AppStrings.user,
+                        viewModel.user?.name ?? context.tr('user'),
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -177,20 +178,20 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                 // Form Fields
                 AuthTextField(
                   controller: _nameController,
-                  hintText: AppStrings.name,
+                  hintText: context.tr('full_name'),
                   suffixIcon:
                       const Icon(Icons.edit, color: Colors.grey, size: 20),
                 ),
                 const SizedBox(height: 16),
                 AuthTextField(
                   controller: _emailController,
-                  hintText: AppStrings.email,
+                  hintText: context.tr('email'),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 AuthTextField(
                   controller: _phoneController,
-                  hintText: AppStrings.phone,
+                  hintText: context.tr('phone'),
                   keyboardType: TextInputType.phone,
                   suffixIcon:
                       const Icon(Icons.edit, color: Colors.grey, size: 20),
@@ -198,24 +199,24 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                 const SizedBox(height: 16),
                 PasswordTextField(
                   controller: _oldPasswordController,
-                  hintText: AppStrings.oldPassword,
+                  hintText: context.tr('old_password'),
                 ),
                 const SizedBox(height: 16),
                 PasswordTextField(
                   controller: _newPasswordController,
-                  hintText: AppStrings.newPassword,
+                  hintText: context.tr('new_password'),
                 ),
                 const SizedBox(height: 16),
                 PasswordTextField(
                   controller: _confirmPasswordController,
-                  hintText: AppStrings.confirmPassword,
+                  hintText: context.tr('confirm_password'),
                 ),
 
                 const SizedBox(height: 32),
 
                 // Save Button
                 PrimaryButton(
-                  text: AppStrings.save,
+                  text: context.tr('save'),
                   isLoading: viewModel.isLoading,
                   onPressed: () async {
                     final name = _nameController.text.trim();
@@ -240,16 +241,16 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                         confirmPassword.isNotEmpty) {
                       if (newPassword != confirmPassword) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(AppStrings.passwordsDoNotMatch)),
+                          SnackBar(
+                              content: Text(context.tr('passwords_do_not_match'))),
                         );
                         return;
                       }
 
                       if (currentPassword.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(AppStrings.enterCurrentPassword)),
+                          SnackBar(
+                              content: Text(context.tr('enter_current_password'))),
                         );
                         return;
                       }
@@ -264,8 +265,8 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                     // 3. Feedback
                     if (profileSuccess && passwordSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text(AppStrings.profileUpdatedSuccess)),
+                        SnackBar(
+                            content: Text(context.tr('profile_updated_success'))),
                       );
                       // Clear password fields on success
                       _oldPasswordController.clear();

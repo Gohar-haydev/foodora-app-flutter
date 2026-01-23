@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_strings.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 // import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart'; // Unused
+import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/features/menu/presentation/pages/menu_item_detail_screen.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
@@ -59,9 +60,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          AppStrings.myFavorites,
-          style: TextStyle(
+        title: Text(
+          context.tr('my_favorites'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -103,7 +104,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    child: const Text(AppStrings.retry),
+                    child: Text(context.tr('retry')),
                   ),
                 ],
               ),
@@ -123,7 +124,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    AppStrings.noFavoritesYet,
+                    context.tr('no_favorites_yet'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -132,7 +133,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    AppStrings.startAddingFavorites,
+                    context.tr('start_adding_favorites'),
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[500],

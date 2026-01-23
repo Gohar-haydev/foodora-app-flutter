@@ -4,6 +4,7 @@ import 'package:foodora/features/order/domain/entities/order_entity.dart';
 import 'package:foodora/features/order/presentation/widgets/widgets.dart';
 import 'package:foodora/features/order/presentation/pages/order_tracking_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final OrderEntity order;
@@ -24,9 +25,9 @@ class OrderDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          AppStrings.orderDetails,
-          style: TextStyle(
+        title: Text(
+          context.tr('order_details'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -64,7 +65,7 @@ class OrderDetailsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      _formatStatus(order.status),
+                      _formatStatus(context, order.status),
                       style: TextStyle(
                         color: _getStatusColor(order.status),
                         fontWeight: FontWeight.w600,
@@ -74,7 +75,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Order #${order.id}',
+                    '${context.tr('order_number')} #${order.id}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -96,9 +97,9 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Restaurant Branch Title
-            const Text(
-              AppStrings.restaurantBranch,
-              style: TextStyle(
+            Text(
+              context.tr('restaurant_branch'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -157,7 +158,7 @@ class OrderDetailsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          order.branchAddress ?? 'No address available',
+                          order.branchAddress ?? context.tr('no_address_available'),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[500],
@@ -173,9 +174,9 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Items Ordered Title
-            const Text(
-              AppStrings.itemsOrdered,
-              style: TextStyle(
+            Text(
+              context.tr('items_ordered'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -203,7 +204,7 @@ class OrderDetailsScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: OrderItemWidget(
                       name: item.itemName,
-                      code: '${AppStrings.qty}: ${item.quantity}',
+                      code: '${context.tr('qty')}: ${item.quantity}',
                       price: item.totalPrice,
                       imageUrl: item.branchImageUrl ?? '',
                     ),
@@ -215,9 +216,9 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Order Summary Title
-            const Text(
-              AppStrings.orderSummary,
-              style: TextStyle(
+            Text(
+              context.tr('order_summary'),
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -241,11 +242,11 @@ class OrderDetailsScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  PriceRowWidget(label: AppStrings.deliveryFee, amount: order.deliveryFee),
+                  PriceRowWidget(label: context.tr('delivery_fee'), amount: order.deliveryFee),
                   const SizedBox(height: 12),
-                  PriceRowWidget(label: AppStrings.tax, amount: order.taxAmount),
+                  PriceRowWidget(label: context.tr('tax'), amount: order.taxAmount),
                   const SizedBox(height: 12),
-                  PriceRowWidget(label: AppStrings.total, amount: order.totalAmount, isBold: true),
+                  PriceRowWidget(label: context.tr('total'), amount: order.totalAmount, isBold: true),
                 ],
               ),
             ),
@@ -274,9 +275,9 @@ class OrderDetailsScreen extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
-                  'Track Order',
-                  style: TextStyle(
+                child: Text(
+                  context.tr('track_order'),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -299,7 +300,7 @@ class OrderDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppStrings.totalPaid,
+                    context.tr('total_paid'),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -348,11 +349,20 @@ class OrderDetailsScreen extends StatelessWidget {
     }
   }
 
-  String _formatStatus(String status) {
+  String _formatStatus(BuildContext context, String status) {
     if (status.isEmpty) return 'Unknown';
-    return status
+    // Use localized string if available, otherwise fallback to formatted string
+    final key = 'status_${status.toLowerCase().replaceAll(' ', '_')}';
+    final localized = context.tr(key);
+    
+    // If translation key is returned (meaning no translation found), fallback to formatting
+    if (localized == key) {
+       return status
         .split('_')
         .map((word) => word.isNotEmpty ? '${word[0].toUpperCase()}${word.substring(1)}' : '')
         .join(' ');
+    }
+    
+    return localized;
   }
 }

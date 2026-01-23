@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:foodora/core/extensions/context_extensions.dart';
+
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
@@ -21,9 +23,9 @@ class NotificationScreen extends StatelessWidget {
         //     }
         //   },
         // ),
-        title: const Text(
-          'Notifications',
-          style: TextStyle(
+        title: Text(
+          context.tr('notifications_title'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -35,38 +37,38 @@ class NotificationScreen extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         children: [
           // Today Section
-          _buildSectionHeader('Today', () {}),
+          _buildSectionHeader(context, context.tr('today'), () {}),
           const SizedBox(height: 16),
           _NotificationCard(
             type: NotificationType.delivery,
-            title: 'Order Deliver',
-            description: 'Lorem Ipsum is simply dummy text of the printing and industry.',
+            title: context.tr('order_delivered'),
+            description: context.tr('order_delivered_desc'),
             time: '1h',
           ),
           const SizedBox(height: 16),
           _NotificationCard(
             type: NotificationType.cancel,
-            title: 'Order cancel',
-            description: 'Lorem Ipsum is simply dummy text of the printing and industry.',
+            title: context.tr('order_cancelled'),
+            description: context.tr('order_cancelled_desc'),
             time: '3h',
           ),
 
           const SizedBox(height: 32),
 
           // Yesterday Section
-          _buildSectionHeader('Yesterday', () {}),
+          _buildSectionHeader(context, context.tr('yesterday'), () {}),
           const SizedBox(height: 16),
           _NotificationCard(
             type: NotificationType.delivery,
-            title: 'Order Deliver',
-            description: 'Lorem Ipsum is simply dummy text of the printing and industry.',
+            title: context.tr('order_delivered'),
+            description: context.tr('order_delivered_desc'),
             time: '1d',
           ),
           const SizedBox(height: 16),
           _NotificationCard(
             type: NotificationType.cancel,
-            title: 'Order cancel',
-            description: 'Lorem Ipsum is simply dummy text of the printing and industry.',
+            title: context.tr('order_cancelled'),
+            description: context.tr('order_cancelled_desc'),
             time: '1d',
           ),
           const SizedBox(height: 24),
@@ -75,7 +77,7 @@ class NotificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title, VoidCallback onMarkRead) {
+  Widget _buildSectionHeader(BuildContext context, String title, VoidCallback onMarkRead) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -89,9 +91,9 @@ class NotificationScreen extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onMarkRead,
-          child: const Text(
-            'Mark all as Read',
-            style: TextStyle(
+          child: Text(
+            context.tr('mark_all_read'),
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: Color(0xFF4CAF50), // Green color

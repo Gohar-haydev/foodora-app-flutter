@@ -10,6 +10,8 @@ import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dar
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import '../../../../core/widgets/logout_button.dart';
 import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
+import 'package:foodora/features/menu/presentation/pages/language_selection_screen.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class ProfileMenuScreen extends StatelessWidget {
   const ProfileMenuScreen({Key? key}) : super(key: key);
@@ -19,9 +21,9 @@ class ProfileMenuScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          AppStrings.profile,
-          style: TextStyle(
+        title: Text(
+          context.tr('profile'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -46,7 +48,7 @@ class ProfileMenuScreen extends StatelessWidget {
                     imagePath: 'assets/images/user.png',
                     iconColor: const Color(0xFF4CAF50),
                     iconBackground: const Color(0xFFE8F5E9),
-                    title: AppStrings.profile,
+                    title: context.tr('profile'),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -67,7 +69,7 @@ class ProfileMenuScreen extends StatelessWidget {
                     imagePath: 'assets/images/order.png',
                     iconColor: const Color(0xFF4CAF50),
                     iconBackground: const Color(0xFFE8F5E9),
-                    title: AppStrings.orders,
+                    title: context.tr('orders'),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -88,7 +90,7 @@ class ProfileMenuScreen extends StatelessWidget {
                     icon: Icons.store_outlined,
                     iconColor: const Color(0xFF4CAF50),
                     iconBackground: const Color(0xFFE8F5E9),
-                    title: AppStrings.changeBranch,
+                    title: context.tr('change_branch'),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -104,8 +106,78 @@ class ProfileMenuScreen extends StatelessWidget {
                     thickness: 1,
                     color: Color(0XFFD8D8D8),
                   ),
-                ],
-              ),
+                  
+                  // Language Menu Item
+                  ProfileMenuItem(
+                    icon: Icons.language,
+                    iconColor: const Color(0xFF4CAF50),
+                    iconBackground: const Color(0xFFE8F5E9),
+                    title: context.tr('language'),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const LanguageSelectionScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // Divider after Language
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Color(0XFFD8D8D8),
+                  ),
+
+                  // Delete Account Menu Item
+                  ProfileMenuItem(
+                    icon: Icons.delete_outline,
+                    iconColor: Colors.red,
+                    iconBackground: const Color(0xFFFFEBEE),
+                    title: context.tr('delete_account'),
+                    onTap: () async {
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(context.tr('delete_account_confirm_title')),
+                          content: Text(context.tr('delete_account_confirm_message')),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(context.tr('cancel')),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text(
+                                context.tr('delete_account'),
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (shouldDelete == true && context.mounted) {
+                        // TODO: Implement actual delete account API call
+                        await context.read<AuthViewModel>().logout();
+                        if (context.mounted) {
+                          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                            (route) => false,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Color(0XFFD8D8D8),
+                  ),
+              ]),
             ),
 
             // Logout Button at Bottom
@@ -197,24 +269,24 @@ class ProfileMenuScreen extends StatelessWidget {
 
             // Logout Button
             LogoutButton(
-              text: AppStrings.logoutButton,
+              text: context.tr('logout_button'),
               onPressed: () async {
                 // Show confirmation dialog
                 final shouldLogout = await showDialog<bool>(
                   context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text(AppStrings.logoutConfirmTitle),
-                    content: const Text(AppStrings.logoutConfirmMessage),
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text(context.tr('logout_confirm_title')),
+                    content: Text(context.tr('logout_confirm_message')),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text(AppStrings.cancel),
+                        onPressed: () => Navigator.of(dialogContext).pop(false),
+                        child: Text(context.tr('cancel')),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text(
-                          AppStrings.logout,
-                          style: TextStyle(color: Colors.red),
+                        onPressed: () => Navigator.of(dialogContext).pop(true),
+                        child: Text(
+                          context.tr('logout'),
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     ],

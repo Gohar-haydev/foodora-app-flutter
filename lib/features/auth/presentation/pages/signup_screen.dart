@@ -5,6 +5,7 @@ import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../widgets/widgets.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -39,22 +40,22 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       context.showError(
-        title: 'Missing Information',
-        message: AppStrings.pleaseFillAllFields,
+        title: context.tr('missing_information'),
+        message: context.tr('please_fill_all_fields'),
       );
       return;
     }
 
     if (password != confirmPassword) {
       context.showError(
-        title: 'Validation Error',
-        message: 'Passwords do not match',
+        title: context.tr('validation_error'),
+        message: context.tr('passwords_do_not_match'),
       );
       return;
     }
 
     // Show loading overlay
-    context.showLoading(message: 'Creating your account...');
+    context.showLoading(message: context.tr('creating_account'));
 
     // Call ViewModel register method
     final success = await context.read<AuthViewModel>().register(
@@ -79,8 +80,8 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
       final error = context.read<AuthViewModel>().errorMessage;
       context.showError(
-        title: 'Registration Failed',
-        message: error ?? 'Registration Failed',
+        title: context.tr('registration_failed'),
+        message: error ?? context.tr('registration_failed'),
       );
     }
   }
@@ -99,14 +100,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 16),
                 
                 // Header with back button and "SIGN UP" title
-                const AuthHeader(title: AppStrings.signUp),
+                AuthHeader(title: context.tr('sign_up')),
 
                 const SizedBox(height: 40),
 
                 // Create Account heading
-                const Text(
-                  AppStrings.createAccount,
-                  style: TextStyle(
+                Text(
+                  context.tr('create_account'),
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -117,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Subtitle
                 Text(
-                  AppStrings.signUpSubtitle,
+                  context.tr('sign_up_subtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -134,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   builder: (context, value, child) {
                     return AuthTextField(
                       controller: _nameController,
-                      hintText: AppStrings.fullNamePlaceholder,
+                      hintText: context.tr('full_name_placeholder'),
                       suffixIcon: value.text.isNotEmpty
                           ? const Icon(
                               Icons.check,
@@ -154,7 +155,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   builder: (context, value, child) {
                     return AuthTextField(
                       controller: _emailController,
-                      hintText: AppStrings.emailAddressPlaceholder,
+                      hintText: context.tr('email_address'),
                       keyboardType: TextInputType.emailAddress,
                       suffixIcon: value.text.isNotEmpty
                           ? const Icon(
@@ -175,7 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   builder: (context, value, child) {
                     return AuthTextField(
                       controller: _phoneController,
-                      hintText: AppStrings.phone,
+                      hintText: context.tr('phone'),
                       keyboardType: TextInputType.phone,
                       suffixIcon: value.text.isNotEmpty
                           ? const Icon(
@@ -193,7 +194,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Password input field with visibility toggle
                 PasswordTextField(
                   controller: _passwordController,
-                  hintText: AppStrings.newPassword,
+                  hintText: context.tr('new_password'),
                   hintTextColor: Colors.black, // Set hint color to black
                 ),
 
@@ -202,7 +203,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 // Confirm Password input field
                 PasswordTextField(
                   controller: _confirmPasswordController,
-                  hintText: AppStrings.confirmPassword,
+                  hintText: context.tr('confirm_password'),
                   hintTextColor: Colors.black, // Set hint color to black
                 ),
 
@@ -210,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Sign Up button
                 AuthButton(
-                  text: AppStrings.signUp,
+                  text: context.tr('sign_up'),
                   onPressed: _onSignupPressed,
                 ),
 
@@ -221,9 +222,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    AppStrings.alreadyHaveAccount,
-                    style: TextStyle(
+                  child: Text(
+                    context.tr('already_have_account'),
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF4CAF50),
                       fontWeight: FontWeight.w500,
@@ -237,7 +238,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 24.0,left: 25,right: 25),
                   child: Text(
-                    AppStrings.termsAndConditions,
+                    context.tr('terms_and_conditions'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,

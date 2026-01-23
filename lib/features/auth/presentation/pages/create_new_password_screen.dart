@@ -3,6 +3,7 @@ import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/custom_text_field.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
@@ -37,8 +38,8 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: const Text(
-          AppStrings.forgotPasswordTitle,
+        title: Text(
+          context.tr('create_new_password_title'),
            style: TextStyle(
             color: Colors.black,
             fontSize: 18,
@@ -62,9 +63,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
               children: [
                 const SizedBox(height: 40),
                 
-                const Center(
+                Center(
                   child: Text(
-                    AppStrings.createNewAccount, // Reused string, or maybe add 'Create New Password' specifically if mismatched
+                    context.tr('create_new_password_title'),
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -76,9 +77,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 
                 const SizedBox(height: 16),
                 
-                const Center(
+                Center(
                   child: Text(
-                    AppStrings.enterResetToken,
+                    context.tr('enter_reset_token'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -93,7 +94,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 // Token Field (Temporary/Required by API)
                 CustomTextField(
                   controller: _tokenController,
-                  hintText: AppStrings.resetToken,
+                  hintText: context.tr('reset_token'),
                 ),
                 
                 const SizedBox(height: 16),
@@ -102,7 +103,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 CustomTextField(
                   controller: _newPasswordController,
                   obscureText: !_newPasswordVisible,
-                  hintText: AppStrings.newPassword,
+                  hintText: context.tr('new_password'),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _newPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -123,7 +124,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 CustomTextField(
                   controller: _confirmPasswordController,
                   obscureText: !_confirmPasswordVisible,
-                  hintText: AppStrings.confirmPassword,
+                  hintText: context.tr('confirm_password'),
                   suffixIcon: IconButton(
                     icon: Icon(
                       _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -143,7 +144,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 Consumer<AuthViewModel>(
                   builder: (context, viewModel, child) {
                     return PrimaryButton(
-                      text: AppStrings.reset,
+                      text: context.tr('reset'),
                       isLoading: viewModel.isLoading,
                       onPressed: () async {
                         final token = _tokenController.text.trim();
@@ -153,21 +154,21 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
 
                         if (token.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
                            ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text(AppStrings.pleaseFillAllFields)),
+                            SnackBar(content: Text(context.tr('please_fill_all_fields'))),
                           );
                           return;
                         }
                         
                         if (email.isEmpty) {
                            ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text(AppStrings.emailNotFound)), // Updated string usage
+                            SnackBar(content: Text(context.tr('email_not_found'))), // Updated string usage
                           );
                           return;
                         }
 
                         if (newPass != confirmPass) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text(AppStrings.passwordsDoNotMatch)),
+                            SnackBar(content: Text(context.tr('passwords_do_not_match'))),
                           );
                           return;
                         }
@@ -183,14 +184,14 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
 
                         if (success) {
                            ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text(AppStrings.passwordResetSuccess)),
+                            SnackBar(content: Text(context.tr('password_reset_success'))),
                           );
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) => const PasswordChangedSuccessScreen()),
                           );
                         } else {
                            ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(viewModel.errorMessage ?? AppStrings.resetFailed)),
+                            SnackBar(content: Text(viewModel.errorMessage ?? context.tr('reset_failed'))),
                           );
                         }
                       },

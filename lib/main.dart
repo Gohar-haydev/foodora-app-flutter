@@ -39,6 +39,9 @@ import 'features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'features/order/domain/usecases/get_orders_usecase.dart';
 import 'features/order/domain/usecases/track_order_usecase.dart';
 import 'features/order/presentation/viewmodels/order_viewmodel.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'core/localization/app_localizations.dart';
+import 'core/providers/locale_provider.dart';
 
 void main() {
   runApp(const FoodieApp());
@@ -136,16 +139,29 @@ class FoodieApp extends StatelessWidget {
             trackOrderUseCase: trackOrderUseCase,
           ),
         ),
+        ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
-      child: MaterialApp(
-        title: AppStrings.appName,
-        theme: ThemeData(
-          fontFamily: 'Plus Jakarta Sans',
-          scaffoldBackgroundColor: AppColors.white,
-          useMaterial3: true,
-        ),
-        home: const SplashScreen(),
-        debugShowCheckedModeBanner: false,
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp(
+            title: AppStrings.appName,
+            theme: ThemeData(
+              fontFamily: 'Plus Jakarta Sans',
+              scaffoldBackgroundColor: AppColors.white,
+              useMaterial3: true,
+            ),
+            locale: localeProvider.locale,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const SplashScreen(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_strings.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/custom_text_field.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'package:foodora/features/menu/presentation/pages/menu_item_detail_screen.dart';
 
@@ -52,9 +53,9 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        title: const Text(
-          AppStrings.searchTitle,
-          style: TextStyle(
+        title: Text(
+          context.tr('search_title'),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -71,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
               // Search Bar
               CustomTextField(
                 controller: _searchController,
-                hintText: AppStrings.searchHint,
+                hintText: context.tr('search_hint'),
               ),
               
               const SizedBox(height: 24),
@@ -283,7 +284,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             Icon(Icons.search_off, size: 64, color: Colors.grey[300]),
                             const SizedBox(height: 16),
                             Text(
-                              'No results found',
+                              context.tr('no_results_found'),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -297,13 +298,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   }
 
                   // Default placeholder
-                  return const Center(
+                  return Center(
                     child: Padding(
                       padding: EdgeInsets.all(40.0),
                       child: Text(
-                        'Search for menu items or select a category',
+                        context.tr('search_placeholder'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   );

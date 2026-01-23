@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/cart/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:foodora/features/cart/presentation/pages/checkout_screen.dart';
+import 'package:foodora/features/cart/presentation/widgets/cart_item_widget.dart';
+import 'package:foodora/features/cart/presentation/widgets/cart_price_row.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -14,8 +17,8 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Cart', 
+        title: Text(
+          context.tr('cart'), 
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -32,11 +35,11 @@ class CartScreen extends StatelessWidget {
              return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.mutedText),
                   SizedBox(height: 16),
                   Text(
-                    'Your cart is empty',
+                    context.tr('empty_cart'),
                     style: TextStyle(
                       color: AppColors.mutedText,
                       fontSize: 18,
@@ -58,144 +61,25 @@ class CartScreen extends StatelessWidget {
             children: [
               // Cart Items List
               ...viewModel.cartItems.map((cartItem) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Dismissible(
-                    key: Key(cartItem.id),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-                    onDismissed: (_) {
-                      viewModel.removeFromCart(cartItem.id);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          // Item Image
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              width: 60,
-                              height: 60,
-                              color: Colors.grey[300],
-                              child: cartItem.menuItem.image != null
-                                  ? Image.network(
-                                      cartItem.menuItem.image!,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (ctx, err, stack) => const Icon(Icons.fastfood, color: Colors.grey),
-                                    )
-                                  : const Icon(Icons.fastfood, color: Colors.grey),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-
-                          // Item Details
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  cartItem.menuItem.name,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                if (cartItem.selectedAddons.isEmpty)
-                                  Text(
-                                    '01', // Variant or static label if no addons
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey[500],
-                                    ),
-                                  )
-                                else
-                                  Wrap(
-                                    spacing: 4,
-                                    children: cartItem.selectedAddons.map((adn) => Text(
-                                      '+${adn.name}',
-                                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                                    )).toList(),
-                                  ),
-                              ],
-                            ),
-                          ),
-
-                          // Quantity Actions
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove, size: 18),
-                                  onPressed: () => viewModel.decrementItem(cartItem.id),
-                                  padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(),
-                                  color: Colors.black,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Text(
-                                    '${cartItem.quantity}'.padLeft(2, '0'),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add, size: 18),
-                                  onPressed: () => viewModel.incrementItem(cartItem.id),
-                                  padding: const EdgeInsets.all(8),
-                                  constraints: const BoxConstraints(),
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                return CartItemWidget(
+                  cartItem: cartItem,
+                  onIncrement: () => viewModel.incrementItem(cartItem.id),
+                  onDecrement: () => viewModel.decrementItem(cartItem.id),
+                  onRemove: () => viewModel.removeFromCart(cartItem.id),
                 );
               }).toList(),
 
               const SizedBox(height: 24),
 
               // Breakdown
-              _PriceRow(label: 'Subtotal', amount: subtotal),
+              CartPriceRow(label: context.tr('subtotal'), amount: subtotal),
               const SizedBox(height: 12),
-              _PriceRow(label: 'Delivery Fee', amount: deliveryFee),
+              CartPriceRow(label: context.tr('delivery_fee'), amount: deliveryFee),
               const SizedBox(height: 12),
-              _PriceRow(label: 'Tax', amount: tax),
+              CartPriceRow(label: context.tr('tax'), amount: tax),
               const SizedBox(height: 12),
-              _PriceRow(
-                label: 'Total',
+              CartPriceRow(
+                label: context.tr('total'),
                 amount: total,
                 isTotal: true,
               ),
@@ -219,9 +103,9 @@ class CartScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'CHECKOUT',
-                    style: TextStyle(
+                  child: Text(
+                    context.tr('checkout').toUpperCase(),
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1,
@@ -238,39 +122,4 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-class _PriceRow extends StatelessWidget {
-  final String label;
-  final double amount;
-  final bool isTotal;
 
-  const _PriceRow({
-    required this.label,
-    required this.amount,
-    this.isTotal = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        Text(
-          '\$${amount.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    );
-  }
-}

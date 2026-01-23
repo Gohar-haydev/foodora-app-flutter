@@ -4,6 +4,7 @@ import 'package:foodora/features/menu/presentation/pages/order_details_screen.da
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/presentation/widgets/past_order_card.dart';
+import 'package:foodora/core/extensions/context_extensions.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
@@ -28,9 +29,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          AppStrings.orderHistory,
-          style: TextStyle(
+        title: Text(
+          context.tr('order_history'),
+          style: const TextStyle(
             color: Colors.black, // Dark text for title to match design
             fontWeight: FontWeight.w600,
           ),
@@ -46,9 +47,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Past Orders',
-                style: TextStyle(
+              Text(
+                context.tr('past_orders'),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1A1A1A), // Dark text color
@@ -85,7 +86,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () => viewModel.fetchOrders(),
-                              child: const Text('Retry'),
+                              child: Text(context.tr('retry')),
                             ),
                           ],
                         ),
@@ -95,10 +96,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
                   // Show empty state
                   if (viewModel.orders.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: Text('No past orders found.'),
+                        padding: const EdgeInsets.all(24.0),
+                        child: Text(context.tr('no_past_orders_found')),
                       ),
                     );
                   }
@@ -111,7 +112,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       final order = viewModel.orders[index];
                       final firstItem = order.items.first;
                       final title = order.items.length > 1 
-                        ? '${firstItem.itemName} + ${order.items.length - 1} more'
+                        ? '${firstItem.itemName} + ${order.items.length - 1} ${context.tr('more')}'
                         : firstItem.itemName;
                       
                       return GestureDetector(
