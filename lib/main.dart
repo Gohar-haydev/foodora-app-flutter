@@ -44,6 +44,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/currency_provider.dart';
+import 'package:animations/animations.dart';
 
 void main() {
   runApp(const FoodieApp());
@@ -154,6 +155,16 @@ class FoodieApp extends StatelessWidget {
               fontFamily: 'Plus Jakarta Sans',
               scaffoldBackgroundColor: AppColors.white,
               useMaterial3: true,
+              pageTransitionsTheme: const PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+                    transitionType: SharedAxisTransitionType.horizontal,
+                  ),
+                  TargetPlatform.iOS: SharedAxisPageTransitionsBuilder(
+                    transitionType: SharedAxisTransitionType.horizontal,
+                  ),
+                },
+              ),
             ),
             locale: localeProvider.locale,
             localizationsDelegates: [

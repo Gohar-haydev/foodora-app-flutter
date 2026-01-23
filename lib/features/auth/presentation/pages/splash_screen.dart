@@ -166,48 +166,148 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemCount: pages.length,
-                itemBuilder: (context, index) {
-                  return _buildPage(pages[index]);
-                },
-              ),
+            // Layer 1: Full-screen PageView for gestures and images
+            PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              itemCount: pages.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    // The sliding image part
+                    Expanded(
+                      flex: 6,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                        child: Image.asset(
+                          pages[index].image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey[300],
+                              alignment: Alignment.center,
+                              child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    // Empty space for the text section to allow gestures to pass if needed
+                    // (Actually PageView treats the whole area as slidable)
+                    const Expanded(flex: 5, child: SizedBox.shrink()),
+                  ],
+                );
+              },
             ),
 
-            // Bottom button
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.backgroundLight,
-                    foregroundColor: AppColors.primaryText,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    elevation: 0,
+            // Layer 2: Static Overlay (Indicators, Text, Buttons)
+            Column(
+              children: [
+                // Top placeholder for images (gestures pass to PageView)
+                Expanded(
+                  flex: 6,
+                  child: Stack(
+                    children: [
+                      // Page Indicator overlay (Static but reflects state)
+                      Positioned(
+                        bottom: 30,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: List.generate(
+                                pages.length,
+                                (index) => _buildIndicatorDot(isActive: index == _currentPage),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                ),
+
+                // Bottom Section: Static Text and Buttons
+                Expanded(
+                  flex: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: [
+                        // Wrap text in IgnorePointer so swipes here go to the PageView behind it
+                        Expanded(
+                          child: IgnorePointer(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  pages[_currentPage].title,
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  pages[_currentPage].description,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        
+                        // Buttons (Interaction kept)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton(
+                            onPressed: _nextPage,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.backgroundLight,
+                              foregroundColor: AppColors.primaryText,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: Text(
+                              _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -215,102 +315,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Widget _buildPage(OnboardingPage page) {
-    // Need access to pages length for indicator (passed in? or accessed via context method?)
-    // Actually indicator is rebuilt in build() which calls _getPages.
-    // _buildPage only builds content.
-    // However, _buildIndicatorDot is separate.
-    // We fixed usage in build() so that's fine.
-    // Wait, _buildPage is used in PageView.builder.
-    // We need to fix _buildPage signature? No, it takes OnboardingPage.
-    
-    return Column(
-      children: [
-        // Top Section: Image with visual appeal
-        Expanded(
-          flex: 6,
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: Image.asset(
-                  page.image,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.image, size: 50, color: Colors.grey),
-                    );
-                  },
-                ),
-              ),
-              // Page Indicator overlay
-              Positioned(
-                bottom: 30,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(
-                        _getPages(context).length,
-                        (index) => _buildIndicatorDot(isActive: index == _currentPage),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
 
-        // Bottom Section: Content
-        Expanded(
-          flex: 4,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  page.title,
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  page.description,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildIndicatorDot({required bool isActive}) {
     return AnimatedContainer(
