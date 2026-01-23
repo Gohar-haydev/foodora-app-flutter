@@ -161,7 +161,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                               ),
                             );
                           }
-                        },
+                         },
                         child: PastOrderCard(
                           title: title,
                           price: '\$${order.totalAmount.toStringAsFixed(2)}',
