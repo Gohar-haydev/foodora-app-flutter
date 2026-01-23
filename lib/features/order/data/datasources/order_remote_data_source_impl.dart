@@ -92,4 +92,25 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       },
     );
   }
+
+  @override
+  Future<void> cancelOrder(int orderId, String reason) async {
+    print('🟣 [DataSource] cancelOrder called for order: $orderId');
+    final result = await apiService.post<void>(
+      endpoint: '/orders/$orderId/cancel',
+      body: {'reason': reason},
+      requireAuth: true,
+      fromJson: (json) => null,
+    );
+
+    return result.fold(
+      (failure) {
+        print('❌ [DataSource] Cancel API failure: ${failure.message}');
+        throw Exception(failure.message);
+      },
+      (_) {
+         print('✅ [DataSource] Cancel API success');
+      },
+    );
+  }
 }

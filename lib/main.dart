@@ -38,6 +38,7 @@ import 'features/order/domain/usecases/create_order_usecase.dart';
 import 'features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'features/order/domain/usecases/get_orders_usecase.dart';
 import 'features/order/domain/usecases/track_order_usecase.dart';
+import 'features/order/domain/usecases/cancel_order_usecase.dart';
 import 'features/order/presentation/viewmodels/order_viewmodel.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/app_localizations.dart';
@@ -98,6 +99,7 @@ class FoodieApp extends StatelessWidget {
     final getOrderByIdUseCase = GetOrderByIdUseCase(orderRepository);
     final getOrdersUseCase = GetOrdersUseCase(orderRepository);
     final trackOrderUseCase = TrackOrderUseCase(orderRepository);
+    final cancelOrderUseCase = CancelOrderUseCase(orderRepository);
 
     // 5. Initialize ViewModels (Providers)
     return MultiProvider(
@@ -137,6 +139,7 @@ class FoodieApp extends StatelessWidget {
             getOrderByIdUseCase: getOrderByIdUseCase,
             getOrdersUseCase: getOrdersUseCase,
             trackOrderUseCase: trackOrderUseCase,
+            cancelOrderUseCase: cancelOrderUseCase,
           ),
         ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),

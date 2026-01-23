@@ -33,6 +33,7 @@ class _MenuScreenState extends State<MenuScreen> {
       final viewModel = context.read<MenuViewModel>();
       viewModel.fetchCategories(widget.branchId);
       viewModel.fetchMenuItems(widget.branchId);
+      viewModel.fetchFavoritesList(page: 1);
     });
   }
 

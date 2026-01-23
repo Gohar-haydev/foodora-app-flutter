@@ -8,4 +8,5 @@ abstract class OrderRepository {
   Future<Result<OrderEntity>> getOrderById(int orderId);
   Future<Result<List<OrderEntity>>> getOrders({int page = 1});
   Future<Result<OrderTrackingEntity>> trackOrder(int orderId);
+  Future<Result<void>> cancelOrder(int orderId, String reason);
 }

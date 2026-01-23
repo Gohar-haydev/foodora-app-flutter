@@ -13,6 +13,7 @@ import 'package:foodora/features/menu/domain/usecases/get_favorites_usecase.dart
 import 'package:foodora/features/menu/domain/usecases/search_menu_items_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_items_by_category_filter_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_item_details_usecase.dart';
+import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart';
 import 'package:foodora/features/menu/domain/usecases/check_favorite_status_usecase.dart';
 
 class MenuViewModel extends ChangeNotifier {
@@ -269,11 +270,17 @@ class MenuViewModel extends ChangeNotifier {
         _isFavoritesLoadingMore = false;
       },
       (favoritesList) {
-        if (page == 1) {
-          _favoriteItems = favoritesList.favorites;
-        } else {
-          _favoriteItems.addAll(favoritesList.favorites);
-        }
+          if (page == 1) {
+            _favoriteItems = favoritesList.favorites;
+            // Optionally clear _favoriteItemIds if we want to trust this list fully, 
+            // but for partial loading we might want to just add. 
+            // However, to be consistent with 'refresh', let's keep what we have and add.
+            // Or if page 1, we might assume we are refreshing favorites state.
+            _favoriteItemIds.addAll(favoritesList.favorites.map((e) => e.id));
+          } else {
+            _favoriteItems.addAll(favoritesList.favorites);
+            _favoriteItemIds.addAll(favoritesList.favorites.map((e) => e.id));
+          }
         _favoritesCurrentPage = favoritesList.pagination.currentPage;
         _hasFavoritesMore = favoritesList.pagination.hasMore;
         _isFavoritesLoading = false;

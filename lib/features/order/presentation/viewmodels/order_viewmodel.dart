@@ -5,6 +5,7 @@ import 'package:foodora/features/order/domain/usecases/get_order_by_id_usecase.d
 import 'package:foodora/features/order/domain/usecases/get_orders_usecase.dart';
 import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
 import 'package:foodora/features/order/domain/usecases/track_order_usecase.dart';
+import 'package:foodora/features/order/domain/usecases/cancel_order_usecase.dart';
 import 'package:foodora/features/order/data/models/order_request_model.dart';
 
 class OrderViewModel extends ChangeNotifier {
@@ -12,12 +13,14 @@ class OrderViewModel extends ChangeNotifier {
   final GetOrderByIdUseCase getOrderByIdUseCase;
   final GetOrdersUseCase getOrdersUseCase;
   final TrackOrderUseCase trackOrderUseCase;
+  final CancelOrderUseCase cancelOrderUseCase;
   
   OrderViewModel({
     required this.createOrderUseCase,
     required this.getOrderByIdUseCase,
     required this.getOrdersUseCase,
     required this.trackOrderUseCase,
+    required this.cancelOrderUseCase,
   });
   
   final List<OrderEntity> _orders = [];
@@ -147,6 +150,33 @@ class OrderViewModel extends ChangeNotifier {
         _orderTracking = trackingData;
         notifyListeners();
         return trackingData;
+      },
+    );
+  }
+
+  Future<bool> cancelOrder(int orderId, String reason) async {
+    print('🟡 [ViewModel] cancelOrder called with orderId: $orderId');
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    final result = await cancelOrderUseCase(orderId, reason);
+
+    return result.fold(
+      (failure) {
+        print('❌ [ViewModel] Cancel order failure: ${failure.message}');
+        _errorMessage = failure.message;
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      },
+      (_) {
+        print('✅ [ViewModel] Cancel order success');
+        _isLoading = false;
+        // Refresh orders to show updated status
+        fetchOrders(); 
+        notifyListeners();
+        return true;
       },
     );
   }

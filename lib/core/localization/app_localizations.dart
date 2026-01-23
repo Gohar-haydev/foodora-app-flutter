@@ -246,6 +246,10 @@ class AppLocalizations {
     'items_ordered': 'Items Ordered',
     'total_paid': 'Total Paid',
     'qty': 'Qty',
+    'cancel_order': 'Cancel Order',
+    'cancel_order_confirm_message': 'Are you sure you want to cancel this order?',
+    'yes': 'Yes',
+    'no': 'No',
     
     // Language
     'language': 'Language',
@@ -468,6 +472,10 @@ class AppLocalizations {
     'items_ordered': 'Beställda artiklar',
     'total_paid': 'Totalt betalt',
     'qty': 'Antal',
+    'cancel_order': 'Avbryt beställning',
+    'cancel_order_confirm_message': 'Är du säker på att du vill avbryta denna beställning?',
+    'yes': 'Ja',
+    'no': 'Nej',
     
     // Language
     'language': 'Språk',

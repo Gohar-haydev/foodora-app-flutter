@@ -7,4 +7,5 @@ abstract class OrderRemoteDataSource {
   Future<OrderModel> getOrderById(int orderId);
   Future<List<OrderModel>> getOrders({int page = 1});
   Future<OrderTrackingModel> trackOrder(int orderId);
+  Future<void> cancelOrder(int orderId, String reason);
 }

@@ -166,6 +166,9 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           title: title,
                           price: '\$${order.totalAmount.toStringAsFixed(2)}',
                           imageUrl: firstItem.branchImageUrl ?? '',
+                          onCancel: (order.status.trim().toLowerCase() == 'pending') 
+                              ? () => _showCancelDialog(context, viewModel, order.id) 
+                              : null,
                         ),
                       );
                     },
@@ -175,6 +178,43 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showCancelDialog(BuildContext context, OrderViewModel viewModel, int orderId) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(context.tr('cancel_order')),
+        content: Text(context.tr('cancel_order_confirm_message')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.tr('no')),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+              
+              // Use the viewModel passed to the method
+              final success = await viewModel.cancelOrder(orderId, 'Changed my mind');
+              
+              if (context.mounted) {
+                if (success) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(context.tr('order_cancelled_desc')), backgroundColor: Colors.green),
+                   );
+                } else if (viewModel.errorMessage != null) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(viewModel.errorMessage!), backgroundColor: Colors.red),
+                   );
+                }
+              }
+            },
+            child: Text(context.tr('yes'), style: const TextStyle(color: Colors.red)),
+          ),
+        ],
       ),
     );
   }

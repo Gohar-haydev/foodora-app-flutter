@@ -64,4 +64,17 @@ class OrderRepositoryImpl implements OrderRepository {
       return Result.failure(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Result<void>> cancelOrder(int orderId, String reason) async {
+    print('🟠 [Repository] cancelOrder called: $orderId, reason: $reason');
+    try {
+      await remoteDataSource.cancelOrder(orderId, reason);
+      print('✅ [Repository] Cancel successful');
+      return Result.success(null);
+    } catch (e) {
+      print('❌ [Repository] Cancel exception: $e');
+      return Result.failure(ServerFailure(e.toString()));
+    }
+  }
 }

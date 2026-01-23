@@ -7,12 +7,14 @@ class PastOrderCard extends StatelessWidget {
   final String title;
   final String price;
   final String imageUrl; // For now we might just use a placeholder or asset
+  final VoidCallback? onCancel;
 
   const PastOrderCard({
     Key? key,
     required this.title,
     required this.price,
     required this.imageUrl,
+    this.onCancel,
   }) : super(key: key);
 
   @override
@@ -91,6 +93,12 @@ class PastOrderCard extends StatelessWidget {
               ],
             ),
           ),
+          if (onCancel != null)
+             IconButton(
+              onPressed: onCancel,
+              icon: const Icon(Icons.cancel_outlined, color: Colors.red),
+              tooltip: 'Cancel Order',
+            ),
         ],
       ),
     );
