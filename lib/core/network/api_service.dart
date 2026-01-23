@@ -1,16 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../errors/failure.dart';
 import '../utils/result.dart';
 import 'api_constants.dart';
 
 import '../utils/token_storage.dart';
+import 'network_info.dart';
 
 class ApiService {
   final http.Client client;
+  final NetworkInfo networkInfo;
 
-  ApiService({http.Client? client}) : client = client ?? http.Client();
+  ApiService({http.Client? client, NetworkInfo? networkInfo}) 
+      : client = client ?? http.Client(),
+        networkInfo = networkInfo ?? NetworkInfoImpl(Connectivity());
 
   // Helper to get headers with optional auth
   Future<Map<String, String>> _getHeaders(Map<String, String>? extraHeaders, bool requireAuth) async {
@@ -26,13 +32,15 @@ class ApiService {
     return headers;
   }
 
-  // Generic GET method
   Future<Result<T>> get<T>({
     required String endpoint,
     required T Function(Map<String, dynamic>) fromJson,
     Map<String, String>? headers,
     bool requireAuth = false,
   }) async {
+    if (!await networkInfo.isConnected) {
+      return Result.failure(const NetworkFailure('No Internet Connection'));
+    }
     try {
       final requestHeaders = await _getHeaders(headers, requireAuth);
       final response = await client.get(
@@ -41,14 +49,15 @@ class ApiService {
       );
 
       return _handleResponse(response, fromJson);
-    } on SocketException {
-      return Result.failure(const NetworkFailure('No Internet Connection'));
+    } on SocketException catch (e) {
+      debugPrint('ApiService SocketException [GET $endpoint]: ${e.message}');
+      return Result.failure(NetworkFailure('Network Error: ${e.message}'));
     } catch (e) {
+      debugPrint('ApiService Exception [GET $endpoint]: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }
 
-  // Generic POST method
   Future<Result<T>> post<T>({
     required String endpoint,
     required Map<String, dynamic> body,
@@ -56,6 +65,9 @@ class ApiService {
     Map<String, String>? headers,
     bool requireAuth = false,
   }) async {
+    if (!await networkInfo.isConnected) {
+      return Result.failure(const NetworkFailure('No Internet Connection'));
+    }
     try {
       final requestHeaders = await _getHeaders(headers, requireAuth);
       final response = await client.post(
@@ -65,14 +77,15 @@ class ApiService {
       );
 
       return _handleResponse(response, fromJson);
-    } on SocketException {
-      return Result.failure(const NetworkFailure('No Internet Connection'));
+    } on SocketException catch (e) {
+      debugPrint('ApiService SocketException [POST $endpoint]: ${e.message}');
+      return Result.failure(NetworkFailure('Network Error: ${e.message}'));
     } catch (e) {
+      debugPrint('ApiService Exception [POST $endpoint]: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }
 
-  // Generic PUT method
   Future<Result<T>> put<T>({
     required String endpoint,
     required Map<String, dynamic> body,
@@ -80,6 +93,9 @@ class ApiService {
     Map<String, String>? headers,
     bool requireAuth = false,
   }) async {
+    if (!await networkInfo.isConnected) {
+      return Result.failure(const NetworkFailure('No Internet Connection'));
+    }
     try {
       final requestHeaders = await _getHeaders(headers, requireAuth);
       final response = await client.put(
@@ -89,20 +105,24 @@ class ApiService {
       );
 
       return _handleResponse(response, fromJson);
-    } on SocketException {
-      return Result.failure(const NetworkFailure('No Internet Connection'));
+    } on SocketException catch (e) {
+      debugPrint('ApiService SocketException [PUT $endpoint]: ${e.message}');
+      return Result.failure(NetworkFailure('Network Error: ${e.message}'));
     } catch (e) {
+      debugPrint('ApiService Exception [PUT $endpoint]: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }
 
-  // Generic DELETE method
   Future<Result<T>> delete<T>({
     required String endpoint,
     required T Function(Map<String, dynamic>) fromJson,
     Map<String, String>? headers,
     bool requireAuth = false,
   }) async {
+    if (!await networkInfo.isConnected) {
+      return Result.failure(const NetworkFailure('No Internet Connection'));
+    }
     try {
       final requestHeaders = await _getHeaders(headers, requireAuth);
       final response = await client.delete(
@@ -111,9 +131,11 @@ class ApiService {
       );
 
       return _handleResponse(response, fromJson);
-    } on SocketException {
-      return Result.failure(const NetworkFailure('No Internet Connection'));
+    } on SocketException catch (e) {
+      debugPrint('ApiService SocketException [DELETE $endpoint]: ${e.message}');
+      return Result.failure(NetworkFailure('Network Error: ${e.message}'));
     } catch (e) {
+      debugPrint('ApiService Exception [DELETE $endpoint]: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }

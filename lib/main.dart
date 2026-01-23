@@ -44,6 +44,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/currency_provider.dart';
+import 'core/providers/connectivity_provider.dart';
+import 'core/widgets/no_internet_screen.dart';
 import 'package:animations/animations.dart';
 
 void main() {
@@ -146,6 +148,7 @@ class FoodieApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => CurrencyProvider()),
+        ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {
@@ -176,6 +179,16 @@ class FoodieApp extends StatelessWidget {
             supportedLocales: AppLocalizations.supportedLocales,
             home: const SplashScreen(),
             debugShowCheckedModeBanner: false,
+            builder: (context, child) {
+              return Consumer<ConnectivityProvider>(
+                builder: (context, connectivityProvider, _) {
+                  if (!connectivityProvider.isConnected) {
+                    return const NoInternetScreen();
+                  }
+                  return child!;
+                },
+              );
+            },
           );
         },
       ),
