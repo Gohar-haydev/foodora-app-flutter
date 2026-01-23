@@ -256,6 +256,10 @@ class AppLocalizations {
     'select_language': 'Select Language',
     'english': 'English',
     'swedish': 'Swedish',
+    'currency': 'Currency',
+    'change_currency': 'Change Currency',
+    'select_currency': 'Select Currency',
+    'krones': 'Krones',
   };
 
   // Swedish strings
@@ -482,6 +486,10 @@ class AppLocalizations {
     'select_language': 'Välj språk',
     'english': 'Engelska',
     'swedish': 'Svenska',
+    'currency': 'Valuta',
+    'change_currency': 'Ändra valuta',
+    'select_currency': 'Välj valuta',
+    'krones': 'Kronor',
   };
 }
 

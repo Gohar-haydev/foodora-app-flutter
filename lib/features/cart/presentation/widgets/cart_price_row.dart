@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:foodora/core/providers/currency_provider.dart';
 
 class CartPriceRow extends StatelessWidget {
   final String label;
@@ -25,13 +27,17 @@ class CartPriceRow extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        Text(
-          '\$${amount.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
-          ),
+        Consumer<CurrencyProvider>(
+          builder: (context, currencyProvider, child) {
+            return Text(
+              currencyProvider.formatPrice(amount),
+              style: TextStyle(
+                fontSize: isTotal ? 18 : 16,
+                fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
+                color: Colors.black,
+              ),
+            );
+          }
         ),
       ],
     );

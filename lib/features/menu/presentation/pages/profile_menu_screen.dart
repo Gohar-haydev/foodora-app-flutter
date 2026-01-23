@@ -11,6 +11,7 @@ import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import '../../../../core/widgets/logout_button.dart';
 import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/language_selection_screen.dart';
+import 'package:foodora/features/menu/presentation/pages/currency_selection_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 class ProfileMenuScreen extends StatelessWidget {
@@ -123,6 +124,28 @@ class ProfileMenuScreen extends StatelessWidget {
                   ),
 
                   // Divider after Language
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Color(0XFFD8D8D8),
+                  ),
+
+                  // Currency Menu Item
+                  ProfileMenuItem(
+                    icon: Icons.attach_money,
+                    iconColor: const Color(0xFF4CAF50),
+                    iconBackground: const Color(0xFFE8F5E9),
+                    title: context.tr('currency'),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const CurrencySelectionScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // Divider after Currency
                   const Divider(
                     height: 1,
                     thickness: 1,

@@ -43,6 +43,7 @@ import 'features/order/presentation/viewmodels/order_viewmodel.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'core/localization/app_localizations.dart';
 import 'core/providers/locale_provider.dart';
+import 'core/providers/currency_provider.dart';
 
 void main() {
   runApp(const FoodieApp());
@@ -143,6 +144,7 @@ class FoodieApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ChangeNotifierProvider(create: (_) => CurrencyProvider()),
       ],
       child: Consumer<LocaleProvider>(
         builder: (context, localeProvider, child) {

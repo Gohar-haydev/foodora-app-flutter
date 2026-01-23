@@ -5,6 +5,7 @@ import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.d
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/presentation/widgets/past_order_card.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
+import 'package:foodora/core/providers/currency_provider.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
@@ -162,13 +163,17 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                             );
                           }
                          },
-                        child: PastOrderCard(
-                          title: title,
-                          price: '\$${order.totalAmount.toStringAsFixed(2)}',
-                          imageUrl: firstItem.branchImageUrl ?? '',
-                          onCancel: (order.status.trim().toLowerCase() == 'pending') 
-                              ? () => _showCancelDialog(context, viewModel, order.id) 
-                              : null,
+                        child: Consumer<CurrencyProvider>(
+                           builder: (context, currencyProvider, child) {
+                              return PastOrderCard(
+                                title: title,
+                                price: currencyProvider.formatPrice(order.totalAmount),
+                                imageUrl: firstItem.branchImageUrl ?? '',
+                                onCancel: (order.status.trim().toLowerCase() == 'pending') 
+                                    ? () => _showCancelDialog(context, viewModel, order.id) 
+                                    : null,
+                              );
+                           }
                         ),
                       );
                     },

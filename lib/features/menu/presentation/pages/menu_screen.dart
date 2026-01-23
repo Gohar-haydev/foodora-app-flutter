@@ -12,6 +12,7 @@ import 'package:foodora/features/menu/presentation/widgets/featured_card.dart';
 import 'package:foodora/features/menu/presentation/widgets/category_chip.dart';
 import 'package:foodora/features/menu/presentation/widgets/recipe_card.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
+import 'package:foodora/core/providers/currency_provider.dart';
 
 class MenuScreen extends StatefulWidget {
   final int branchId;
@@ -68,6 +69,9 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch currency provider to rebuild on change
+    final currencyProvider = Provider.of<CurrencyProvider>(context);
+    
     return Scaffold(
       backgroundColor: Colors.white,
         appBar: AppBar(
@@ -342,7 +346,7 @@ class _MenuScreenState extends State<MenuScreen> {
                             },
                             child: RecipeCard(
                               title: itemsToShow[i].name,
-                              price: '${context.tr('from')} ${itemsToShow[i].price} kr',
+                              price: '${context.tr('from')} ${currencyProvider.formatPrice(double.tryParse(itemsToShow[i].price.toString()) ?? 0)}',
                               image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
                                 menuItemId: itemsToShow[i].id,
                               isFavorite: viewModel.isFavorite(itemsToShow[i].id),
