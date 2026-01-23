@@ -30,7 +30,9 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MenuViewModel>().fetchMenuItemDetails(widget.menuItemId);
+      final viewModel = context.read<MenuViewModel>();
+      viewModel.fetchMenuItemDetails(widget.menuItemId);
+      viewModel.checkFavoriteStatus(widget.menuItemId);
     });
   }
 
@@ -142,6 +144,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                     ),
                     _buildCircleAction(
                       icon: viewModel.isFavorite(item.id) ? Icons.favorite : Icons.favorite_border,
+                      iconColor: viewModel.isFavorite(item.id) ? Colors.red : AppColors.primaryText,
                       onTap: () async {
                          await viewModel.toggleFavorite(item.id);
                       },
@@ -437,7 +440,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
     );
   }
 
-  Widget _buildCircleAction({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildCircleAction({required IconData icon, required VoidCallback onTap, Color iconColor = AppColors.primaryText}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -447,7 +450,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
           color: AppColors.white,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, size: 20, color: AppColors.primaryText),
+        child: Icon(icon, size: 20, color: iconColor),
       ),
     );
   }
