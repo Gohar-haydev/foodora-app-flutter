@@ -4,14 +4,18 @@ import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/cart/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:foodora/features/cart/presentation/pages/order_confirmation_screen.dart';
 import 'package:foodora/features/cart/presentation/pages/change_address_screen.dart';
+import 'package:foodora/features/cart/presentation/pages/klarna_payment_screen.dart';
+import 'package:foodora/features/cart/data/datasources/klarna_payment_datasource.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
 import 'package:foodora/features/order/data/models/order_request_model.dart';
 import 'package:foodora/features/order/data/models/order_item_request_model.dart';
 import 'package:foodora/features/order/data/models/order_addon_request_model.dart';
 import 'package:foodora/core/utils/token_storage.dart';
+import 'package:foodora/core/network/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
-
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
+import 'package:foodora/core/widgets/error_dialog.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key}) : super(key: key);
@@ -176,6 +180,216 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
           ),
     );
+  }
+
+  void _handlePayPalPayment(CartViewModel cartViewModel, OrderViewModel orderViewModel) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => PaypalCheckoutView(
+          sandboxMode: true,
+          clientId: "AZu9hsdQ5-kT6IDF7ItoUjcDoc1VCtaDMRYcPO8ru7ThpAx-XiaAyVFe6Pi88opZV79aTsRuC6Dhtd1k", // Replace with actual Client ID
+          secretKey: "EMZ5tcvuia--E7MB_6YhdE0FzqrmG37HoFx8LNXv15cPLSE2z6cFxKe6AjSeEkk4rf2naO36ifAu_xgW", // Replace with actual Secret Key
+          transactions: [
+            {
+              "amount": {
+                "total": cartViewModel.grandTotal.toStringAsFixed(2),
+                "currency": "USD",
+                "details": {
+                  "subtotal": cartViewModel.totalAmount.toStringAsFixed(2),
+                  "shipping": cartViewModel.deliveryFee.toStringAsFixed(2),
+                  "tax": cartViewModel.tax.toStringAsFixed(2),
+                  "shipping_discount": 0
+                }
+              },
+              "description": "Foodora Order",
+              "item_list": {
+                "items": cartViewModel.cartItems.map((item) {
+                  return {
+                    "name": item.menuItem.name,
+                    "quantity": item.quantity,
+                    "price": (double.tryParse(item.menuItem.price) ?? 0.0).toStringAsFixed(2),
+                    "currency": "USD"
+                  };
+                }).toList(),
+              }
+            }
+          ],
+          note: "Contact us for any questions on your order.",
+          onSuccess: (Map params) async {
+            debugPrint("onSuccess: $params");
+            // Proceed to create order on backend after successful payment
+            _createOrder(cartViewModel, orderViewModel);
+          },
+          onError: (error) {
+            debugPrint("onError: $error");
+            context.showError(
+              title: "Payment Error",
+              message: "An error occurred during PayPal payment. Please try again.",
+            );
+          },
+          onCancel: () {
+            debugPrint('cancelled');
+          },
+        ),
+      ),
+    );
+  }
+
+  void _handleKlarnaPayment(CartViewModel cartViewModel, OrderViewModel orderViewModel) async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      // Create Klarna payment datasource
+      final apiService = ApiService();
+      final klarnaDataSource = KlarnaPaymentDataSource(apiService: apiService);
+
+      // Prepare order lines for Klarna
+      final orderLines = cartViewModel.cartItems.map((item) {
+        return {
+          'name': item.menuItem.name,
+          'quantity': item.quantity,
+          'unit_price': (double.tryParse(item.menuItem.price) ?? 0.0) * 100, // Convert to cents
+          'total_amount': (item.totalPrice * 100).toInt(), // Convert to cents
+        };
+      }).toList();
+
+      // Create Klarna session
+      final sessionResult = await klarnaDataSource.createKlarnaSession(
+        totalAmount: (cartViewModel.grandTotal * 100), // Convert to cents
+        currency: 'USD',
+        orderLines: orderLines,
+        purchaseCountry: 'US',
+      );
+
+      // Dismiss loading
+      if (mounted) Navigator.of(context).pop();
+
+      sessionResult.fold(
+        (error) {
+          // Handle session creation failure
+          context.showError(
+            title: 'Session Creation Failed',
+            message: error.message,
+          );
+        },
+        (sessionModel) {
+          // Navigate to Klarna payment screen
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => KlarnaPaymentScreen(
+                clientToken: sessionModel.clientToken,
+                sessionId: sessionModel.sessionId,
+                cartViewModel: cartViewModel,
+                orderViewModel: orderViewModel,
+                onPaymentAuthorized: (authToken) async {
+                  // Authorize payment with backend
+                  final authResult = await klarnaDataSource.authorizeKlarnaPayment(
+                    authorizationToken: authToken,
+                    sessionId: sessionModel.sessionId,
+                  );
+
+                  authResult.fold(
+                    (error) {
+                      // Handle authorization failure
+                      if (mounted) {
+                        context.showError(
+                          title: 'Authorization Failed',
+                          message: error.message,
+                        );
+                      }
+                    },
+                    (authModel) {
+                      if (authModel.approved) {
+                        // Payment authorized, create order
+                        if (mounted) {
+                          Navigator.of(context).pop(); // Close Klarna screen
+                          _createOrder(cartViewModel, orderViewModel);
+                        }
+                      } else {
+                        if (mounted) {
+                          context.showError(
+                            title: 'Payment Not Approved',
+                            message: 'Klarna payment was not approved. Please try again.',
+                          );
+                        }
+                      }
+                    },
+                  );
+                },
+                onPaymentCancelled: () {
+                  debugPrint('Klarna payment cancelled by user');
+                },
+              ),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      // Dismiss loading if still showing
+      if (mounted) Navigator.of(context).pop();
+      
+      context.showError(
+        title: 'Klarna Payment Error',
+        message: 'An error occurred: ${e.toString()}',
+      );
+    }
+  }
+
+  Future<void> _createOrder(CartViewModel cartViewModel, OrderViewModel orderViewModel) async {
+    // Build order request from cart
+    final orderRequest = OrderRequestModel(
+      deliveryType: "delivery",
+      paymentMethod: _paymentMethod == AppStrings.cashOnDelivery ? "cash" : "card",
+      deliveryAddress: _addressText,
+      deliveryLat: _latitude,
+      deliveryLng: _longitude,
+      customerName: await TokenStorage.getUserName() ?? "Guest",
+      customerPhone: "+1234567890", // TODO: Get from user profile
+      notes: _notesController.text.isEmpty ? null : _notesController.text,
+      items: cartViewModel.cartItems.map((cartItem) {
+        return OrderItemRequestModel(
+          menuItemId: cartItem.menuItem.id,
+          quantity: cartItem.quantity,
+          specialInstructions: null,
+          addons: cartItem.selectedAddons.map((addon) {
+            return OrderAddonRequestModel(
+              addonId: addon.id,
+              quantity: 1,
+            );
+          }).toList(),
+        );
+      }).toList(),
+    );
+
+    // Call API
+    final success = await orderViewModel.createOrder(orderRequest);
+
+    if (success && mounted) {
+      // Clear cart
+      cartViewModel.clearCart();
+
+      // Navigate to confirmation
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => OrderConfirmationScreen(
+            order: orderViewModel.lastCreatedOrder!,
+          ),
+        ),
+      );
+    } else if (mounted) {
+      // Show error
+      context.showError(
+        title: "Order Failed",
+        message: orderViewModel.errorMessage ?? 'Failed to place order',
+      );
+    }
   }
 
   Widget _buildPaymentOption({
@@ -463,62 +677,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 builder: (context, orderViewModel, _) {
                   return ElevatedButton(
                     onPressed: orderViewModel.isLoading ? null : () async {
-                      // Build order request from cart
-                      final orderRequest = OrderRequestModel(
-                        deliveryType: "delivery",
-                        paymentMethod: _paymentMethod ==
-                            AppStrings.cashOnDelivery ? "cash" : "card",
-                        deliveryAddress: _addressText,
-                        deliveryLat: _latitude,
-                        deliveryLng: _longitude,
-                        customerName: await TokenStorage.getUserName() ??
-                            "Guest",
-                        customerPhone: "+1234567890",
-                        // TODO: Get from user profile
-                        notes: _notesController.text.isEmpty
-                            ? null
-                            : _notesController.text,
-                        items: viewModel.cartItems.map((cartItem) {
-                          return OrderItemRequestModel(
-                            menuItemId: cartItem.menuItem.id,
-                            quantity: cartItem.quantity,
-                            specialInstructions: null,
-                            addons: cartItem.selectedAddons.map((addon) {
-                              return OrderAddonRequestModel(
-                                addonId: addon.id,
-                                quantity: 1,
-                              );
-                            }).toList(),
-                          );
-                        }).toList(),
-                      );
-
-                      // Call API
-                      final success = await orderViewModel.createOrder(
-                          orderRequest);
-
-                      if (success && mounted) {
-                        // Clear cart
-                        viewModel.clearCart();
-
-                        // Navigate to confirmation
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                OrderConfirmationScreen(
-                                  order: orderViewModel.lastCreatedOrder!,
-                                ),
-                          ),
-                        );
-                      } else if (mounted) {
-                        // Show error
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(orderViewModel.errorMessage ??
-                                'Failed to place order'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
+                      if (_paymentMethod == context.tr('paypal')) {
+                        _handlePayPalPayment(viewModel, orderViewModel);
+                      } else if (_paymentMethod == context.tr('klarna')) {
+                        _handleKlarnaPayment(viewModel, orderViewModel);
+                      } else {
+                        await _createOrder(viewModel, orderViewModel);
                       }
                     },
                     style: ElevatedButton.styleFrom(
