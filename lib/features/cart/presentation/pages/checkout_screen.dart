@@ -108,13 +108,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       builder: (context) =>
           Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),
               ),
             ),
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppDimensions.spacing24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +125,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: AppColors.grey300,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -133,10 +133,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 20),
                 Text(
                   context.tr('select_payment_method'),
-                  style: TextStyle(
-                    fontSize: 20,
+                  style: const TextStyle(
+                    fontSize: AppDimensions.fontSize18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.primaryText,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -151,7 +151,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppDimensions.spacing12),
 
                 // Klarna Option
                 _buildPaymentOption(
@@ -163,7 +163,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppDimensions.spacing12),
 
                 // Cash on Delivery Option
                 _buildPaymentOption(
@@ -223,8 +223,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           onError: (error) {
             debugPrint("onError: $error");
             context.showError(
-              title: "Payment Error",
-              message: "An error occurred during PayPal payment. Please try again.",
+              title: context.tr('payment_error'),
+              message: context.tr('paypal_payment_error'),
             );
           },
           onCancel: () {
@@ -275,7 +275,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         (error) {
           // Handle session creation failure
           context.showError(
-            title: 'Session Creation Failed',
+            title: context.tr('session_creation_failed'),
             message: error.message,
           );
         },
@@ -297,7 +297,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                   authResult.fold(
                     (error) {
-                      // Handle authorization failure
                       if (mounted) {
                         context.showError(
                           title: 'Authorization Failed',
@@ -315,8 +314,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       } else {
                         if (mounted) {
                           context.showError(
-                            title: 'Payment Not Approved',
-                            message: 'Klarna payment was not approved. Please try again.',
+                            title: context.tr('payment_not_approved'),
+                            message: context.tr('klarna_not_approved_message'),
                           );
                         }
                       }
@@ -336,8 +335,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       if (mounted) Navigator.of(context).pop();
       
       context.showError(
-        title: 'Klarna Payment Error',
-        message: 'An error occurred: ${e.toString()}',
+        title: context.tr('klarna_payment_error'),
+        message: '${context.tr('an_error_occurred')}: ${e.toString()}',
       );
     }
   }
@@ -386,8 +385,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     } else if (mounted) {
       // Show error
       context.showError(
-        title: "Order Failed",
-        message: orderViewModel.errorMessage ?? 'Failed to place order',
+        title: context.tr('order_failed'),
+        message: orderViewModel.errorMessage ?? context.tr('failed_to_place_order'),
       );
     }
   }
@@ -400,15 +399,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppDimensions.spacing12),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppDimensions.spacing16),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryAccent.withOpacity(0.1) : Colors
-              .grey[50],
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? AppColors.primaryAccent.withOpacity(0.1) : AppColors.grey50,
+          borderRadius: BorderRadius.circular(AppDimensions.spacing12),
           border: Border.all(
-            color: isSelected ? AppColors.primaryAccent : Colors.grey[300]!,
+            color: isSelected ? AppColors.primaryAccent : AppColors.grey300,
             width: 2,
           ),
         ),
@@ -417,23 +415,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryAccent : Colors.grey[200],
+                color: isSelected ? AppColors.primaryAccent : AppColors.grey200,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 icon,
-                color: isSelected ? Colors.white : Colors.grey[600],
+                color: isSelected ? AppColors.white : AppColors.grey600,
                 size: 24,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppDimensions.spacing16),
             Expanded(
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: AppDimensions.fontSize16,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: isSelected ? AppColors.primaryAccent : Colors.black87,
+                  color: isSelected ? AppColors.primaryAccent : AppColors.black87,
                 ),
               ),
             ),
@@ -452,10 +450,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(context.tr('checkout')),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
         centerTitle: true,
@@ -469,30 +467,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
                   const Icon(Icons.remove_shopping_cart, size: 64,
                       color: AppColors.mutedText),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppDimensions.spacing16),
                   Text(context.tr('your_cart_is_empty'), style: const TextStyle(
-                      color: AppColors.mutedText, fontSize: 18)),
+                      color: AppColors.mutedText, fontSize: AppDimensions.fontSize18)),
                 ],
               ),
             );
           }
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.all(AppDimensions.spacing24),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                 // Delivery Address Section (Static for now)
                 _SectionHeader(title: context.tr('delivery_address')),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.spacing16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppColors.primaryText.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -502,7 +500,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
                   const Icon(Icons.location_on_outlined,
                       color: AppColors.primaryAccent),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -510,12 +508,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         Text(
                           _addressLabel,
                           style: const TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 16),
+                              fontSize: AppDimensions.fontSize16),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _addressText,
-                          style: const TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: AppColors.grey),
                         ),
                       ],
                     ),
@@ -527,19 +525,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.spacing24),
 
             // Payment Method Section (Static for now)
             _SectionHeader(title: context.tr('payment_method')),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.spacing16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppColors.primaryText.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -555,12 +553,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         : Icons.money,
                     color: AppColors.primaryAccent,
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: Text(
                       _paymentMethod,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 16),
+                          fontWeight: FontWeight.w600, fontSize: AppDimensions.fontSize16),
                     ),
                   ),
                   TextButton(
@@ -570,19 +568,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.spacing24),
 
             // Order Notes Section
             _SectionHeader(title: context.tr('order_notes')),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.spacing16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppColors.primaryText.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -593,21 +591,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: context.tr('order_notes_hint'),
-                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  hintStyle: const TextStyle(color: AppColors.grey),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
+                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    borderSide: const BorderSide(color: AppColors.grey300),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
+                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    borderSide: const BorderSide(color: AppColors.grey300),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
                     borderSide: const BorderSide(
                         color: AppColors.primaryAccent, width: 2),
                   ),
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.all(AppDimensions.spacing16),
                   prefixIcon: const Padding(
                     padding: EdgeInsets.only(left: 12, right: 8, top: 12),
                     child: Icon(
@@ -616,19 +614,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.spacing24),
 
             // Order Summary
             _SectionHeader(title: context.tr('order_summary')),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppDimensions.spacing12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.spacing16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: AppColors.primaryText.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -645,29 +643,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('${item.quantity}x ${item.menuItem.name}',
-                                style: const TextStyle(fontSize: 14)),
+                                style: const TextStyle(fontSize: AppDimensions.fontSize14)),
                             Text('\$${item.totalPrice.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600)),
                           ],
                         ),
                       )).toList(),
-                  const Divider(height: 24),
+                  const Divider(height: AppDimensions.spacing24),
                   _SummaryRow(label: context.tr('subtotal'),
                       amount: viewModel.totalAmount),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spacing8),
                   _SummaryRow(label: context.tr('delivery_fee'),
                       amount: viewModel.deliveryFee),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spacing8),
                   _SummaryRow(label: context.tr('tax'), amount: viewModel.tax),
-                  const Divider(height: 24),
+                  const Divider(height: AppDimensions.spacing24),
                   _SummaryRow(label: context.tr('total'),
                       amount: viewModel.grandTotal,
                       isTotal: true),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppDimensions.spacing32),
 
             // Place Order Button
             SizedBox(
@@ -686,8 +684,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4CAF50),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primaryAccent,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28),
                       ),
@@ -698,14 +696,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: AppColors.white,
                         strokeWidth: 2,
                       ),
                     )
                         : Text(
                       context.tr('place_order'),
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: const TextStyle(
+                        fontSize: AppDimensions.fontSize16,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
                       ),
@@ -733,9 +731,9 @@ class _SectionHeader extends StatelessWidget {
     return Text(
       title,
       style: const TextStyle(
-        fontSize: 18,
+        fontSize: AppDimensions.fontSize18,
         fontWeight: FontWeight.bold,
-        color: Colors.black,
+        color: AppColors.primaryText,
       ),
     );
   }
@@ -757,17 +755,17 @@ class _SummaryRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: isTotal ? 16 : 14,
+            fontSize: isTotal ? AppDimensions.fontSize16 : AppDimensions.fontSize14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-            color: isTotal ? Colors.black : Colors.grey[600],
+            color: isTotal ? AppColors.primaryText : AppColors.grey600,
           ),
         ),
         Text(
           '\$${amount.toStringAsFixed(2)}',
           style: TextStyle(
-            fontSize: isTotal ? 16 : 14,
+            fontSize: isTotal ? AppDimensions.fontSize16 : AppDimensions.fontSize14,
             fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
+            color: AppColors.primaryText,
           ),
         ),
       ],

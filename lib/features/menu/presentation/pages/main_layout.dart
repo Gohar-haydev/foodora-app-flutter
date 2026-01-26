@@ -100,7 +100,7 @@ class _MainLayoutState extends State<MainLayout> {
           height: 70,
           child: FloatingActionButton(
             onPressed: () => _onTabTapped(2),
-            backgroundColor: const Color(0xFF1E3A2E), // Dark green
+            backgroundColor: AppColors.darkText, // Dark green
             shape: const CircleBorder(),
             elevation: 4,
             child: Column(
@@ -108,14 +108,14 @@ class _MainLayoutState extends State<MainLayout> {
               children: [
                 Icon(
                   Icons.shopping_cart_outlined,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: _currentIndex == 2 ? 26 : 24,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   context.tr('cart'),
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 10,
                     fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
                   ),
@@ -128,7 +128,7 @@ class _MainLayoutState extends State<MainLayout> {
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),
           notchMargin: 8.0,
-          color: const Color(0xFF4CAF50), // Green background
+          color: AppColors.primaryAccent, // Green background
           clipBehavior: Clip.antiAlias,
           child: SizedBox(
             height: 70, // Adjusted height
@@ -201,20 +201,20 @@ class BottomNavItem extends StatelessWidget {
                 imagePath!,
                 width: 24,
                 height: 24,
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
               )
             else
               Icon(
                 icon,
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
+                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
                 size: 24,
               ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.6),
-                fontSize: 12,
+                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
+                fontSize: AppDimensions.fontSize12,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
               ),
             ),

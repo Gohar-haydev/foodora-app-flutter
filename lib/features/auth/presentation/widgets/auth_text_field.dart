@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 /// Reusable text field widget for auth screens
 class AuthTextField extends StatelessWidget {
@@ -29,19 +30,19 @@ class AuthTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(
-          fontSize: 14,
-          color: hintTextColor ?? const Color(0XFF868686), // Use parameter
+          fontSize: AppDimensions.fontSize14,
+          color: hintTextColor ?? AppColors.grey,
           letterSpacing: 0.5,
         ),
         filled: true,
-        fillColor: const Color(0xFFF5F5F5),
+        fillColor: AppColors.greyLight,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30),
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 18,
+          horizontal: AppDimensions.spacing24,
+          vertical: AppDimensions.spacing16,
           
         ),
         suffixIcon: suffixIcon,
@@ -82,7 +83,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       suffixIcon: IconButton(
         icon: Icon(
           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-          color: Colors.grey[600],
+          color: AppColors.grey600,
           size: 20,
         ),
         onPressed: () {

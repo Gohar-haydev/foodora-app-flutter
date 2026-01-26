@@ -94,9 +94,9 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       if (!serviceEnabled) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location services are disabled. Please enable them.'),
-              backgroundColor: Colors.red,
+            SnackBar(
+              content: Text(context.tr('location_services_disabled')),
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -111,9 +111,9 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
         if (permission == LocationPermission.denied) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Location permissions are denied'),
-                backgroundColor: Colors.red,
+              SnackBar(
+                content: Text(context.tr('location_permissions_denied')),
+                backgroundColor: AppColors.error,
               ),
             );
           }
@@ -125,10 +125,10 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       if (permission == LocationPermission.deniedForever) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location permissions are permanently denied. Please enable them in settings.'),
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 4),
+            SnackBar(
+              content: Text(context.tr('location_permissions_permanent')),
+              backgroundColor: AppColors.error,
+              duration: const Duration(seconds: 4),
             ),
           );
         }
@@ -165,10 +165,10 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location fetched successfully!'),
+            SnackBar(
+              content: Text(context.tr('location_fetched_success')),
               backgroundColor: AppColors.primaryAccent,
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ),
           );
         }
@@ -177,8 +177,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error fetching location: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            content: Text('${context.tr('error_fetching_location')}: ${e.toString()}'),
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -190,16 +190,16 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(context.tr('change_address_title')),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppDimensions.spacing24),
         child: Form(
           key: _formKey,
           child: Column(
@@ -229,12 +229,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                     foregroundColor: AppColors.primaryAccent,
                     side: const BorderSide(color: AppColors.primaryAccent, width: 1.5),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppDimensions.spacing12),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Street Address
               _buildTextField(
@@ -244,12 +244,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                 icon: Icons.location_on_outlined,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter street address';
+                    return context.tr('please_enter_street_address');
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
 
               // City
               _buildTextField(
@@ -259,12 +259,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                 icon: Icons.location_city,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter city';
+                    return context.tr('please_enter_city');
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
 
               // State and ZIP in a row
               Row(
@@ -277,7 +277,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                       icon: Icons.map_outlined,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.spacing12),
                   Expanded(
                     child: _buildTextField(
                       controller: _zipController,
@@ -289,7 +289,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
 
               // Country
               _buildTextField(
@@ -299,12 +299,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                 icon: Icons.public,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter country';
+                    return context.tr('please_enter_country');
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: AppDimensions.spacing32),
 
               // Save Button
               SizedBox(
@@ -314,7 +314,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                   onPressed: _saveAddress,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryAccent,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
@@ -322,8 +322,8 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
                   ),
                   child: Text(
                     context.tr('save_address_button'),
-                    style: TextStyle(
-                      fontSize: 16,
+                    style: const TextStyle(
+                      fontSize: AppDimensions.fontSize16,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
                     ),
@@ -351,12 +351,12 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: AppDimensions.fontSize14,
             fontWeight: FontWeight.w600,
-            color: Colors.black87,
+            color: AppColors.black87,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppDimensions.spacing8),
         TextFormField(
           controller: controller,
           validator: validator,
@@ -365,28 +365,28 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
             hintText: hint,
             prefixIcon: Icon(icon, color: AppColors.primaryAccent, size: 20),
             filled: true,
-            fillColor: Colors.grey[50],
+            fillColor: AppColors.grey50,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+              borderSide: BorderSide(color: AppColors.grey300),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey[300]!),
+              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+              borderSide: BorderSide(color: AppColors.grey300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
               borderSide: const BorderSide(color: AppColors.primaryAccent, width: 2),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red),
+              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+              borderSide: const BorderSide(color: AppColors.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
+              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+              borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing16, vertical: AppDimensions.fontSize14),
           ),
         ),
       ],

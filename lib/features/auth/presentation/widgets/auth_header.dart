@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 /// Reusable header widget for auth screens with back button and centered title
 class AuthHeader extends StatelessWidget {
@@ -31,9 +32,9 @@ class AuthHeader extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: AppDimensions.fontSize18,
                 fontWeight: FontWeight.w500,
-                color: Colors.black,
+                color: AppColors.primaryText,
               ),
             ),
           ),

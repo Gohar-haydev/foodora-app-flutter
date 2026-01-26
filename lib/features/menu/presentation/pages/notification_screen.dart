@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -8,44 +8,33 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back, color: Colors.black),
-        //   onPressed: () {
-        //     final navigator = Navigator.of(context);
-        //     if (navigator.canPop()) {
-        //       navigator.pop();
-        //     } else {
-        //       Navigator.of(context).maybePop();
-        //     }
-        //   },
-        // ),
         title: Text(
           context.tr('notifications_title'),
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppDimensions.spacing24),
         children: [
           // Today Section
           _buildSectionHeader(context, context.tr('today'), () {}),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.spacing16),
           _NotificationCard(
             type: NotificationType.delivery,
             title: context.tr('order_delivered'),
             description: context.tr('order_delivered_desc'),
             time: '1h',
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.spacing16),
           _NotificationCard(
             type: NotificationType.cancel,
             title: context.tr('order_cancelled'),
@@ -53,25 +42,25 @@ class NotificationScreen extends StatelessWidget {
             time: '3h',
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: AppDimensions.spacing32),
 
           // Yesterday Section
           _buildSectionHeader(context, context.tr('yesterday'), () {}),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.spacing16),
           _NotificationCard(
             type: NotificationType.delivery,
             title: context.tr('order_delivered'),
             description: context.tr('order_delivered_desc'),
             time: '1d',
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppDimensions.spacing16),
           _NotificationCard(
             type: NotificationType.cancel,
             title: context.tr('order_cancelled'),
             description: context.tr('order_cancelled_desc'),
             time: '1d',
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppDimensions.spacing24),
         ],
       ),
     );
@@ -83,10 +72,10 @@ class NotificationScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: 16,
+          style: const TextStyle(
+            fontSize: AppDimensions.fontSize16,
             fontWeight: FontWeight.w600,
-            color: Colors.grey[500],
+            color: AppColors.grey,
           ),
         ),
         GestureDetector(
@@ -94,9 +83,9 @@ class NotificationScreen extends StatelessWidget {
           child: Text(
             context.tr('mark_all_read'),
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: AppDimensions.fontSize14,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF4CAF50), // Green color
+              color: AppColors.primaryAccent, // Green color
             ),
           ),
         ),
@@ -123,13 +112,13 @@ class _NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppDimensions.spacing16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.primaryText.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -140,11 +129,11 @@ class _NotificationCard extends StatelessWidget {
         children: [
           // Icon
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(AppDimensions.spacing12),
             decoration: BoxDecoration(
               color: type == NotificationType.delivery
-                  ? const Color(0xFFE8F5E9) // Light green
-                  : const Color(0xFFFFEBEE), // Light red
+                  ? AppColors.successLight // Light green
+                  : AppColors.errorLight, // Light red
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -152,12 +141,12 @@ class _NotificationCard extends StatelessWidget {
                   ? Icons.restaurant // Using restaurant icon as placeholder for bottle/utensils
                   : Icons.inventory_2_outlined, // Using solid box icon placeholder
               color: type == NotificationType.delivery
-                  ? const Color(0xFF4CAF50)
-                  : const Color(0xFFEF5350),
+                  ? AppColors.primaryAccent
+                  : AppColors.error,
               size: 24,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppDimensions.spacing16),
           
           // Content
           Expanded(
@@ -170,16 +159,16 @@ class _NotificationCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: AppDimensions.fontSize16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                        color: AppColors.primaryText,
                       ),
                     ),
                     Text(
                       time,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[400],
+                      style: const TextStyle(
+                        fontSize: AppDimensions.fontSize12,
+                        color: AppColors.grey,
                       ),
                     ),
                   ],
@@ -187,9 +176,9 @@ class _NotificationCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[500],
+                    color: AppColors.grey,
                     height: 1.4,
                   ),
                 ),

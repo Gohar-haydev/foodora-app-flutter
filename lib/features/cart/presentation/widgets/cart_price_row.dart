@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/providers/currency_provider.dart';
 
 class CartPriceRow extends StatelessWidget {
@@ -22,9 +23,9 @@ class CartPriceRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: isTotal ? 18 : 16,
+            fontSize: isTotal ? AppDimensions.fontSize18 : AppDimensions.fontSize16,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: AppColors.primaryText,
           ),
         ),
         Consumer<CurrencyProvider>(
@@ -32,9 +33,9 @@ class CartPriceRow extends StatelessWidget {
             return Text(
               currencyProvider.formatPrice(amount),
               style: TextStyle(
-                fontSize: isTotal ? 18 : 16,
+                fontSize: isTotal ? AppDimensions.fontSize18 : AppDimensions.fontSize16,
                 fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-                color: Colors.black,
+                color: AppColors.primaryText,
               ),
             );
           }

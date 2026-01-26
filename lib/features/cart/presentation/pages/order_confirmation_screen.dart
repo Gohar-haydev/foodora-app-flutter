@@ -15,88 +15,84 @@ class OrderConfirmationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
           context.tr('order_confirmation'), 
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           )
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppDimensions.spacing24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 40),
-            // Success Icon
             // Success Image
             Image.asset(
               'assets/images/success.png',
               height: 200, 
               fit: BoxFit.contain,
             ),
-             // A more specific "Badge" shape could be used if strict adherence to image is needed, 
-             // but a circle with check is standard and close. 
-             // The image shows a wavy circle. Simple circle is usually acceptable unless SVG is provided.
             
-            const SizedBox(height: 32),
+            const SizedBox(height: AppDimensions.spacing32),
             
             Text(
               context.tr('order_placed_successfully'),
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: AppDimensions.spacing24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1F2937),
+                color: AppColors.darkText,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.spacing16),
             Text(
               context.tr('order_placed_subtitle'),
               style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+                fontSize: AppDimensions.fontSize16,
+                color: AppColors.grey,
                 height: 1.5,
               ),
               textAlign: TextAlign.center,
             ),
             
-            const SizedBox(height: 48),
+            const SizedBox(height: AppDimensions.spacing48),
             
             // Order Details Header
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 context.tr('order_details'),
-                style: TextStyle(
-                  fontSize: 20,
+                style: const TextStyle(
+                  fontSize: AppDimensions.fontSize18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1F2937),
+                  color: AppColors.darkText,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.spacing24),
             
             // Details Rows
             _DetailRow(label: context.tr('order_number'), value: '#${order.id}'),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.spacing16),
             _DetailRow(label: context.tr('estimated_time'), value: '30 ${context.tr('min')}'),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.spacing16),
             _DetailRow(label: context.tr('payment_method'), value: context.tr('cash')),
 
             
-            const SizedBox(height: 48),
+            const SizedBox(height: AppDimensions.spacing48),
             
             // View Order Button
             SizedBox(
@@ -113,7 +109,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryAccent,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
                   ),
@@ -122,7 +118,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                 child: Text(
                   context.tr('view_order'),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: AppDimensions.fontSize16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
                   ),
@@ -150,17 +146,15 @@ class _DetailRow extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
-            color: Color(0xFF1F2937), // Dark text
+            fontSize: AppDimensions.fontSize16,
+            color: AppColors.darkText,
           ),
         ),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 16,
-            color: Colors.grey, // Lighter text for value as per typical design, or swap if needed
-             // Looking at image: Label is standard, Value might be gray. 
-             // Actually image shows: Label dark, Value gray.
+            fontSize: AppDimensions.fontSize16,
+            color: AppColors.grey,
           ),
         ),
       ],

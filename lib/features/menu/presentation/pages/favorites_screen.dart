@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
-// import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart'; // Unused
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/features/menu/presentation/pages/menu_item_detail_screen.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
@@ -52,19 +50,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           context.tr('my_favorites'),
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -76,7 +74,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           if (viewModel.isFavoritesLoading && viewModel.favoriteItems.isEmpty) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
               ),
             );
           }
@@ -87,19 +85,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
+                  const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
+                  const SizedBox(height: AppDimensions.spacing16),
                   Text(
                     viewModel.favoritesListError!,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[600]),
+                    style: const TextStyle(color: AppColors.grey600),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppDimensions.spacing16),
                   ElevatedButton(
                     onPressed: () => viewModel.fetchFavoritesList(page: 1),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4CAF50),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primaryAccent,
+                      foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -117,26 +115,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.favorite_border,
                     size: 80,
-                    color: Colors.grey[300],
+                    color: AppColors.grey300,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppDimensions.spacing16),
                   Text(
                     context.tr('no_favorites_yet'),
-                    style: TextStyle(
-                      fontSize: 20,
+                    style: const TextStyle(
+                      fontSize: AppDimensions.fontSize18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[600],
+                      color: AppColors.grey600,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spacing8),
                   Text(
                     context.tr('start_adding_favorites'),
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
+                    style: const TextStyle(
+                      fontSize: AppDimensions.fontSize14,
+                      color: AppColors.grey,
                     ),
                   ),
                 ],
@@ -147,14 +145,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           // Favorites list with pull to refresh
           return RefreshIndicator(
             onRefresh: _onRefresh,
-            color: const Color(0xFF4CAF50),
+            color: AppColors.primaryAccent,
             child: GridView.builder(
               controller: _scrollController,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimensions.spacing16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+                crossAxisSpacing: AppDimensions.spacing16,
+                mainAxisSpacing: AppDimensions.spacing16,
                 childAspectRatio: 0.75,
               ),
               itemCount: viewModel.favoriteItems.length + (viewModel.hasFavoritesMore ? 1 : 0),
@@ -165,7 +163,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
                       ),
                     ),
                   );
@@ -194,7 +192,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(message),
-                              backgroundColor: const Color(0xFF4CAF50),
+                              backgroundColor: AppColors.primaryAccent,
                               duration: const Duration(seconds: 2),
                             ),
                           );

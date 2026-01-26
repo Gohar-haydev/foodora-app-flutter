@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:foodora/core/constants/app_colors.dart';
-import 'package:foodora/core/constants/app_strings.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
-import 'package:foodora/features/auth/presentation/widgets/auth_header.dart';
+import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 
 class PasswordChangedSuccessScreen extends StatelessWidget {
@@ -11,7 +10,7 @@ class PasswordChangedSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -20,7 +19,7 @@ class PasswordChangedSuccessScreen extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,40 +27,28 @@ class PasswordChangedSuccessScreen extends StatelessWidget {
                     const Spacer(flex: 2),
                     
                     // Success Icon
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF4CAF50), // Green color
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 50,
-                      ),
-                    ),
+                    const SuccessIcon(),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppDimensions.spacing32),
                     
                     const Text(
                       AppStrings.passwordChangedTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: AppDimensions.spacing24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.primaryText,
                       ),
                     ),
                     
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppDimensions.spacing12),
                     
                     const Text(
                       AppStrings.passwordChangedSubtitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
+                        fontSize: AppDimensions.fontSize16,
+                        color: AppColors.grey,
                         height: 1.5,
                       ),
                     ),

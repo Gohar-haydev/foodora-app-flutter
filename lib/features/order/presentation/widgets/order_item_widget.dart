@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 class OrderItemWidget extends StatelessWidget {
   final String name;
@@ -19,26 +20,26 @@ class OrderItemWidget extends StatelessWidget {
     return Row(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppDimensions.spacing12),
           child: Container(
             width: 60,
             height: 60,
-            color: Colors.grey[300],
+            color: AppColors.grey300,
             child: imageUrl.isNotEmpty
                 ? Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.fastfood, color: Colors.grey),
+                        color: AppColors.grey300,
+                        child: const Icon(Icons.fastfood, color: AppColors.grey),
                       );
                     },
                   )
-                : const Icon(Icons.fastfood, color: Colors.grey),
+                : const Icon(Icons.fastfood, color: AppColors.grey),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppDimensions.spacing12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,17 +47,17 @@ class OrderItemWidget extends StatelessWidget {
               Text(
                 name,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: AppDimensions.fontSize16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
+                  color: AppColors.primaryText,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 code,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[500],
+                style: const TextStyle(
+                  fontSize: AppDimensions.fontSize14,
+                  color: AppColors.grey,
                 ),
               ),
             ],
@@ -65,9 +66,9 @@ class OrderItemWidget extends StatelessWidget {
         Text(
           '\$${price.toStringAsFixed(2)}',
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: AppDimensions.fontSize16,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: AppColors.primaryText,
           ),
         ),
       ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/custom_text_field.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
@@ -31,9 +30,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         title: Text(
           context.tr('forgot_password'),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
+          style: const TextStyle(
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -41,13 +40,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,23 +56,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Text(
                   context.tr('forgot_password_title'),
                   style: const TextStyle(
-                    fontSize: 32,
+                    fontSize: AppDimensions.fontSize32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.primaryText,
                     height: 1.2,
                   ),
                 ),
               ),
               
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
 
               Center(
                 child: Text(
                   context.tr('forgot_password_subtitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                  style: const TextStyle(
+                    fontSize: AppDimensions.fontSize16,
+                    color: AppColors.grey,
                     height: 1.5,
                   ),
                 ),
@@ -87,7 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 keyboardType: TextInputType.emailAddress,
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
               
               Consumer<AuthViewModel>(
                 builder: (context, viewModel, child) {

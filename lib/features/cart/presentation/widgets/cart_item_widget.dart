@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/cart/domain/entities/cart_item_entity.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -18,28 +19,28 @@ class CartItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: AppDimensions.spacing12),
       child: Dismissible(
         key: Key(cartItem.id),
         direction: DismissDirection.endToStart,
         background: Container(
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: AppColors.error,
             borderRadius: BorderRadius.circular(16),
           ),
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.only(right: 20),
-          child: const Icon(Icons.delete, color: Colors.white),
+          child: const Icon(Icons.delete, color: AppColors.white),
         ),
         onDismissed: (_) => onRemove(),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppDimensions.spacing12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: AppColors.primaryText.withOpacity(0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -49,21 +50,21 @@ class CartItemWidget extends StatelessWidget {
             children: [
               // Item Image
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppDimensions.spacing12),
                 child: Container(
                   width: 60,
                   height: 60,
-                  color: Colors.grey[300],
+                  color: AppColors.grey300,
                   child: cartItem.menuItem.image != null
                       ? Image.network(
                           cartItem.menuItem.image!,
                           fit: BoxFit.cover,
-                          errorBuilder: (ctx, err, stack) => const Icon(Icons.fastfood, color: Colors.grey),
+                          errorBuilder: (ctx, err, stack) => const Icon(Icons.fastfood, color: AppColors.grey),
                         )
-                      : const Icon(Icons.fastfood, color: Colors.grey),
+                      : const Icon(Icons.fastfood, color: AppColors.grey),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.spacing12),
 
               // Item Details
               Expanded(
@@ -73,9 +74,9 @@ class CartItemWidget extends StatelessWidget {
                     Text(
                       cartItem.menuItem.name,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: AppDimensions.fontSize16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                        color: AppColors.primaryText,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -83,8 +84,8 @@ class CartItemWidget extends StatelessWidget {
                       Text(
                         '01', // Default or variant label
                         style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[500],
+                          fontSize: AppDimensions.fontSize14,
+                          color: AppColors.grey,
                         ),
                       )
                     else
@@ -92,7 +93,7 @@ class CartItemWidget extends StatelessWidget {
                         spacing: 4,
                         children: cartItem.selectedAddons.map((adn) => Text(
                           '+${adn.name}',
-                          style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                          style: TextStyle(fontSize: AppDimensions.fontSize12, color: AppColors.grey),
                         )).toList(),
                       ),
                   ],
@@ -102,7 +103,7 @@ class CartItemWidget extends StatelessWidget {
               // Quantity Actions
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: AppColors.grey100,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -112,16 +113,16 @@ class CartItemWidget extends StatelessWidget {
                       onPressed: onDecrement,
                       padding: const EdgeInsets.all(8),
                       constraints: const BoxConstraints(),
-                      color: Colors.black,
+                      color: AppColors.primaryText,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Text(
                         '${cartItem.quantity}'.padLeft(2, '0'),
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: AppDimensions.fontSize14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: AppColors.primaryText,
                         ),
                       ),
                     ),
@@ -130,7 +131,7 @@ class CartItemWidget extends StatelessWidget {
                       onPressed: onIncrement,
                       padding: const EdgeInsets.all(8),
                       constraints: const BoxConstraints(),
-                      color: Colors.black,
+                      color: AppColors.primaryText,
                     ),
                   ],
                 ),

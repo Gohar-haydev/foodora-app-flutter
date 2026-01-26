@@ -5,7 +5,6 @@ import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dar
 import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/profile_view_screen.dart';
 import 'package:foodora/features/order/presentation/pages/order_history_screen.dart';
-import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import '../../../../core/widgets/logout_button.dart';
@@ -20,35 +19,35 @@ class ProfileMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
           context.tr('profile'),
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppDimensions.spacing16),
         child: Column(
           children: [
             Expanded(
               child: ListView(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: AppDimensions.spacing16),
                 children: [
                   // Profile Menu Item
                   ProfileMenuItem(
                     imagePath: 'assets/images/user.png',
-                    iconColor: const Color(0xFF4CAF50),
-                    iconBackground: const Color(0xFFE8F5E9),
+                    iconColor: AppColors.primaryAccent,
+                    iconBackground: AppColors.successLight,
                     title: context.tr('profile'),
                     onTap: () {
                       Navigator.of(context).push(
@@ -63,13 +62,13 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
                   // Orders Menu Item
                   ProfileMenuItem(
                     imagePath: 'assets/images/order.png',
-                    iconColor: const Color(0xFF4CAF50),
-                    iconBackground: const Color(0xFFE8F5E9),
+                    iconColor: AppColors.primaryAccent,
+                    iconBackground: AppColors.successLight,
                     title: context.tr('orders'),
                     onTap: () {
                       Navigator.of(context).push(
@@ -84,13 +83,13 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
                   // Change Branch Menu Item
                   ProfileMenuItem(
                     icon: Icons.store_outlined,
-                    iconColor: const Color(0xFF4CAF50),
-                    iconBackground: const Color(0xFFE8F5E9),
+                    iconColor: AppColors.primaryAccent,
+                    iconBackground: AppColors.successLight,
                     title: context.tr('change_branch'),
                     onTap: () {
                       Navigator.of(context).push(
@@ -105,14 +104,14 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
                   
                   // Language Menu Item
                   ProfileMenuItem(
                     icon: Icons.language,
-                    iconColor: const Color(0xFF4CAF50),
-                    iconBackground: const Color(0xFFE8F5E9),
+                    iconColor: AppColors.primaryAccent,
+                    iconBackground: AppColors.successLight,
                     title: context.tr('language'),
                     onTap: () {
                       Navigator.of(context).push(
@@ -127,14 +126,14 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
 
                   // Currency Menu Item
                   ProfileMenuItem(
                     icon: Icons.attach_money,
-                    iconColor: const Color(0xFF4CAF50),
-                    iconBackground: const Color(0xFFE8F5E9),
+                    iconColor: AppColors.primaryAccent,
+                    iconBackground: AppColors.successLight,
                     title: context.tr('currency'),
                     onTap: () {
                       Navigator.of(context).push(
@@ -149,14 +148,14 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
 
                   // Delete Account Menu Item
                   ProfileMenuItem(
                     icon: Icons.delete_outline,
-                    iconColor: Colors.red,
-                    iconBackground: const Color(0xFFFFEBEE),
+                    iconColor: AppColors.error,
+                    iconBackground: AppColors.errorLight,
                     title: context.tr('delete_account'),
                     onTap: () async {
                       final shouldDelete = await showDialog<bool>(
@@ -173,7 +172,7 @@ class ProfileMenuScreen extends StatelessWidget {
                               onPressed: () => Navigator.of(context).pop(true),
                               child: Text(
                                 context.tr('delete_account'),
-                                style: const TextStyle(color: Colors.red),
+                                style: const TextStyle(color: AppColors.error),
                               ),
                             ),
                           ],
@@ -198,7 +197,7 @@ class ProfileMenuScreen extends StatelessWidget {
                   const Divider(
                     height: 1,
                     thickness: 1,
-                    color: Color(0XFFD8D8D8),
+                    color: AppColors.divider,
                   ),
               ]),
             ),
@@ -221,7 +220,7 @@ class ProfileMenuScreen extends StatelessWidget {
                         onPressed: () => Navigator.of(dialogContext).pop(true),
                         child: Text(
                           context.tr('logout'),
-                          style: const TextStyle(color: Colors.red),
+                          style: const TextStyle(color: AppColors.error),
                         ),
                       ),
                     ],
@@ -242,7 +241,7 @@ class ProfileMenuScreen extends StatelessWidget {
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             )
           ],

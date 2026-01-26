@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/custom_text_field.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
@@ -56,8 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Text(
           context.tr('search_title'),
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -65,7 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(AppDimensions.spacing20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -75,7 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 hintText: context.tr('search_hint'),
               ),
               
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
               
               // Category Filter Chips
               Consumer<MenuViewModel>(
@@ -89,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: viewModel.categories.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 12),
+                      separatorBuilder: (context, index) => const SizedBox(width: AppDimensions.spacing12),
                       itemBuilder: (context, index) {
                         final category = viewModel.categories[index];
                         final isSelected = _selectedCategoryId == category.id;
@@ -109,15 +108,15 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF4CAF50) : const Color(0xFFF5F5F5),
+                              color: isSelected ? AppColors.primaryAccent : AppColors.greyLight,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
                               category.name,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.grey[600],
+                                color: isSelected ? AppColors.white : AppColors.grey600,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 14,
+                                fontSize: AppDimensions.fontSize14,
                               ),
                             ),
                           ),
@@ -128,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 },
               ),
               
-              const SizedBox(height: 32),
+              const SizedBox(height: AppDimensions.spacing32),
               
               // Search Results or Default Content
               Consumer<MenuViewModel>(
@@ -139,7 +138,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(40.0),
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
                         ),
                       ),
                     );
@@ -152,12 +151,12 @@ class _SearchScreenState extends State<SearchScreen> {
                         padding: const EdgeInsets.all(40.0),
                         child: Column(
                           children: [
-                            Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
-                            const SizedBox(height: 16),
+                            const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
+                            const SizedBox(height: AppDimensions.spacing16),
                             Text(
                               viewModel.searchError!,
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey[600]),
+                              style: const TextStyle(color: AppColors.grey600),
                             ),
                           ],
                         ),
@@ -171,7 +170,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: viewModel.searchResults.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 16),
+                      separatorBuilder: (context, index) => const SizedBox(height: AppDimensions.spacing16),
                       itemBuilder: (context, index) {
                         final item = viewModel.searchResults[index];
                         
@@ -186,13 +185,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(AppDimensions.spacing12),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.white,
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: AppColors.primaryText.withOpacity(0.05),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -205,8 +204,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   width: 80,
                                   height: 80,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                                    color: AppColors.grey200,
                                     image: item.image != null
                                         ? DecorationImage(
                                             image: NetworkImage(item.image!),
@@ -215,10 +214,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                         : null,
                                   ),
                                   child: item.image == null
-                                      ? const Icon(Icons.local_pizza, color: Colors.grey, size: 40)
+                                      ? const Icon(Icons.local_pizza, color: AppColors.grey, size: 40)
                                       : null,
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: AppDimensions.spacing16),
                                 
                                 // Details
                                 Expanded(
@@ -228,21 +227,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                       Text(
                                         item.name,
                                         style: const TextStyle(
-                                          fontSize: 16,
+                                          fontSize: AppDimensions.fontSize16,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                                          color: AppColors.primaryText,
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
+                                      const SizedBox(height: AppDimensions.spacing8),
                                       Row(
                                         children: [
-                                          const Icon(Icons.local_fire_department_outlined, size: 16, color: Color(0xFF4CAF50)),
+                                          const Icon(Icons.local_fire_department_outlined, size: 16, color: AppColors.primaryAccent),
                                           const SizedBox(width: 4),
                                           Text(
                                             '${item.price} kr',
                                             style: const TextStyle(
-                                              color: Color(0xFF4CAF50),
-                                              fontSize: 14,
+                                              color: AppColors.primaryAccent,
+                                              fontSize: AppDimensions.fontSize14,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -257,12 +256,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   width: 32,
                                   height: 32,
                                   decoration: const BoxDecoration(
-                                    color: Color(0xFF1A1A1A),
+                                    color: AppColors.darkText,
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
                                     Icons.arrow_forward,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     size: 16,
                                   ),
                                 ),
@@ -281,14 +280,14 @@ class _SearchScreenState extends State<SearchScreen> {
                         padding: const EdgeInsets.all(40.0),
                         child: Column(
                           children: [
-                            Icon(Icons.search_off, size: 64, color: Colors.grey[300]),
-                            const SizedBox(height: 16),
+                            const Icon(Icons.search_off, size: 64, color: AppColors.grey300),
+                            const SizedBox(height: AppDimensions.spacing16),
                             Text(
                               context.tr('no_results_found'),
-                              style: TextStyle(
-                                fontSize: 18,
+                              style: const TextStyle(
+                                fontSize: AppDimensions.fontSize18,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey[600],
+                                color: AppColors.grey600,
                               ),
                             ),
                           ],
@@ -300,11 +299,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   // Default placeholder
                   return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(40.0),
+                      padding: const EdgeInsets.all(40.0),
                       child: Text(
                         context.tr('search_placeholder'),
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: AppColors.grey),
                       ),
                     ),
                   );

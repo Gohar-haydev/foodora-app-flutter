@@ -86,18 +86,42 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  Widget _buildValidatedTextField({
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType? keyboardType,
+  }) {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, child) {
+        return AuthTextField(
+          controller: controller,
+          hintText: hintText,
+          keyboardType: keyboardType,
+          suffixIcon: value.text.isNotEmpty
+              ? const Icon(
+                  Icons.check,
+                  color: AppColors.orange,
+                  size: 20,
+                )
+              : null,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
                 
                 // Header with back button and "SIGN UP" title
                 AuthHeader(title: context.tr('sign_up')),
@@ -108,21 +132,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 Text(
                   context.tr('create_account'),
                   style: const TextStyle(
-                    fontSize: 32,
+                    fontSize: AppDimensions.fontSize32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.primaryText,
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: AppDimensions.spacing12),
 
                 // Subtitle
                 Text(
                   context.tr('sign_up_subtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
+                    fontSize: AppDimensions.fontSize14,
+                    color: AppColors.grey600,
                     height: 1.5,
                   ),
                 ),
@@ -130,84 +154,48 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 40),
 
                 // Full Name input field
-                ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: _nameController,
-                  builder: (context, value, child) {
-                    return AuthTextField(
-                      controller: _nameController,
-                      hintText: context.tr('full_name_placeholder'),
-                      suffixIcon: value.text.isNotEmpty
-                          ? const Icon(
-                              Icons.check,
-                              color: Color(0xFFFF9800),
-                              size: 20,
-                            )
-                          : null,
-                    );
-                  },
+                _buildValidatedTextField(
+                  controller: _nameController,
+                  hintText: context.tr('full_name_placeholder'),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
 
                 // Email input field
-                ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: _emailController,
-                  builder: (context, value, child) {
-                    return AuthTextField(
-                      controller: _emailController,
-                      hintText: context.tr('email_address'),
-                      keyboardType: TextInputType.emailAddress,
-                      suffixIcon: value.text.isNotEmpty
-                          ? const Icon(
-                              Icons.check,
-                              color: Color(0xFFFF9800),
-                              size: 20,
-                            )
-                          : null,
-                    );
-                  },
+                _buildValidatedTextField(
+                  controller: _emailController,
+                  hintText: context.tr('email_address'),
+                  keyboardType: TextInputType.emailAddress,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
 
                 // Phone input field
-                ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: _phoneController,
-                  builder: (context, value, child) {
-                    return AuthTextField(
-                      controller: _phoneController,
-                      hintText: context.tr('phone'),
-                      keyboardType: TextInputType.phone,
-                      suffixIcon: value.text.isNotEmpty
-                          ? const Icon(
-                              Icons.check,
-                              color: Color(0xFFFF9800),
-                              size: 20,
-                            )
-                          : null,
-                    );
-                  },
+                _buildValidatedTextField(
+                  controller: _phoneController,
+                  hintText: context.tr('phone'),
+                  keyboardType: TextInputType.phone,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
 
                 // Password input field with visibility toggle
                 PasswordTextField(
                   controller: _passwordController,
                   hintText: context.tr('new_password'),
-                  hintTextColor: Colors.black, // Set hint color to black
+                  hintTextColor: AppColors.primaryText,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacing16),
 
                 // Confirm Password input field
                 PasswordTextField(
                   controller: _confirmPasswordController,
                   hintText: context.tr('confirm_password'),
-                  hintTextColor: Colors.black, // Set hint color to black
+                  hintTextColor: AppColors.primaryText,
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: AppDimensions.spacing32),
 
                 // Sign Up button
                 AuthButton(
@@ -225,8 +213,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Text(
                     context.tr('already_have_account'),
                     style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF4CAF50),
+                      fontSize: AppDimensions.fontSize14,
+                      color: AppColors.primaryAccent,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -236,13 +224,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Terms and Conditions
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0,left: 25,right: 25),
+                  padding: const EdgeInsets.only(bottom: AppDimensions.spacing24, left: 25, right: 25),
                   child: Text(
                     context.tr('terms_and_conditions'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
+                      fontSize: AppDimensions.fontSize16,
+                      color: AppColors.grey600,
                       height: 1.5,
                     ),
                   ),

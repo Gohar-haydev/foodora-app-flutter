@@ -5,6 +5,7 @@ import 'package:foodora/core/utils/token_storage.dart';
 import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
+import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
 
 import 'login_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
@@ -136,35 +137,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     // Show loading screen while checking authentication
     if (_isCheckingAuth) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Foodora',
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF4CAF50),
-                  letterSpacing: 1.0,
-                ),
-              ),
-              SizedBox(height: 24),
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4CAF50)),
-              ),
-            ],
-          ),
-        ),
-      );
+      return const SplashLoadingWidget();
     }
 
     // Show onboarding carousel
     final pages = _getPages(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -193,9 +172,9 @@ class _SplashScreenState extends State<SplashScreen> {
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Container(
-                              color: Colors.grey[300],
+                              color: AppColors.grey300,
                               alignment: Alignment.center,
-                              child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                              child: const Icon(Icons.image, size: 50, color: AppColors.grey),
                             );
                           },
                         ),
@@ -226,14 +205,27 @@ class _SplashScreenState extends State<SplashScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppColors.white,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: List.generate(
                                 pages.length,
-                                (index) => _buildIndicatorDot(isActive: index == _currentPage),
+                                (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    width: 16,
+                                    height: 6,
+                                    decoration: BoxDecoration(
+                                      color: index == _currentPage 
+                                          ? AppColors.primaryAccent 
+                                          : AppColors.grey300,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -247,7 +239,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Expanded(
                   flex: 5,
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(AppDimensions.spacing24),
                     child: Column(
                       children: [
                         // Wrap text in IgnorePointer so swipes here go to the PageView behind it
@@ -259,19 +251,19 @@ class _SplashScreenState extends State<SplashScreen> {
                                 Text(
                                   pages[_currentPage].title,
                                   style: const TextStyle(
-                                    fontSize: 32,
+                                    fontSize: AppDimensions.fontSize32,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: AppColors.primaryText,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: AppDimensions.spacing16),
                                 Text(
                                   pages[_currentPage].description,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
+                                    fontSize: AppDimensions.fontSize16,
+                                    color: AppColors.grey600,
                                     height: 1.5,
                                   ),
                                 ),
@@ -297,7 +289,7 @@ class _SplashScreenState extends State<SplashScreen> {
                             child: Text(
                               _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: AppDimensions.fontSize18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -311,21 +303,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-
-
-  Widget _buildIndicatorDot({required bool isActive}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 3),
-      width: 16,
-      height: 6,
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF4CAF50) : Colors.grey[300],
-        borderRadius: BorderRadius.circular(4),
       ),
     );
   }
@@ -343,5 +320,3 @@ class OnboardingPage {
     required this.description,
   });
 }
-
-

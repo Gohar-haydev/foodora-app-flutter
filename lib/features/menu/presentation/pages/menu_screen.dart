@@ -73,41 +73,27 @@ class _MenuScreenState extends State<MenuScreen> {
     final currencyProvider = Provider.of<CurrencyProvider>(context);
     
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
             onPressed: () {
               // Logic to go back or switch to home tab if at root
               final navigator = Navigator.of(context);
               if (navigator.canPop()) {
                 navigator.pop();
               } else {
-                // Assuming MainLayout state logic, but we can't access it easily without a provider or global key.
-                // For now, standard behavior. If this is a root tab, back button visually exists per requirement.
-                // We could try specific logic if needed, but let's stick to standard pop first.
-                // If it does nothing, user might rely on bottom nav.
-                // Alternatively, find MainLayoutState? No, too complex.
-                // Just Pop.
                 Navigator.of(context).maybePop();
               }
             },
           ),
-          // title: const Text(
-          //   'Profile',
-          //   style: TextStyle(
-          //     color: Colors.black,
-          //     fontSize: 20,
-          //     fontWeight: FontWeight.w600,
-          //   ),
-          // ),
           centerTitle: true,
         ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(AppDimensions.spacing20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -116,21 +102,21 @@ class _MenuScreenState extends State<MenuScreen> {
                 children: [
                    Icon(
                     _getGreetingIcon(),
-                    color: Colors.grey[600],
+                    color: AppColors.grey600,
                     size: 20,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppDimensions.spacing8),
                   Text(
                     _getGreeting(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
+                    style: const TextStyle(
+                      fontSize: AppDimensions.fontSize16,
+                      color: AppColors.grey600,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.spacing8),
               Row(
                 children: [
                   Expanded(
@@ -139,7 +125,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
+                        color: AppColors.darkText,
                       ),
                     ),
                   ),
@@ -152,14 +138,14 @@ class _MenuScreenState extends State<MenuScreen> {
                       );
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF0F4F2),
+                      padding: const EdgeInsets.all(AppDimensions.spacing8),
+                      decoration: const BoxDecoration(
+                        color: AppColors.greyLight,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
                         Icons.favorite_border,
-                        color: Color(0xFF4CAF50),
+                        color: AppColors.primaryAccent,
                         size: 24,
                       ),
                     ),
@@ -167,18 +153,18 @@ class _MenuScreenState extends State<MenuScreen> {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Featured Section
               Text(
                 context.tr('featured'),
-                style: TextStyle(
-                  fontSize: 20,
+                style: const TextStyle(
+                  fontSize: AppDimensions.fontSize18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A1A1A),
+                  color: AppColors.darkText,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
               
               // Featured Carousel
               SizedBox(
@@ -193,22 +179,22 @@ class _MenuScreenState extends State<MenuScreen> {
                       authorName: 'Olivia',
                       authorImage: 'assets/images/user_avatar.jpg', // Placeholder
                       foodImage: 'assets/images/noodle_bowl.png', // Placeholder
-                      backgroundColor: const Color(0xFF4CAF50),
+                      backgroundColor: AppColors.primaryAccent,
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppDimensions.spacing16),
                     FeaturedCard(
                       title: context.tr('featured_card_title_2'),
                       time: context.tr('featured_card_time_2'),
                       authorName: 'Olivia',
                       authorImage: 'assets/images/user_avatar.jpg',
                       foodImage: 'assets/images/salad_bowl.png',
-                      backgroundColor: const Color(0xFF66BB6A),
+                      backgroundColor: AppColors.success,
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Category Section
               SectionHeader(
@@ -233,7 +219,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.spacing12),
               Consumer<MenuViewModel>(
                 builder: (context, viewModel, child) {
                   if (viewModel.isCategoriesLoading) {
@@ -275,7 +261,7 @@ class _MenuScreenState extends State<MenuScreen> {
                               viewModel.fetchMenuItemsByCategory(categoriesToShow[i].id);
                             },
                           ),
-                          if (i < categoriesToShow.length - 1) const SizedBox(width: 12),
+                          if (i < categoriesToShow.length - 1) const SizedBox(width: AppDimensions.spacing12),
                         ],
                       ],
                     ),
@@ -283,11 +269,11 @@ class _MenuScreenState extends State<MenuScreen> {
                 },
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Popular Recipes Section
               SectionHeader(title: context.tr('popular_recipes'), onSeeAll: () {}),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
               
               Consumer<MenuViewModel>(
                 builder: (context, viewModel, child) {
@@ -305,12 +291,12 @@ class _MenuScreenState extends State<MenuScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
-                            const SizedBox(height: 8),
+                            const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
+                            const SizedBox(height: AppDimensions.spacing8),
                             Text(
                               viewModel.menuItemsError!,
                               textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey[600]),
+                              style: const TextStyle(color: AppColors.grey600),
                             ),
                           ],
                         ),
@@ -362,8 +348,8 @@ class _MenuScreenState extends State<MenuScreen> {
                                     SnackBar(
                                       content: Text(message),
                                       backgroundColor: viewModel.favoritesError != null 
-                                          ? Colors.red 
-                                          : const Color(0xFF4CAF50),
+                                          ? AppColors.error 
+                                          : AppColors.primaryAccent,
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
@@ -372,14 +358,14 @@ class _MenuScreenState extends State<MenuScreen> {
                             ),
                           ),
                         ),
-                        if (i < itemsToShow.length - 1) const SizedBox(width: 16),
+                        if (i < itemsToShow.length - 1) const SizedBox(width: AppDimensions.spacing16),
                       ],
                     ],
                   );
                 },
               ),
               // Sub bottom padding for better scroll feel above bottom nav
-               const SizedBox(height: 20),
+               const SizedBox(height: AppDimensions.spacing20),
             ],
           ),
         ),
@@ -387,10 +373,6 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 }
-
-
-
-
 
 
 

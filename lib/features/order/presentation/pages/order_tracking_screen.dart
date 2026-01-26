@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
@@ -14,20 +15,20 @@ class OrderTrackingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
           context.tr('track_order'),
           style: const TextStyle(
-            color: Colors.black,
+            color: AppColors.primaryText,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -45,13 +46,13 @@ class OrderTrackingScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                      const SizedBox(height: 16),
+                      const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+                      const SizedBox(height: AppDimensions.spacing16),
                       Text(
                         viewModel.errorMessage!,
-                        style: const TextStyle(color: Colors.red),
+                        style: const TextStyle(color: AppColors.error),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppDimensions.spacing16),
                       ElevatedButton(
                         onPressed: () => viewModel.trackOrder(orderId),
                         child: Text(context.tr('retry')),
@@ -67,7 +68,7 @@ class OrderTrackingScreen extends StatelessWidget {
               }
 
               return SingleChildScrollView(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(AppDimensions.spacing24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,39 +79,39 @@ class OrderTrackingScreen extends StatelessWidget {
                           Text(
                             '${context.tr('order_number')} #${trackingData.orderNumber}',
                             style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: AppDimensions.fontSize18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: AppDimensions.spacing8),
                           Text(
                             trackingData.statusLabel,
                             style: const TextStyle(
-                              fontSize: 16,
-                              color: Color(0xFF4CAF50),
+                              fontSize: AppDimensions.fontSize16,
+                              color: AppColors.primaryAccent,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppDimensions.spacing32),
 
                     // Horizontal Stepper
                     _buildHorizontalStepper(context, trackingData.status),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppDimensions.spacing32),
 
                     // Estimated Delivery or Current Status Info
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppDimensions.spacing16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: AppColors.primaryText.withOpacity(0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -121,13 +122,13 @@ class OrderTrackingScreen extends StatelessWidget {
                         children: [
                           Text(
                             context.tr('delivery_status'),
-                            style: TextStyle(
-                              fontSize: 16,
+                            style: const TextStyle(
+                              fontSize: AppDimensions.fontSize16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                              color: AppColors.primaryText,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: AppDimensions.spacing16),
                           _buildTimelineItem(
                             context.tr('timeline_placed'),
                             trackingData.timeline.placedAt,
@@ -168,25 +169,25 @@ class OrderTrackingScreen extends StatelessWidget {
                       ),
                     ),
 
-                     const SizedBox(height: 24),
+                     const SizedBox(height: AppDimensions.spacing24),
 
                     // Branch Info
                     Text(
                       context.tr('branch_information'),
-                      style: TextStyle(
-                        fontSize: 18,
+                      style: const TextStyle(
+                        fontSize: AppDimensions.fontSize18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppDimensions.spacing12),
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(AppDimensions.spacing16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: AppColors.primaryText.withOpacity(0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -198,8 +199,8 @@ class OrderTrackingScreen extends StatelessWidget {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFE8F5E9),
-                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.successLight,
+                              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
                               image: trackingData.branch.imageUrl != null
                                   ? DecorationImage(
                                       image: NetworkImage(trackingData.branch.imageUrl!),
@@ -208,10 +209,10 @@ class OrderTrackingScreen extends StatelessWidget {
                                   : null,
                             ),
                             child: trackingData.branch.imageUrl == null
-                                ? const Icon(Icons.store, color: Color(0xFF4CAF50))
+                                ? const Icon(Icons.store, color: AppColors.primaryAccent)
                                 : null,
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: AppDimensions.spacing16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,16 +221,16 @@ class OrderTrackingScreen extends StatelessWidget {
                                   trackingData.branch.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: AppDimensions.fontSize16,
                                   ),
                                 ),
                                 if (trackingData.branch.address != null) ...[
                                   const SizedBox(height: 4),
                                   Text(
                                     trackingData.branch.address!,
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 14,
+                                    style: const TextStyle(
+                                      color: AppColors.grey600,
+                                      fontSize: AppDimensions.fontSize14,
                                     ),
                                   ),
                                 ],
@@ -278,21 +279,21 @@ class OrderTrackingScreen extends StatelessWidget {
                     height: 30,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: isCompleted ? const Color(0xFF4CAF50) : Colors.grey[300],
+                      color: isCompleted ? AppColors.primaryAccent : AppColors.grey300,
                     ),
                     child: Icon(
                       _getStepIcon(steps[index]),
-                      color: Colors.white,
+                      color: AppColors.white,
                       size: 16,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spacing8),
                   Text(
                     labels[index],
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal,
-                      color: isCompleted ? Colors.black : Colors.grey,
+                      color: isCompleted ? AppColors.primaryText : AppColors.grey,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -302,7 +303,7 @@ class OrderTrackingScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                     height: 2,
-                    color: index < currentIndex ? const Color(0xFF4CAF50) : Colors.grey[300],
+                    color: index < currentIndex ? AppColors.primaryAccent : AppColors.grey300,
                     margin: const EdgeInsets.only(bottom: 20, left: 4, right: 4),
                   ),
                 ),
@@ -336,18 +337,18 @@ class OrderTrackingScreen extends StatelessWidget {
               height: 12,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isCompleted ? const Color(0xFF4CAF50) : Colors.grey[300],
+                color: isCompleted ? AppColors.primaryAccent : AppColors.grey300,
               ),
             ),
             if (!isLast)
               Container(
                 width: 2,
                 height: 40,
-                color: Colors.grey[200],
+                color: AppColors.grey200,
               ),
           ],
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppDimensions.spacing16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,17 +356,17 @@ class OrderTrackingScreen extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppDimensions.fontSize14,
                   fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
-                  color: isCompleted ? Colors.black : Colors.grey,
+                  color: isCompleted ? AppColors.primaryText : AppColors.grey,
                 ),
               ),
               if (time != null)
                 Text(
                   DateFormat('MMM d, h:mm a').format(time),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[500],
+                  style: const TextStyle(
+                    fontSize: AppDimensions.fontSize12,
+                    color: AppColors.grey,
                   ),
                 ),
             ],

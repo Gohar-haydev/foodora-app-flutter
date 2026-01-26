@@ -69,14 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
               // Header with back button and title
               AuthHeader(
                 title: context.tr('sign_in'),
@@ -88,9 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   context.tr('welcome_back'),
                   style: const TextStyle(
-                    fontSize: 32,
+                    fontSize: AppDimensions.fontSize32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: AppColors.primaryText,
                   ),
                 ),
               ),
@@ -101,13 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: context.tr('email_address'),
                 keyboardType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
               // Password input field with visibility toggle
               PasswordTextField(
                 controller: _passwordController,
                 hintText: context.tr('password_placeholder'),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.spacing8),
               // Forget Password link
               Align(
                 alignment: Alignment.center,
@@ -121,58 +121,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     context.tr('forgot_password'),
                     style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
+                      fontSize: AppDimensions.fontSize14,
+                      color: AppColors.primaryText,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
               // Sign In button
               AuthButton(
                 text: context.tr('sign_in'),
                 onPressed: _onLoginPressed,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
               // Bottom text links
-              Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      context.tr('dont_have_account'),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (_) => const SignupScreen()),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        context.tr('create_account'),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF4FAF5A),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              AuthBottomLink(
+                prefixText: context.tr('dont_have_account'),
+                linkText: context.tr('create_account'),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const SignupScreen()),
+                  );
+                },
               ),
             ],
           ),

@@ -15,18 +15,18 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text(
           context.tr('cart'), 
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
+          style: const TextStyle(
+            color: AppColors.primaryText,
+            fontSize: AppDimensions.fontSize18,
             fontWeight: FontWeight.w600,
           )
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
       ),
       body: Consumer<CartViewModel>(
@@ -36,13 +36,13 @@ class CartScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.mutedText),
-                  SizedBox(height: 16),
+                  const Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.mutedText),
+                  const SizedBox(height: AppDimensions.spacing16),
                   Text(
                     context.tr('empty_cart'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.mutedText,
-                      fontSize: 18,
+                      fontSize: AppDimensions.fontSize18,
                     ),
                   ),
                 ],
@@ -57,7 +57,7 @@ class CartScreen extends StatelessWidget {
           final double total = viewModel.grandTotal;
 
           return ListView(
-            padding: const EdgeInsets.all(25),
+            padding: const EdgeInsets.all(AppDimensions.spacing24),
             children: [
               // Cart Items List
               ...viewModel.cartItems.map((cartItem) {
@@ -69,21 +69,21 @@ class CartScreen extends StatelessWidget {
                 );
               }).toList(),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Breakdown
               CartPriceRow(label: context.tr('subtotal'), amount: subtotal),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.spacing12),
               CartPriceRow(label: context.tr('delivery_fee'), amount: deliveryFee),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.spacing12),
               CartPriceRow(label: context.tr('tax'), amount: tax),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppDimensions.spacing12),
               CartPriceRow(
                 label: context.tr('total'),
                 amount: total,
                 isTotal: true,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppDimensions.spacing24),
 
               // Checkout Button
               SizedBox(
@@ -96,8 +96,8 @@ class CartScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4CAF50), // Green
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryAccent,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
@@ -106,14 +106,14 @@ class CartScreen extends StatelessWidget {
                   child: Text(
                     context.tr('checkout').toUpperCase(),
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: AppDimensions.fontSize16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.spacing16),
             ],
           );
         },
@@ -121,5 +121,3 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
-
-

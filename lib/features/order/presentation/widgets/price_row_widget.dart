@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 class PriceRowWidget extends StatelessWidget {
   final String label;
@@ -20,17 +21,17 @@ class PriceRowWidget extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: AppDimensions.fontSize16,
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
+            color: AppColors.primaryText,
           ),
         ),
         Text(
           '\$${amount.toStringAsFixed(2)}',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: AppDimensions.fontSize16,
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: Colors.black,
+            color: AppColors.primaryText,
           ),
         ),
       ],
