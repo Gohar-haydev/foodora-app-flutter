@@ -32,7 +32,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           context.tr('forgot_password'),
           style: TextStyle(
             color: AppColors.primaryText,
-            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -49,93 +48,91 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
       body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: AppDimensions.getMaxContentWidth(context),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
             ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
-                  
-                  Center(
-                    child: Text(
-                      context.tr('forgot_password_title'),
-                      style: TextStyle(
-                        fontSize: AppDimensions.getH1Size(context),
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryText,
-                        height: 1.2,
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+
+                Center(
+                  child: Text(
+                    context.tr('forgot_password_title'),
+                    style: TextStyle(
+                      fontSize: AppDimensions.getH1Size(context),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText,
+                      height: 1.2,
                     ),
                   ),
-                  
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                ),
 
-                  Center(
-                    child: Text(
-                      context.tr('forgot_password_subtitle'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: AppDimensions.getBodySize(context),
-                        color: AppColors.grey,
-                        height: 1.5,
-                      ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                Center(
+                  child: Text(
+                    context.tr('forgot_password_subtitle'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: AppDimensions.getBodySize(context),
+                      color: AppColors.grey,
+                      height: 1.5,
                     ),
                   ),
-                  
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
-                  
-                  CustomTextField(
-                    controller: _emailController,
-                    hintText: context.tr('email_address'),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
-                  
-                  Consumer<AuthViewModel>(
-                    builder: (context, viewModel, child) {
-                      return PrimaryButton(
-                        text: context.tr('reset_password'),
-                        isLoading: viewModel.isLoading,
-                        height: AppDimensions.getButtonHeight(context),
-                        onPressed: () async {
-                          final email = _emailController.text.trim();
-                          if (email.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(context.tr('please_enter_email'))),
-                            );
-                            return;
-                          }
+                ),
 
-                          final success = await viewModel.forgotPassword(email);
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
 
-                          if (!mounted) return;
+                CustomTextField(
+                  controller: _emailController,
+                  hintText: context.tr('email_address'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
 
-                          if (success) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(context.tr('send_reset_instructions'))),
-                            );
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => CreateNewPasswordScreen(email: email)),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(viewModel.errorMessage ?? context.tr('failed_to_send_reset_email'))),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                Consumer<AuthViewModel>(
+                  builder: (context, viewModel, child) {
+                    return PrimaryButton(
+                      text: context.tr('reset_password'),
+                      isLoading: viewModel.isLoading,
+                      height: AppDimensions.getButtonHeight(context),
+                      onPressed: () async {
+                        final email = _emailController.text.trim();
+                        if (email.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(context.tr('please_enter_email'))),
+                          );
+                          return;
+                        }
+
+                        final success = await viewModel.forgotPassword(email);
+
+                        if (!mounted) return;
+
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(context.tr('send_reset_instructions'))),
+                          );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => CreateNewPasswordScreen(email: email)),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(viewModel.errorMessage ?? context.tr('failed_to_send_reset_email'))),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

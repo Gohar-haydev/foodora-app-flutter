@@ -115,138 +115,136 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: AppDimensions.getMaxContentWidth(context),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
             ),
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
-                  
-                  // Header with back button and "SIGN UP" title
-                  AuthHeader(title: context.tr('sign_up')),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
 
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                // Header with back button and "SIGN UP" title
+                AuthHeader(title: context.tr('sign_up')),
 
-                  // Create Account heading
-                  Text(
-                    context.tr('create_account'),
-                    style: TextStyle(
-                      fontSize: AppDimensions.getH1Size(context),
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryText,
-                    ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+
+                // Create Account heading
+                Text(
+                  context.tr('create_account'),
+                  style: TextStyle(
+                    fontSize: AppDimensions.getH1Size(context),
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryText,
                   ),
+                ),
 
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
 
-                  // Subtitle
-                  Text(
-                    context.tr('sign_up_subtitle'),
-                    textAlign: TextAlign.center,
+                // Subtitle
+                Text(
+                  context.tr('sign_up_subtitle'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: AppDimensions.getBodySize(context),
+                    color: AppColors.grey600,
+                    height: 1.5,
+                  ),
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+
+                // Full Name input field
+                _buildValidatedTextField(
+                  controller: _nameController,
+                  hintText: context.tr('full_name_placeholder'),
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                // Email input field
+                _buildValidatedTextField(
+                  controller: _emailController,
+                  hintText: context.tr('email_address'),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                // Phone input field
+                _buildValidatedTextField(
+                  controller: _phoneController,
+                  hintText: context.tr('phone'),
+                  keyboardType: TextInputType.phone,
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                // Password input field with visibility toggle
+                PasswordTextField(
+                  controller: _passwordController,
+                  hintText: context.tr('new_password'),
+                  hintTextColor: AppColors.primaryText,
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                // Confirm Password input field
+                PasswordTextField(
+                  controller: _confirmPasswordController,
+                  hintText: context.tr('confirm_password'),
+                  hintTextColor: AppColors.primaryText,
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                // Sign Up button
+                AuthButton(
+                  text: context.tr('sign_up'),
+                  onPressed: _onSignupPressed,
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 10, tablet: 16)),
+
+                // Already have account link
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    context.tr('already_have_account'),
                     style: TextStyle(
                       fontSize: AppDimensions.getBodySize(context),
+                      color: AppColors.primaryAccent,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 15, tablet: 20)),
+
+                // Terms and Conditions
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
+                    left: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
+                    right: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
+                  ),
+                  child: Text(
+                    context.tr('terms_and_conditions'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: AppDimensions.getSmallSize(context),
                       color: AppColors.grey600,
                       height: 1.5,
                     ),
                   ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
-
-                  // Full Name input field
-                  _buildValidatedTextField(
-                    controller: _nameController,
-                    hintText: context.tr('full_name_placeholder'),
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-
-                  // Email input field
-                  _buildValidatedTextField(
-                    controller: _emailController,
-                    hintText: context.tr('email_address'),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-
-                  // Phone input field
-                  _buildValidatedTextField(
-                    controller: _phoneController,
-                    hintText: context.tr('phone'),
-                    keyboardType: TextInputType.phone,
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-
-                  // Password input field with visibility toggle
-                  PasswordTextField(
-                    controller: _passwordController,
-                    hintText: context.tr('new_password'),
-                    hintTextColor: AppColors.primaryText,
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-
-                  // Confirm Password input field
-                  PasswordTextField(
-                    controller: _confirmPasswordController,
-                    hintText: context.tr('confirm_password'),
-                    hintTextColor: AppColors.primaryText,
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
-
-                  // Sign Up button
-                  AuthButton(
-                    text: context.tr('sign_up'),
-                    onPressed: _onSignupPressed,
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 10, tablet: 16)),
-
-                  // Already have account link
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      context.tr('already_have_account'),
-                      style: TextStyle(
-                        fontSize: AppDimensions.getBodySize(context),
-                        color: AppColors.primaryAccent,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 15, tablet: 20)),
-
-                  // Terms and Conditions
-                  Padding(
-                    padding: EdgeInsets.only(
-                      bottom: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
-                      left: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
-                      right: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
-                    ),
-                    child: Text(
-                      context.tr('terms_and_conditions'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: AppDimensions.getSmallSize(context),
-                        color: AppColors.grey600,
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

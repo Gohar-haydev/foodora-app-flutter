@@ -24,9 +24,7 @@ class AuthHeader extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_ios, size: 20),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-          )
-        else
-          const SizedBox(width: 40), // Balance the title when back button is hidden
+          ),
         Expanded(
           child: Center(
             child: Text(
