@@ -19,9 +19,9 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.tr('cart'), 
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
-            fontSize: AppDimensions.fontSize18,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           )
         ),
@@ -29,94 +29,107 @@ class CartScreen extends StatelessWidget {
         backgroundColor: AppColors.white,
         elevation: 0,
       ),
-      body: Consumer<CartViewModel>(
-        builder: (context, viewModel, child) {
-           if (viewModel.cartItems.isEmpty) {
-             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.shopping_cart_outlined, size: 64, color: AppColors.mutedText),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(
-                    context.tr('empty_cart'),
-                    style: const TextStyle(
-                      color: AppColors.mutedText,
-                      fontSize: AppDimensions.fontSize18,
-                    ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Consumer<CartViewModel>(
+            builder: (context, viewModel, child) {
+               if (viewModel.cartItems.isEmpty) {
+                 return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 64, tablet: 80),
+                        color: AppColors.mutedText,
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                      Text(
+                        context.tr('empty_cart'),
+                        style: TextStyle(
+                          color: AppColors.mutedText,
+                          fontSize: AppDimensions.getH3Size(context),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          }
-
-          // Price Calculations
-          final double subtotal = viewModel.totalAmount;
-          final double deliveryFee = viewModel.deliveryFee;
-          final double tax = viewModel.tax;
-          final double total = viewModel.grandTotal;
-
-          return ListView(
-            padding: const EdgeInsets.all(AppDimensions.spacing24),
-            children: [
-              // Cart Items List
-              ...viewModel.cartItems.map((cartItem) {
-                return CartItemWidget(
-                  cartItem: cartItem,
-                  onIncrement: () => viewModel.incrementItem(cartItem.id),
-                  onDecrement: () => viewModel.decrementItem(cartItem.id),
-                  onRemove: () => viewModel.removeFromCart(cartItem.id),
                 );
-              }).toList(),
+              }
 
-              const SizedBox(height: AppDimensions.spacing24),
+              // Price Calculations
+              final double subtotal = viewModel.totalAmount;
+              final double deliveryFee = viewModel.deliveryFee;
+              final double tax = viewModel.tax;
+              final double total = viewModel.grandTotal;
 
-              // Breakdown
-              CartPriceRow(label: context.tr('subtotal'), amount: subtotal),
-              const SizedBox(height: AppDimensions.spacing12),
-              CartPriceRow(label: context.tr('delivery_fee'), amount: deliveryFee),
-              const SizedBox(height: AppDimensions.spacing12),
-              CartPriceRow(label: context.tr('tax'), amount: tax),
-              const SizedBox(height: AppDimensions.spacing12),
-              CartPriceRow(
-                label: context.tr('total'),
-                amount: total,
-                isTotal: true,
-              ),
-              const SizedBox(height: AppDimensions.spacing24),
-
-              // Checkout Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const CheckoutScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryAccent,
-                    foregroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    context.tr('checkout').toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1,
-                    ),
-                  ),
+              return ListView(
+                padding: EdgeInsets.all(
+                  AppDimensions.getResponsiveHorizontalPadding(context),
                 ),
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-            ],
-          );
-        },
+                children: [
+                  // Cart Items List
+                  ...viewModel.cartItems.map((cartItem) {
+                    return CartItemWidget(
+                      cartItem: cartItem,
+                      onIncrement: () => viewModel.incrementItem(cartItem.id),
+                      onDecrement: () => viewModel.decrementItem(cartItem.id),
+                      onRemove: () => viewModel.removeFromCart(cartItem.id),
+                    );
+                  }).toList(),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                  // Breakdown
+                  CartPriceRow(label: context.tr('subtotal'), amount: subtotal),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                  CartPriceRow(label: context.tr('delivery_fee'), amount: deliveryFee),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                  CartPriceRow(label: context.tr('tax'), amount: tax),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                  CartPriceRow(
+                    label: context.tr('total'),
+                    amount: total,
+                    isTotal: true,
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                  // Checkout Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: AppDimensions.getButtonHeight(context),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryAccent,
+                        foregroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        context.tr('checkout').toUpperCase(),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

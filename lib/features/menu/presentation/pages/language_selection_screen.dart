@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:foodora/core/providers/locale_provider.dart';
 import 'package:foodora/core/localization/app_localizations.dart';
 import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 class LanguageSelectionScreen extends StatelessWidget {
   const LanguageSelectionScreen({super.key});
@@ -17,9 +18,9 @@ class LanguageSelectionScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           localizations.translate('select_language'),
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -27,48 +28,61 @@ class LanguageSelectionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            _LanguageOption(
-              languageName: localizations.translate('english'),
-              languageCode: 'en',
-              flag: '🇬🇧',
-              isSelected: localeProvider.locale.languageCode == 'en',
-              onTap: () async {
-                await localeProvider.setLocale(const Locale('en'));
-                if (context.mounted) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => const BranchSelectionScreen(),
-                    ),
-                  );
-                }
-              },
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(
+              AppDimensions.getResponsiveHorizontalPadding(context),
             ),
-            const SizedBox(height: 16),
-            _LanguageOption(
-              languageName: localizations.translate('swedish'),
-              languageCode: 'sv',
-              flag: '🇸🇪',
-              isSelected: localeProvider.locale.languageCode == 'sv',
-              onTap: () async {
-                await localeProvider.setLocale(const Locale('sv'));
-                if (context.mounted) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => const BranchSelectionScreen(),
-                    ),
-                  );
-                }
-              },
+            child: Column(
+              children: [
+                _LanguageOption(
+                  languageName: localizations.translate('english'),
+                  languageCode: 'en',
+                  flag: '🇬🇧',
+                  isSelected: localeProvider.locale.languageCode == 'en',
+                  onTap: () async {
+                    await localeProvider.setLocale(const Locale('en'));
+                    if (context.mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const BranchSelectionScreen(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                _LanguageOption(
+                  languageName: localizations.translate('swedish'),
+                  languageCode: 'sv',
+                  flag: '🇸🇪',
+                  isSelected: localeProvider.locale.languageCode == 'sv',
+                  onTap: () async {
+                    await localeProvider.setLocale(const Locale('sv'));
+                    if (context.mounted) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const BranchSelectionScreen(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -96,7 +110,9 @@ class _LanguageOption extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(
+          AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 24),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFE8F5E9) : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -117,24 +133,26 @@ class _LanguageOption extends StatelessWidget {
           children: [
             Text(
               flag,
-              style: const TextStyle(fontSize: 32),
+              style: TextStyle(
+                fontSize: AppDimensions.responsive(context, mobile: 32, tablet: 40),
+              ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
             Expanded(
               child: Text(
                 languageName,
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: AppDimensions.getH3Size(context),
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                   color: isSelected ? const Color(0xFF4CAF50) : Colors.black87,
                 ),
               ),
             ),
             if (isSelected)
-              const Icon(
+              Icon(
                 Icons.check_circle,
-                color: Color(0xFF4CAF50),
-                size: 28,
+                color: const Color(0xFF4CAF50),
+                size: AppDimensions.responsiveIconSize(context, mobile: 28, tablet: 32),
               ),
           ],
         ),

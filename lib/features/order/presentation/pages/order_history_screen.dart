@@ -33,9 +33,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       appBar: AppBar(
         title: Text(
           context.tr('order_history'),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
             fontWeight: FontWeight.w600,
+            fontSize: AppDimensions.getH3Size(context),
           ),
         ),
         centerTitle: true,
@@ -43,129 +44,157 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         foregroundColor: AppColors.primaryText,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24, vertical: AppDimensions.spacing16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.tr('past_orders'),
-                style: const TextStyle(
-                  fontSize: AppDimensions.fontSize18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkText,
-                ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+                vertical: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
               ),
-              const SizedBox(height: AppDimensions.spacing16),
-              // List of Orders
-              Consumer<OrderViewModel>(
-                builder: (context, viewModel, child) {
-                  // Show loading indicator
-                  if (viewModel.isLoading) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(48.0),
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  // Show error message
-                  if (viewModel.errorMessage != null) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppDimensions.spacing24),
-                        child: Column(
-                          children: [
-                            const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                            const SizedBox(height: AppDimensions.spacing16),
-                            Text(
-                              viewModel.errorMessage!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: AppColors.error),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.tr('past_orders'),
+                    style: TextStyle(
+                      fontSize: AppDimensions.getH3Size(context),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkText,
+                    ),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  // List of Orders
+                  Consumer<OrderViewModel>(
+                    builder: (context, viewModel, child) {
+                      // Show loading indicator
+                      if (viewModel.isLoading) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              AppDimensions.responsiveSpacing(context, mobile: 48, tablet: 60),
                             ),
-                            const SizedBox(height: AppDimensions.spacing16),
-                            ElevatedButton(
-                              onPressed: () => viewModel.fetchOrders(),
-                              child: Text(context.tr('retry')),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
+                            child: const CircularProgressIndicator(),
+                          ),
+                        );
+                      }
 
-                  // Show empty state
-                  if (viewModel.orders.isEmpty) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(AppDimensions.spacing24),
-                        child: Text(context.tr('no_past_orders_found')),
-                      ),
-                    );
-                  }
-                  
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(), 
-                    itemCount: viewModel.orders.length,
-                    itemBuilder: (context, index) {
-                      final order = viewModel.orders[index];
-                      final firstItem = order.items.first;
-                      final title = order.items.length > 1 
-                        ? '${firstItem.itemName} + ${order.items.length - 1} ${context.tr('more')}'
-                        : firstItem.itemName;
+                      // Show error message
+                      if (viewModel.errorMessage != null) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              AppDimensions.getResponsiveHorizontalPadding(context),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.error_outline,
+                                  size: AppDimensions.responsiveIconSize(context, mobile: 48, tablet: 60),
+                                  color: AppColors.error,
+                                ),
+                                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                                Text(
+                                  viewModel.errorMessage!,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColors.error,
+                                    fontSize: AppDimensions.getBodySize(context),
+                                  ),
+                                ),
+                                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                                ElevatedButton(
+                                  onPressed: () => viewModel.fetchOrders(),
+                                  child: Text(context.tr('retry')),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      // Show empty state
+                      if (viewModel.orders.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              AppDimensions.getResponsiveHorizontalPadding(context),
+                            ),
+                            child: Text(
+                              context.tr('no_past_orders_found'),
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodySize(context),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                       
-                      return GestureDetector(
-                        onTap: () async {
-                          // Check if context is mounted before starting
-                          if (!context.mounted) {
-                            return;
-                          }
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), 
+                        itemCount: viewModel.orders.length,
+                        itemBuilder: (context, index) {
+                          final order = viewModel.orders[index];
+                          final firstItem = order.items.first;
+                          final title = order.items.length > 1 
+                            ? '${firstItem.itemName} + ${order.items.length - 1} ${context.tr('more')}'
+                            : firstItem.itemName;
                           
-                          // Capture navigator and scaffold messenger before async call
-                          final navigator = Navigator.of(context);
-                          final scaffoldMessenger = ScaffoldMessenger.of(context);
-                          
-                          // Fetch fresh order details from API
-                          final orderDetails = await viewModel.getOrderById(order.id);
-                          
-                          if (orderDetails != null) {
-                            // Navigate with fresh data using captured navigator
-                            navigator.push(
-                              MaterialPageRoute(
-                                builder: (_) => OrderDetailsScreen(order: orderDetails),
-                              ),
-                            );
-                          } else if (viewModel.errorMessage != null) {
-                            // Show error if fetch failed using captured scaffold messenger
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text(viewModel.errorMessage!),
-                                backgroundColor: AppColors.error,
-                              ),
-                            );
-                          }
-                         },
-                        child: Consumer<CurrencyProvider>(
-                           builder: (context, currencyProvider, child) {
-                              return PastOrderCard(
-                                title: title,
-                                price: currencyProvider.formatPrice(order.totalAmount),
-                                imageUrl: firstItem.branchImageUrl ?? '',
-                                onCancel: (order.status.trim().toLowerCase() == 'pending') 
-                                    ? () => _showCancelDialog(context, viewModel, order.id) 
-                                    : null,
-                              );
-                           }
-                        ),
+                          return GestureDetector(
+                            onTap: () async {
+                              // Check if context is mounted before starting
+                              if (!context.mounted) {
+                                return;
+                              }
+                              
+                              // Capture navigator and scaffold messenger before async call
+                              final navigator = Navigator.of(context);
+                              final scaffoldMessenger = ScaffoldMessenger.of(context);
+                              
+                              // Fetch fresh order details from API
+                              final orderDetails = await viewModel.getOrderById(order.id);
+                              
+                              if (orderDetails != null) {
+                                // Navigate with fresh data using captured navigator
+                                navigator.push(
+                                  MaterialPageRoute(
+                                    builder: (_) => OrderDetailsScreen(order: orderDetails),
+                                  ),
+                                );
+                              } else if (viewModel.errorMessage != null) {
+                                // Show error if fetch failed using captured scaffold messenger
+                                scaffoldMessenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(viewModel.errorMessage!),
+                                    backgroundColor: AppColors.error,
+                                  ),
+                                );
+                              }
+                             },
+                            child: Consumer<CurrencyProvider>(
+                               builder: (context, currencyProvider, child) {
+                                  return PastOrderCard(
+                                    title: title,
+                                    price: currencyProvider.formatPrice(order.totalAmount),
+                                    imageUrl: firstItem.branchImageUrl ?? '',
+                                    onCancel: (order.status.trim().toLowerCase() == 'pending') 
+                                        ? () => _showCancelDialog(context, viewModel, order.id) 
+                                        : null,
+                                  );
+                               }
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -176,8 +205,18 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(context.tr('cancel_order')),
-        content: Text(context.tr('cancel_order_confirm_message')),
+        title: Text(
+          context.tr('cancel_order'),
+          style: TextStyle(
+            fontSize: AppDimensions.getH3Size(context),
+          ),
+        ),
+        content: Text(
+          context.tr('cancel_order_confirm_message'),
+          style: TextStyle(
+            fontSize: AppDimensions.getBodySize(context),
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),

@@ -99,10 +99,10 @@ class _SignupScreenState extends State<SignupScreen> {
           hintText: hintText,
           keyboardType: keyboardType,
           suffixIcon: value.text.isNotEmpty
-              ? const Icon(
+              ? Icon(
                   Icons.check,
                   color: AppColors.orange,
-                  size: 20,
+                  size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
                 )
               : null,
         );
@@ -115,127 +115,138 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: AppDimensions.spacing16),
-                
-                // Header with back button and "SIGN UP" title
-                AuthHeader(title: context.tr('sign_up')),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                  
+                  // Header with back button and "SIGN UP" title
+                  AuthHeader(title: context.tr('sign_up')),
 
-                const SizedBox(height: 40),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
 
-                // Create Account heading
-                Text(
-                  context.tr('create_account'),
-                  style: const TextStyle(
-                    fontSize: AppDimensions.fontSize32,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryText,
-                  ),
-                ),
-
-                const SizedBox(height: AppDimensions.spacing12),
-
-                // Subtitle
-                Text(
-                  context.tr('sign_up_subtitle'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: AppDimensions.fontSize14,
-                    color: AppColors.grey600,
-                    height: 1.5,
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                // Full Name input field
-                _buildValidatedTextField(
-                  controller: _nameController,
-                  hintText: context.tr('full_name_placeholder'),
-                ),
-
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // Email input field
-                _buildValidatedTextField(
-                  controller: _emailController,
-                  hintText: context.tr('email_address'),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // Phone input field
-                _buildValidatedTextField(
-                  controller: _phoneController,
-                  hintText: context.tr('phone'),
-                  keyboardType: TextInputType.phone,
-                ),
-
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // Password input field with visibility toggle
-                PasswordTextField(
-                  controller: _passwordController,
-                  hintText: context.tr('new_password'),
-                  hintTextColor: AppColors.primaryText,
-                ),
-
-                const SizedBox(height: AppDimensions.spacing16),
-
-                // Confirm Password input field
-                PasswordTextField(
-                  controller: _confirmPasswordController,
-                  hintText: context.tr('confirm_password'),
-                  hintTextColor: AppColors.primaryText,
-                ),
-
-                const SizedBox(height: AppDimensions.spacing32),
-
-                // Sign Up button
-                AuthButton(
-                  text: context.tr('sign_up'),
-                  onPressed: _onSignupPressed,
-                ),
-
-                const SizedBox(height: 10),
-
-                // Already have account link
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    context.tr('already_have_account'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize14,
-                      color: AppColors.primaryAccent,
-                      fontWeight: FontWeight.w500,
+                  // Create Account heading
+                  Text(
+                    context.tr('create_account'),
+                    style: TextStyle(
+                      fontSize: AppDimensions.getH1Size(context),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryText,
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 15),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
 
-                // Terms and Conditions
-                Padding(
-                  padding: const EdgeInsets.only(bottom: AppDimensions.spacing24, left: 25, right: 25),
-                  child: Text(
-                    context.tr('terms_and_conditions'),
+                  // Subtitle
+                  Text(
+                    context.tr('sign_up_subtitle'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: AppDimensions.fontSize16,
+                      fontSize: AppDimensions.getBodySize(context),
                       color: AppColors.grey600,
                       height: 1.5,
                     ),
                   ),
-                ),
-              ],
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+
+                  // Full Name input field
+                  _buildValidatedTextField(
+                    controller: _nameController,
+                    hintText: context.tr('full_name_placeholder'),
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // Email input field
+                  _buildValidatedTextField(
+                    controller: _emailController,
+                    hintText: context.tr('email_address'),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // Phone input field
+                  _buildValidatedTextField(
+                    controller: _phoneController,
+                    hintText: context.tr('phone'),
+                    keyboardType: TextInputType.phone,
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // Password input field with visibility toggle
+                  PasswordTextField(
+                    controller: _passwordController,
+                    hintText: context.tr('new_password'),
+                    hintTextColor: AppColors.primaryText,
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // Confirm Password input field
+                  PasswordTextField(
+                    controller: _confirmPasswordController,
+                    hintText: context.tr('confirm_password'),
+                    hintTextColor: AppColors.primaryText,
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                  // Sign Up button
+                  AuthButton(
+                    text: context.tr('sign_up'),
+                    onPressed: _onSignupPressed,
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 10, tablet: 16)),
+
+                  // Already have account link
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      context.tr('already_have_account'),
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodySize(context),
+                        color: AppColors.primaryAccent,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 15, tablet: 20)),
+
+                  // Terms and Conditions
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
+                      left: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
+                      right: AppDimensions.responsiveSpacing(context, mobile: 25, tablet: 40),
+                    ),
+                    child: Text(
+                      context.tr('terms_and_conditions'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: AppDimensions.getSmallSize(context),
+                        color: AppColors.grey600,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

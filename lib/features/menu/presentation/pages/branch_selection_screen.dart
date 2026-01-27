@@ -65,133 +65,154 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header Section
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Greeting
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: Column(
+              children: [
+                // Header Section
+                Padding(
+                  padding: EdgeInsets.all(
+                    AppDimensions.getResponsiveHorizontalPadding(context),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Greeting
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            _getGreetingIcon(),
-                            size: 20,
-                            color: Colors.grey[600],
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _getGreeting(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                _getGreetingIcon(),
+                                size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                                color: Colors.grey[600],
+                              ),
+                              SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                              Text(
+                                _getGreeting(),
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getBodySize(context),
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                      
+                      // User Name
+                      Text(
+                        userName,
+                        style: TextStyle(
+                          fontSize: AppDimensions.getH1Size(context),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                      
+                      // Select Branch Title
+                      Text(
+                        context.tr('select_branch_title'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getH1Size(context),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  
-                  // User Name
-                  Text(
-                    userName,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Select Branch Title
-                  Text(
-                    context.tr('select_branch_title'),
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Branch List
-            Expanded(
-              child: Consumer<MenuViewModel>(
-                builder: (context, viewModel, child) {
-                  if (viewModel.isLoading) {
-                    return const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)));
-                  }
+                ),
+                // Branch List
+                Expanded(
+                  child: Consumer<MenuViewModel>(
+                    builder: (context, viewModel, child) {
+                      if (viewModel.isLoading) {
+                        return const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)));
+                      }
 
-                  if (viewModel.error != null) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
-                          const SizedBox(height: 16),
-                          Text(
-                            viewModel.error!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey[600]),
+                      if (viewModel.error != null) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                size: AppDimensions.responsiveIconSize(context, mobile: 48, tablet: 60),
+                                color: Colors.grey[400],
+                              ),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                              Text(
+                                viewModel.error!,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: AppDimensions.getBodySize(context),
+                                ),
+                              ),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                              PrimaryButton(
+                                text: context.tr('retry'),
+                                width: AppDimensions.responsive(context, mobile: 120, tablet: 140),
+                                height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
+                                onPressed: () => viewModel.fetchBranches(),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 16),
-                          PrimaryButton(
-                            text: context.tr('retry'),
-                            width: 120,
-                            height: 40,
-                            onPressed: () => viewModel.fetchBranches(),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
+                        );
+                      }
 
-                  if (viewModel.branches.isEmpty) {
-                    return Center(
-                      child: Text(
-                        context.tr('no_branches_available'),
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    );
-                  }
-
-                  return ListView.separated(
-                    padding: const EdgeInsets.only(
-                      top: 24.0,
-                      left: 24.0,
-                      right: 24.0,
-                      bottom: 50.0, // Add bottom padding to avoid cart button overlap
-                    ),
-                    itemCount: viewModel.branches.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final branch = viewModel.branches[index];
-                      return BranchCard(
-                        name: branch.name,
-                        address: branch.address,
-                        imageUrl: 'assets/images/branch_placeholder.jpg',
-                        onSelect: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => MenuScreen(branchId: branch.id),
+                      if (viewModel.branches.isEmpty) {
+                        return Center(
+                          child: Text(
+                            context.tr('no_branches_available'),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: AppDimensions.getBodySize(context),
                             ),
+                          ),
+                        );
+                      }
+
+                      return ListView.separated(
+                        padding: EdgeInsets.only(
+                          top: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
+                          left: AppDimensions.getResponsiveHorizontalPadding(context),
+                          right: AppDimensions.getResponsiveHorizontalPadding(context),
+                          bottom: AppDimensions.responsiveSpacing(context, mobile: 50, tablet: 60), // Add bottom padding to avoid cart button overlap
+                        ),
+                        itemCount: viewModel.branches.length,
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                        ),
+                        itemBuilder: (context, index) {
+                          final branch = viewModel.branches[index];
+                          return BranchCard(
+                            name: branch.name,
+                            address: branch.address,
+                            imageUrl: 'assets/images/branch_placeholder.jpg',
+                            onSelect: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MenuScreen(branchId: branch.id),
+                                ),
+                              );
+                            },
                           );
                         },
                       );
                     },
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

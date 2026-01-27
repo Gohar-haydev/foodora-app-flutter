@@ -78,7 +78,11 @@ class _MenuScreenState extends State<MenuScreen> {
           backgroundColor: AppColors.white,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+            icon: Icon(
+              Icons.arrow_back,
+              color: AppColors.primaryText,
+              size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+            ),
             onPressed: () {
               // Logic to go back or switch to home tab if at root
               final navigator = Navigator.of(context);
@@ -92,288 +96,309 @@ class _MenuScreenState extends State<MenuScreen> {
           centerTitle: true,
         ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppDimensions.spacing20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header / Greeting
-              Row(
-                children: [
-                   Icon(
-                    _getGreetingIcon(),
-                    color: AppColors.grey600,
-                    size: 20,
-                  ),
-                  const SizedBox(width: AppDimensions.spacing8),
-                  Text(
-                    _getGreeting(),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize16,
-                      color: AppColors.grey600,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(
+                AppDimensions.getResponsiveHorizontalPadding(context),
               ),
-              const SizedBox(height: AppDimensions.spacing8),
-              Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkText,
+                  // Header / Greeting
+                  Row(
+                    children: [
+                       Icon(
+                        _getGreetingIcon(),
+                        color: AppColors.grey600,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
                       ),
+                      SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                      Text(
+                        _getGreeting(),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          color: AppColors.grey600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
+                          style: TextStyle(
+                            fontSize: AppDimensions.getH1Size(context),
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkText,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const FavoritesScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(
+                            AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10),
+                          ),
+                          decoration: const BoxDecoration(
+                            color: AppColors.greyLight,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.favorite_border,
+                            color: AppColors.primaryAccent,
+                            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                  // Featured Section
+                  Text(
+                    context.tr('featured'),
+                    style: TextStyle(
+                      fontSize: AppDimensions.getH3Size(context),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkText,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  
+                  // Featured Carousel
+                  SizedBox(
+                    height: AppDimensions.responsive(context, mobile: 180, tablet: 220, desktop: 260),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      children: [
+                        FeaturedCard(
+                          title: context.tr('featured_card_title_1'),
+                          time: context.tr('featured_card_time_1'),
+                          authorName: 'Olivia',
+                          authorImage: 'assets/images/user_avatar.jpg', // Placeholder
+                          foodImage: 'assets/images/noodle_bowl.png', // Placeholder
+                          backgroundColor: AppColors.primaryAccent,
+                        ),
+                        SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                        FeaturedCard(
+                          title: context.tr('featured_card_title_2'),
+                          time: context.tr('featured_card_time_2'),
+                          authorName: 'Olivia',
+                          authorImage: 'assets/images/user_avatar.jpg',
+                          foodImage: 'assets/images/salad_bowl.png',
+                          backgroundColor: AppColors.success,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                  // Category Section
+                  SectionHeader(
+                    title: context.tr('category'),
+                    onSeeAll: () async {
+                      final selectedCategoryId = await Navigator.of(context).push<int?>(
                         MaterialPageRoute(
-                          builder: (_) => const FavoritesScreen(),
+                          builder: (_) => CategoryScreen(
+                            branchId: widget.branchId,
+                            initialSelectedCategoryId: _selectedCategoryId,
+                          ),
+                        ),
+                      );
+                      
+                      // Update selected category if user selected one
+                      if (selectedCategoryId != null && mounted) {
+                        setState(() {
+                          _selectedCategoryId = selectedCategoryId;
+                        });
+                        // Fetch menu items for the selected category
+                        context.read<MenuViewModel>().fetchMenuItemsByCategory(selectedCategoryId);
+                      }
+                    },
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                  Consumer<MenuViewModel>(
+                    builder: (context, viewModel, child) {
+                      if (viewModel.isCategoriesLoading) {
+                        return SizedBox(
+                          height: AppDimensions.responsive(context, mobile: 40, tablet: 50),
+                          child: const Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      if (viewModel.categories.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      // Show all categories
+                      final categoriesToShow = viewModel.categories;
+
+                      // Set first category as selected if none selected
+                      if (_selectedCategoryId == null && categoriesToShow.isNotEmpty) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          setState(() {
+                            _selectedCategoryId = categoriesToShow[0].id;
+                          });
+                        });
+                      }
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (int i = 0; i < categoriesToShow.length; i++) ...[
+                              CategoryChip(
+                                label: categoriesToShow[i].name,
+                                isSelected: _selectedCategoryId == categoriesToShow[i].id,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedCategoryId = categoriesToShow[i].id;
+                                  });
+                                  // Fetch menu items for the selected category
+                                  viewModel.fetchMenuItemsByCategory(categoriesToShow[i].id);
+                                },
+                              ),
+                              if (i < categoriesToShow.length - 1) 
+                                SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                            ],
+                          ],
                         ),
                       );
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(AppDimensions.spacing8),
-                      decoration: const BoxDecoration(
-                        color: AppColors.greyLight,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: AppColors.primaryAccent,
-                        size: 24,
-                      ),
-                    ),
                   ),
-                ],
-              ),
 
-              const SizedBox(height: AppDimensions.spacing24),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
-              // Featured Section
-              Text(
-                context.tr('featured'),
-                style: const TextStyle(
-                  fontSize: AppDimensions.fontSize18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkText,
-                ),
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-              
-              // Featured Carousel
-              SizedBox(
-                height: 180,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
-                  children: [
-                    FeaturedCard(
-                      title: context.tr('featured_card_title_1'),
-                      time: context.tr('featured_card_time_1'),
-                      authorName: 'Olivia',
-                      authorImage: 'assets/images/user_avatar.jpg', // Placeholder
-                      foodImage: 'assets/images/noodle_bowl.png', // Placeholder
-                      backgroundColor: AppColors.primaryAccent,
-                    ),
-                    const SizedBox(width: AppDimensions.spacing16),
-                    FeaturedCard(
-                      title: context.tr('featured_card_title_2'),
-                      time: context.tr('featured_card_time_2'),
-                      authorName: 'Olivia',
-                      authorImage: 'assets/images/user_avatar.jpg',
-                      foodImage: 'assets/images/salad_bowl.png',
-                      backgroundColor: AppColors.success,
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: AppDimensions.spacing24),
-
-              // Category Section
-              SectionHeader(
-                title: context.tr('category'),
-                onSeeAll: () async {
-                  final selectedCategoryId = await Navigator.of(context).push<int?>(
-                    MaterialPageRoute(
-                      builder: (_) => CategoryScreen(
-                        branchId: widget.branchId,
-                        initialSelectedCategoryId: _selectedCategoryId,
-                      ),
-                    ),
-                  );
+                  // Popular Recipes Section
+                  SectionHeader(title: context.tr('popular_recipes'), onSeeAll: () {}),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                   
-                  // Update selected category if user selected one
-                  if (selectedCategoryId != null && mounted) {
-                    setState(() {
-                      _selectedCategoryId = selectedCategoryId;
-                    });
-                    // Fetch menu items for the selected category
-                    context.read<MenuViewModel>().fetchMenuItemsByCategory(selectedCategoryId);
-                  }
-                },
-              ),
-              const SizedBox(height: AppDimensions.spacing12),
-              Consumer<MenuViewModel>(
-                builder: (context, viewModel, child) {
-                  if (viewModel.isCategoriesLoading) {
-                    return const SizedBox(
-                      height: 40,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
+                  Consumer<MenuViewModel>(
+                    builder: (context, viewModel, child) {
+                      if (viewModel.isMenuItemsLoading) {
+                        return SizedBox(
+                          height: AppDimensions.responsive(context, mobile: 200, tablet: 250),
+                          child: const Center(child: CircularProgressIndicator()),
+                        );
+                      }
 
-                  if (viewModel.categories.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-
-                  // Show all categories
-                  final categoriesToShow = viewModel.categories;
-
-                  // Set first category as selected if none selected
-                  if (_selectedCategoryId == null && categoriesToShow.isNotEmpty) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      setState(() {
-                        _selectedCategoryId = categoriesToShow[0].id;
-                      });
-                    });
-                  }
-
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        for (int i = 0; i < categoriesToShow.length; i++) ...[
-                          CategoryChip(
-                            label: categoriesToShow[i].name,
-                            isSelected: _selectedCategoryId == categoriesToShow[i].id,
-                            onTap: () {
-                              setState(() {
-                                _selectedCategoryId = categoriesToShow[i].id;
-                              });
-                              // Fetch menu items for the selected category
-                              viewModel.fetchMenuItemsByCategory(categoriesToShow[i].id);
-                            },
-                          ),
-                          if (i < categoriesToShow.length - 1) const SizedBox(width: AppDimensions.spacing12),
-                        ],
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              const SizedBox(height: AppDimensions.spacing24),
-
-              // Popular Recipes Section
-              SectionHeader(title: context.tr('popular_recipes'), onSeeAll: () {}),
-              const SizedBox(height: AppDimensions.spacing16),
-              
-              Consumer<MenuViewModel>(
-                builder: (context, viewModel, child) {
-                  if (viewModel.isMenuItemsLoading) {
-                    return const SizedBox(
-                      height: 200,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
-
-                  if (viewModel.menuItemsError != null) {
-                    return SizedBox(
-                      height: 200,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
-                            const SizedBox(height: AppDimensions.spacing8),
-                            Text(
-                              viewModel.menuItemsError!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: AppColors.grey600),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (viewModel.menuItems.isEmpty) {
-                    return SizedBox(
-                      height: 200,
-                      child: Center(
-                        child: Text(context.tr('no_menu_items')),
-                      ),
-                    );
-                  }
-
-                  // Show first 2 menu items
-                  final itemsToShow = viewModel.menuItems.take(2).toList();
-
-                  return Row(
-                    children: [
-                      for (int i = 0; i < itemsToShow.length; i++) ...[
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MenuItemDetailScreen(
-                                    menuItemId: itemsToShow[i].id,
+                      if (viewModel.menuItemsError != null) {
+                        return SizedBox(
+                          height: AppDimensions.responsive(context, mobile: 200, tablet: 250),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.error_outline,
+                                  size: AppDimensions.responsiveIconSize(context, mobile: 48, tablet: 60),
+                                  color: AppColors.grey,
+                                ),
+                                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                                Text(
+                                  viewModel.menuItemsError!,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColors.grey600,
+                                    fontSize: AppDimensions.getSmallSize(context),
                                   ),
                                 ),
-                              );
-                            },
-                            child: RecipeCard(
-                              title: itemsToShow[i].name,
-                              price: '${context.tr('from')} ${currencyProvider.formatPrice(double.tryParse(itemsToShow[i].price.toString()) ?? 0)}',
-                              image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
-                                menuItemId: itemsToShow[i].id,
-                              isFavorite: viewModel.isFavorite(itemsToShow[i].id),
-                              onFavoriteTap: () async {
-                                // Verify status first as requested
-                                await viewModel.checkFavoriteStatus(itemsToShow[i].id);
-                                
-                                if (!context.mounted) return;
-                                
-                                final message = await viewModel.toggleFavorite(itemsToShow[i].id);
-                                if (context.mounted && message != null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(message),
-                                      backgroundColor: viewModel.favoritesError != null 
-                                          ? AppColors.error 
-                                          : AppColors.primaryAccent,
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              },
+                              ],
                             ),
                           ),
-                        ),
-                        if (i < itemsToShow.length - 1) const SizedBox(width: AppDimensions.spacing16),
-                      ],
-                    ],
-                  );
-                },
+                        );
+                      }
+
+                      if (viewModel.menuItems.isEmpty) {
+                        return SizedBox(
+                          height: AppDimensions.responsive(context, mobile: 200, tablet: 250),
+                          child: Center(
+                            child: Text(
+                              context.tr('no_menu_items'),
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodySize(context),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      // Show first 2 menu items
+                      final itemsToShow = viewModel.menuItems.take(2).toList();
+
+                      return Row(
+                        children: [
+                          for (int i = 0; i < itemsToShow.length; i++) ...[
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => MenuItemDetailScreen(
+                                        menuItemId: itemsToShow[i].id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: RecipeCard(
+                                  title: itemsToShow[i].name,
+                                  price: '${context.tr('from')} ${currencyProvider.formatPrice(double.tryParse(itemsToShow[i].price.toString()) ?? 0)}',
+                                  image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
+                                    menuItemId: itemsToShow[i].id,
+                                  isFavorite: viewModel.isFavorite(itemsToShow[i].id),
+                                  onFavoriteTap: () async {
+                                    // Verify status first as requested
+                                    await viewModel.checkFavoriteStatus(itemsToShow[i].id);
+                                    
+                                    if (!context.mounted) return;
+                                    
+                                    final message = await viewModel.toggleFavorite(itemsToShow[i].id);
+                                    if (context.mounted && message != null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(message),
+                                          backgroundColor: viewModel.favoritesError != null 
+                                              ? AppColors.error 
+                                              : AppColors.primaryAccent,
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            if (i < itemsToShow.length - 1) 
+                              SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                          ],
+                        ],
+                      );
+                    },
+                  ),
+                  // Sub bottom padding for better scroll feel above bottom nav
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
+                ],
               ),
-              // Sub bottom padding for better scroll feel above bottom nav
-               const SizedBox(height: AppDimensions.spacing20),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
-
-

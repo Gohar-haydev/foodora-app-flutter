@@ -14,54 +14,63 @@ class NotificationScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           context.tr('notifications_title'),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
-            fontSize: AppDimensions.fontSize18,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(AppDimensions.spacing24),
-        children: [
-          // Today Section
-          _buildSectionHeader(context, context.tr('today'), () {}),
-          const SizedBox(height: AppDimensions.spacing16),
-          _NotificationCard(
-            type: NotificationType.delivery,
-            title: context.tr('order_delivered'),
-            description: context.tr('order_delivered_desc'),
-            time: '1h',
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
           ),
-          const SizedBox(height: AppDimensions.spacing16),
-          _NotificationCard(
-            type: NotificationType.cancel,
-            title: context.tr('order_cancelled'),
-            description: context.tr('order_cancelled_desc'),
-            time: '3h',
-          ),
+          child: ListView(
+            padding: EdgeInsets.all(
+              AppDimensions.getResponsiveHorizontalPadding(context),
+            ),
+            children: [
+              // Today Section
+              _buildSectionHeader(context, context.tr('today'), () {}),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+              _NotificationCard(
+                type: NotificationType.delivery,
+                title: context.tr('order_delivered'),
+                description: context.tr('order_delivered_desc'),
+                time: '1h',
+              ),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+              _NotificationCard(
+                type: NotificationType.cancel,
+                title: context.tr('order_cancelled'),
+                description: context.tr('order_cancelled_desc'),
+                time: '3h',
+              ),
 
-          const SizedBox(height: AppDimensions.spacing32),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
 
-          // Yesterday Section
-          _buildSectionHeader(context, context.tr('yesterday'), () {}),
-          const SizedBox(height: AppDimensions.spacing16),
-          _NotificationCard(
-            type: NotificationType.delivery,
-            title: context.tr('order_delivered'),
-            description: context.tr('order_delivered_desc'),
-            time: '1d',
+              // Yesterday Section
+              _buildSectionHeader(context, context.tr('yesterday'), () {}),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+              _NotificationCard(
+                type: NotificationType.delivery,
+                title: context.tr('order_delivered'),
+                description: context.tr('order_delivered_desc'),
+                time: '1d',
+              ),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+              _NotificationCard(
+                type: NotificationType.cancel,
+                title: context.tr('order_cancelled'),
+                description: context.tr('order_cancelled_desc'),
+                time: '1d',
+              ),
+              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+            ],
           ),
-          const SizedBox(height: AppDimensions.spacing16),
-          _NotificationCard(
-            type: NotificationType.cancel,
-            title: context.tr('order_cancelled'),
-            description: context.tr('order_cancelled_desc'),
-            time: '1d',
-          ),
-          const SizedBox(height: AppDimensions.spacing24),
-        ],
+        ),
       ),
     );
   }
@@ -72,8 +81,8 @@ class NotificationScreen extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: AppDimensions.fontSize16,
+          style: TextStyle(
+            fontSize: AppDimensions.getBodySize(context),
             fontWeight: FontWeight.w600,
             color: AppColors.grey,
           ),
@@ -82,8 +91,8 @@ class NotificationScreen extends StatelessWidget {
           onTap: onMarkRead,
           child: Text(
             context.tr('mark_all_read'),
-            style: const TextStyle(
-              fontSize: AppDimensions.fontSize14,
+            style: TextStyle(
+              fontSize: AppDimensions.getSmallSize(context),
               fontWeight: FontWeight.w500,
               color: AppColors.primaryAccent, // Green color
             ),
@@ -112,7 +121,9 @@ class _NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.spacing16),
+      padding: EdgeInsets.all(
+        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -129,7 +140,9 @@ class _NotificationCard extends StatelessWidget {
         children: [
           // Icon
           Container(
-            padding: const EdgeInsets.all(AppDimensions.spacing12),
+            padding: EdgeInsets.all(
+              AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16),
+            ),
             decoration: BoxDecoration(
               color: type == NotificationType.delivery
                   ? AppColors.successLight // Light green
@@ -143,10 +156,10 @@ class _NotificationCard extends StatelessWidget {
               color: type == NotificationType.delivery
                   ? AppColors.primaryAccent
                   : AppColors.error,
-              size: 24,
+              size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
             ),
           ),
-          const SizedBox(width: AppDimensions.spacing16),
+          SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
           
           // Content
           Expanded(
@@ -158,16 +171,16 @@ class _NotificationCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: AppDimensions.fontSize16,
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodySize(context),
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryText,
                       ),
                     ),
                     Text(
                       time,
-                      style: const TextStyle(
-                        fontSize: AppDimensions.fontSize12,
+                      style: TextStyle(
+                        fontSize: AppDimensions.responsive(context, mobile: 12, tablet: 14),
                         color: AppColors.grey,
                       ),
                     ),
@@ -176,8 +189,8 @@ class _NotificationCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: TextStyle(
+                    fontSize: AppDimensions.getSmallSize(context),
                     color: AppColors.grey,
                     height: 1.4,
                   ),

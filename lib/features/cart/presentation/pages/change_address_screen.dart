@@ -192,145 +192,171 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: Text(context.tr('change_address_title')),
+        title: Text(
+          context.tr('change_address_title'),
+          style: TextStyle(
+            fontSize: AppDimensions.getH3Size(context),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimensions.spacing24),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Use Current Location Button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton.icon(
-                  onPressed: _isLoadingLocation ? null : _getCurrentLocation,
-                  icon: _isLoadingLocation
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
-                          ),
-                        )
-                      : const Icon(Icons.my_location, size: 20),
-                  label: Text(
-                    _isLoadingLocation ? context.tr('fetching_location') : context.tr('use_current_location'),
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.primaryAccent,
-                    side: const BorderSide(color: AppColors.primaryAccent, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppDimensions.spacing24),
-
-              // Street Address
-              _buildTextField(
-                controller: _streetController,
-                label: context.tr('street_address'),
-                hint: context.tr('street_address_hint'),
-                icon: Icons.location_on_outlined,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return context.tr('please_enter_street_address');
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-
-              // City
-              _buildTextField(
-                controller: _cityController,
-                label: context.tr('city'),
-                hint: context.tr('city_hint'),
-                icon: Icons.location_city,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return context.tr('please_enter_city');
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-
-              // State and ZIP in a row
-              Row(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(
+              AppDimensions.getResponsiveHorizontalPadding(context),
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: _buildTextField(
-                      controller: _stateController,
-                      label: context.tr('state_province'),
-                      hint: context.tr('state_hint'),
-                      icon: Icons.map_outlined,
+                  // Use Current Location Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: AppDimensions.getInputHeight(context),
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoadingLocation ? null : _getCurrentLocation,
+                      icon: _isLoadingLocation
+                          ? SizedBox(
+                              width: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              height: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
+                              ),
+                            )
+                          : Icon(
+                              Icons.my_location,
+                              size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                            ),
+                      label: Text(
+                        _isLoadingLocation ? context.tr('fetching_location') : context.tr('use_current_location'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.primaryAccent,
+                        side: const BorderSide(color: AppColors.primaryAccent, width: 1.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: AppDimensions.spacing12),
-                  Expanded(
-                    child: _buildTextField(
-                      controller: _zipController,
-                      label: context.tr('zip_code'),
-                      hint: context.tr('zip_hint'),
-                      icon: Icons.pin_outlined,
-                      keyboardType: TextInputType.number,
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                  // Street Address
+                  _buildTextField(
+                    context: context,
+                    controller: _streetController,
+                    label: context.tr('street_address'),
+                    hint: context.tr('street_address_hint'),
+                    icon: Icons.location_on_outlined,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return context.tr('please_enter_street_address');
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // City
+                  _buildTextField(
+                    context: context,
+                    controller: _cityController,
+                    label: context.tr('city'),
+                    hint: context.tr('city_hint'),
+                    icon: Icons.location_city,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return context.tr('please_enter_city');
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // State and ZIP in a row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          context: context,
+                          controller: _stateController,
+                          label: context.tr('state_province'),
+                          hint: context.tr('state_hint'),
+                          icon: Icons.map_outlined,
+                        ),
+                      ),
+                      SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                      Expanded(
+                        child: _buildTextField(
+                          context: context,
+                          controller: _zipController,
+                          label: context.tr('zip_code'),
+                          hint: context.tr('zip_hint'),
+                          icon: Icons.pin_outlined,
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+
+                  // Country
+                  _buildTextField(
+                    context: context,
+                    controller: _countryController,
+                    label: context.tr('country'),
+                    hint: context.tr('country_hint'),
+                    icon: Icons.public,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return context.tr('please_enter_country');
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                  // Save Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: AppDimensions.getButtonHeight(context),
+                    child: ElevatedButton(
+                      onPressed: _saveAddress,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryAccent,
+                        foregroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: Text(
+                        context.tr('save_address_button'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppDimensions.spacing16),
-
-              // Country
-              _buildTextField(
-                controller: _countryController,
-                label: context.tr('country'),
-                hint: context.tr('country_hint'),
-                icon: Icons.public,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return context.tr('please_enter_country');
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: AppDimensions.spacing32),
-
-              // Save Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _saveAddress,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryAccent,
-                    foregroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: Text(
-                    context.tr('save_address_button'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -338,6 +364,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   }
 
   Widget _buildTextField({
+    required BuildContext context,
     required TextEditingController controller,
     required String label,
     required String hint,
@@ -350,20 +377,27 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: AppDimensions.fontSize14,
+          style: TextStyle(
+            fontSize: AppDimensions.getSmallSize(context),
             fontWeight: FontWeight.w600,
             color: AppColors.black87,
           ),
         ),
-        const SizedBox(height: AppDimensions.spacing8),
+        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
         TextFormField(
           controller: controller,
           validator: validator,
           keyboardType: keyboardType,
+          style: TextStyle(
+            fontSize: AppDimensions.getBodySize(context),
+          ),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon, color: AppColors.primaryAccent, size: 20),
+            prefixIcon: Icon(
+              icon,
+              color: AppColors.primaryAccent,
+              size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+            ),
             filled: true,
             fillColor: AppColors.grey50,
             border: OutlineInputBorder(
@@ -386,7 +420,10 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
               borderRadius: BorderRadius.circular(AppDimensions.spacing12),
               borderSide: const BorderSide(color: AppColors.error, width: 2),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing16, vertical: AppDimensions.fontSize14),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+              vertical: AppDimensions.responsiveSpacing(context, mobile: 14, tablet: 18),
+            ),
           ),
         ),
       ],

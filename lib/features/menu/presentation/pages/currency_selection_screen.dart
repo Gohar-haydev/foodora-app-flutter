@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/providers/currency_provider.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
+import 'package:foodora/core/constants/app_constants.dart';
 
 class CurrencySelectionScreen extends StatelessWidget {
   const CurrencySelectionScreen({super.key});
@@ -15,9 +16,9 @@ class CurrencySelectionScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.tr('select_currency'),
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -25,38 +26,51 @@ class CurrencySelectionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            _CurrencyOption(
-              currencyName: context.tr('krones'),
-              currencyCode: 'SEK',
-              symbol: 'kr',
-              isSelected: currencyProvider.currencyCode == 'SEK',
-              onTap: () => currencyProvider.setCurrency('SEK'),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(
+              AppDimensions.getResponsiveHorizontalPadding(context),
             ),
-            const SizedBox(height: 16),
-            _CurrencyOption(
-              currencyName: 'US Dollar',
-              currencyCode: 'USD',
-              symbol: '\$',
-              isSelected: currencyProvider.currencyCode == 'USD',
-              onTap: () => currencyProvider.setCurrency('USD'),
+            child: Column(
+              children: [
+                _CurrencyOption(
+                  currencyName: context.tr('krones'),
+                  currencyCode: 'SEK',
+                  symbol: 'kr',
+                  isSelected: currencyProvider.currencyCode == 'SEK',
+                  onTap: () => currencyProvider.setCurrency('SEK'),
+                ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                _CurrencyOption(
+                  currencyName: 'US Dollar',
+                  currencyCode: 'USD',
+                  symbol: '\$',
+                  isSelected: currencyProvider.currencyCode == 'USD',
+                  onTap: () => currencyProvider.setCurrency('USD'),
+                ),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                _CurrencyOption(
+                  currencyName: 'Euro',
+                  currencyCode: 'EUR',
+                  symbol: '€',
+                  isSelected: currencyProvider.currencyCode == 'EUR',
+                  onTap: () => currencyProvider.setCurrency('EUR'),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            _CurrencyOption(
-              currencyName: 'Euro',
-              currencyCode: 'EUR',
-              symbol: '€',
-              isSelected: currencyProvider.currencyCode == 'EUR',
-              onTap: () => currencyProvider.setCurrency('EUR'),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -84,7 +98,9 @@ class _CurrencyOption extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(
+          AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 24),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFE8F5E9) : Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -104,8 +120,8 @@ class _CurrencyOption extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 50,
-              height: 50,
+              width: AppDimensions.responsive(context, mobile: 50, tablet: 60),
+              height: AppDimensions.responsive(context, mobile: 50, tablet: 60),
               decoration: BoxDecoration(
                 color: isSelected ? Colors.white : Colors.grey[100],
                 shape: BoxShape.circle,
@@ -114,14 +130,14 @@ class _CurrencyOption extends StatelessWidget {
                 child: Text(
                   symbol,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: AppDimensions.getH2Size(context),
                     fontWeight: FontWeight.bold,
                     color: isSelected ? const Color(0xFF4CAF50) : Colors.black54,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +145,7 @@ class _CurrencyOption extends StatelessWidget {
                   Text(
                     currencyName,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: AppDimensions.getH3Size(context),
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                       color: isSelected ? const Color(0xFF4CAF50) : Colors.black87,
                     ),
@@ -137,7 +153,7 @@ class _CurrencyOption extends StatelessWidget {
                   Text(
                     currencyCode,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: AppDimensions.getSmallSize(context),
                       color: Colors.grey[600],
                     ),
                   ),
@@ -145,10 +161,10 @@ class _CurrencyOption extends StatelessWidget {
               ),
             ),
             if (isSelected)
-              const Icon(
+              Icon(
                 Icons.check_circle,
-                color: Color(0xFF4CAF50),
-                size: 28,
+                color: const Color(0xFF4CAF50),
+                size: AppDimensions.responsiveIconSize(context, mobile: 28, tablet: 32),
               ),
           ],
         ),

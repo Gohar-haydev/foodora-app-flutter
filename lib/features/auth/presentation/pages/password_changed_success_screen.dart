@@ -12,68 +12,78 @@ class PasswordChangedSuccessScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            const AuthHeader(
-              title: AppStrings.forgotPasswordTitle,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(flex: 2),
-                    
-                    // Success Icon
-                    const SuccessIcon(),
-                    
-                    const SizedBox(height: AppDimensions.spacing32),
-                    
-                    const Text(
-                      AppStrings.passwordChangedTitle,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: AppDimensions.spacing24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryText,
-                      ),
-                    ),
-                    
-                    const SizedBox(height: AppDimensions.spacing12),
-                    
-                    const Text(
-                      AppStrings.passwordChangedSubtitle,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: AppDimensions.fontSize16,
-                        color: AppColors.grey,
-                        height: 1.5,
-                      ),
-                    ),
-                    
-                    const Spacer(flex: 3),
-                    
-                    SizedBox(
-                      width: double.infinity,
-                      child: PrimaryButton(
-                        text: AppStrings.backToLogin,
-                        onPressed: () {
-                           Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (_) => const LoginScreen()),
-                            (route) => false,
-                          );
-                        },
-                      ),
-                    ),
-                    
-                    const Spacer(flex: 1),
-                  ],
+            child: Column(
+              children: [
+                const AuthHeader(
+                  title: AppStrings.forgotPasswordTitle,
                 ),
-              ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 2),
+                        
+                        // Success Icon
+                        const SuccessIcon(),
+                        
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+                        
+                        Text(
+                          AppStrings.passwordChangedTitle,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: AppDimensions.getH2Size(context),
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryText,
+                          ),
+                        ),
+                        
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                        
+                        Text(
+                          AppStrings.passwordChangedSubtitle,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: AppDimensions.getBodySize(context),
+                            color: AppColors.grey,
+                            height: 1.5,
+                          ),
+                        ),
+                        
+                        const Spacer(flex: 3),
+                        
+                        SizedBox(
+                          width: double.infinity,
+                          child: PrimaryButton(
+                            text: AppStrings.backToLogin,
+                            height: AppDimensions.getButtonHeight(context),
+                            onPressed: () {
+                               Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                                (route) => false,
+                              );
+                            },
+                          ),
+                        ),
+                        
+                        const Spacer(flex: 1),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

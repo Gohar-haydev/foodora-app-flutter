@@ -55,156 +55,176 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppColors.primaryText,
+            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           context.tr('my_favorites'),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
-            fontSize: AppDimensions.fontSize18,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
       ),
-      body: Consumer<MenuViewModel>(
-        builder: (context, viewModel, child) {
-          // Loading state
-          if (viewModel.isFavoritesLoading && viewModel.favoriteItems.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
-              ),
-            );
-          }
-
-          // Error state
-          if (viewModel.favoritesListError != null && viewModel.favoriteItems.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: AppColors.grey),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(
-                    viewModel.favoritesListError!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: AppColors.grey600),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Consumer<MenuViewModel>(
+            builder: (context, viewModel, child) {
+              // Loading state
+              if (viewModel.isFavoritesLoading && viewModel.favoriteItems.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
                   ),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  ElevatedButton(
-                    onPressed: () => viewModel.fetchFavoritesList(page: 1),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryAccent,
-                      foregroundColor: AppColors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                );
+              }
+
+              // Error state
+              if (viewModel.favoritesListError != null && viewModel.favoriteItems.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 48, tablet: 60),
+                        color: AppColors.grey,
                       ),
-                    ),
-                    child: Text(context.tr('retry')),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Empty state
-          if (viewModel.favoriteItems.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.favorite_border,
-                    size: 80,
-                    color: AppColors.grey300,
-                  ),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(
-                    context.tr('no_favorites_yet'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.grey600,
-                    ),
-                  ),
-                  const SizedBox(height: AppDimensions.spacing8),
-                  Text(
-                    context.tr('start_adding_favorites'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize14,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // Favorites list with pull to refresh
-          return RefreshIndicator(
-            onRefresh: _onRefresh,
-            color: AppColors.primaryAccent,
-            child: GridView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(AppDimensions.spacing16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: AppDimensions.spacing16,
-                mainAxisSpacing: AppDimensions.spacing16,
-                childAspectRatio: 0.75,
-              ),
-              itemCount: viewModel.favoriteItems.length + (viewModel.hasFavoritesMore ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index >= viewModel.favoriteItems.length) {
-                  // Loading indicator for pagination
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
-                      ),
-                    ),
-                  );
-                }
-
-                final item = viewModel.favoriteItems[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => MenuItemDetailScreen(
-                          menuItemId: item.id,
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                      Text(
+                        viewModel.favoritesListError!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.grey600,
+                          fontSize: AppDimensions.getBodySize(context),
                         ),
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                      ElevatedButton(
+                        onPressed: () => viewModel.fetchFavoritesList(page: 1),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryAccent,
+                          foregroundColor: AppColors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(context.tr('retry')),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // Empty state
+              if (viewModel.favoriteItems.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.favorite_border,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 80, tablet: 100),
+                        color: AppColors.grey300,
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                      Text(
+                        context.tr('no_favorites_yet'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getH3Size(context),
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey600,
+                        ),
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                      Text(
+                        context.tr('start_adding_favorites'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getSmallSize(context),
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // Favorites list with pull to refresh
+              return RefreshIndicator(
+                onRefresh: _onRefresh,
+                color: AppColors.primaryAccent,
+                child: GridView.builder(
+                  controller: _scrollController,
+                  padding: EdgeInsets.all(
+                    AppDimensions.getResponsiveHorizontalPadding(context),
+                  ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: AppDimensions.getGridColumns(context),
+                    crossAxisSpacing: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                    mainAxisSpacing: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                    childAspectRatio: 0.75,
+                  ),
+                  itemCount: viewModel.favoriteItems.length + (viewModel.hasFavoritesMore ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index >= viewModel.favoriteItems.length) {
+                      // Loading indicator for pagination
+                      return const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryAccent),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final item = viewModel.favoriteItems[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => MenuItemDetailScreen(
+                              menuItemId: item.id,
+                            ),
+                          ),
+                        );
+                      },
+                      child: FavoriteItemCard(
+                        item: item,
+                        onRemove: () async {
+                          final message = await viewModel.removeFromFavorites(item.id);
+                          if (context.mounted) {
+                            // Refresh the list after removing
+                            await viewModel.fetchFavoritesList(page: 1);
+                            
+                            if (message != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(message),
+                                  backgroundColor: AppColors.primaryAccent,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          }
+                        },
                       ),
                     );
                   },
-                  child: FavoriteItemCard(
-                    item: item,
-                    onRemove: () async {
-                      final message = await viewModel.removeFromFavorites(item.id);
-                      if (context.mounted) {
-                        // Refresh the list after removing
-                        await viewModel.fetchFavoritesList(page: 1);
-                        
-                        if (message != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message),
-                              backgroundColor: AppColors.primaryAccent,
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
-                );
-              },
-            ),
-          );
-        },
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

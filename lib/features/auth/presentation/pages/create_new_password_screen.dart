@@ -5,7 +5,6 @@ import 'package:foodora/core/widgets/primary_button.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
-import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 import 'package:foodora/features/auth/presentation/pages/password_changed_success_screen.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
@@ -39,9 +38,9 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
       appBar: AppBar(
         title: Text(
           context.tr('create_new_password_title'),
-           style: const TextStyle(
+           style: TextStyle(
             color: AppColors.primaryText,
-            fontSize: AppDimensions.fontSize18,
+            fontSize: AppDimensions.getH3Size(context),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -49,155 +48,167 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: AppColors.primaryText, size: 20),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: AppColors.primaryText,
+            size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                
-                Center(
-                  child: Text(
-                    context.tr('create_new_password_title'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize28,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryText,
-                      height: 1.2,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                  
+                  Center(
+                    child: Text(
+                      context.tr('create_new_password_title'),
+                      style: TextStyle(
+                        fontSize: AppDimensions.getH2Size(context),
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryText,
+                        height: 1.2,
+                      ),
                     ),
                   ),
-                ),
-                
-                const SizedBox(height: AppDimensions.spacing16),
-                
-                Center(
-                  child: Text(
-                    context.tr('enter_reset_token'),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize16,
-                      color: AppColors.grey,
-                      height: 1.5,
+                  
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  
+                  Center(
+                    child: Text(
+                      context.tr('enter_reset_token'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: AppDimensions.getBodySize(context),
+                        color: AppColors.grey,
+                        height: 1.5,
+                      ),
                     ),
                   ),
-                ),
-                
-                const SizedBox(height: 40),
+                  
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
 
-                // Token Field (Temporary/Required by API)
-                CustomTextField(
-                  controller: _tokenController,
-                  hintText: context.tr('reset_token'),
-                ),
-                
-                const SizedBox(height: AppDimensions.spacing16),
-                
-                // New Password Field
-                CustomTextField(
-                  controller: _newPasswordController,
-                  obscureText: !_newPasswordVisible,
-                  hintText: context.tr('new_password'),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _newPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.grey,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                         _newPasswordVisible = !_newPasswordVisible;
-                      });
-                    },
+                  // Token Field (Temporary/Required by API)
+                  CustomTextField(
+                    controller: _tokenController,
+                    hintText: context.tr('reset_token'),
                   ),
-                ),
-                
-                const SizedBox(height: AppDimensions.spacing16),
-                
-                // Confirm Password Field
-                CustomTextField(
-                  controller: _confirmPasswordController,
-                  obscureText: !_confirmPasswordVisible,
-                  hintText: context.tr('confirm_password'),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.grey,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                         _confirmPasswordVisible = !_confirmPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-                
-                const SizedBox(height: AppDimensions.spacing24),
-                
-                Consumer<AuthViewModel>(
-                  builder: (context, viewModel, child) {
-                    return PrimaryButton(
-                      text: context.tr('reset'),
-                      isLoading: viewModel.isLoading,
-                      onPressed: () async {
-                        final token = _tokenController.text.trim();
-                        final newPass = _newPasswordController.text;
-                        final confirmPass = _confirmPasswordController.text;
-                        final email = widget.email ?? ''; 
-
-                        if (token.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.tr('please_fill_all_fields'))),
-                          );
-                          return;
-                        }
-                        
-                        if (email.isEmpty) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.tr('email_not_found'))),
-                          );
-                          return;
-                        }
-
-                        if (newPass != confirmPass) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.tr('passwords_do_not_match'))),
-                          );
-                          return;
-                        }
-
-                        final success = await viewModel.resetPassword(
-                          otp: token,
-                          email: email,
-                          password: newPass,
-                          confirmPassword: confirmPass,
-                        );
-                        
-                        if (!mounted) return;
-
-                        if (success) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(context.tr('password_reset_success'))),
-                          );
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) => const PasswordChangedSuccessScreen()),
-                          );
-                        } else {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(viewModel.errorMessage ?? context.tr('reset_failed'))),
-                          );
-                        }
+                  
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  
+                  // New Password Field
+                  CustomTextField(
+                    controller: _newPasswordController,
+                    obscureText: !_newPasswordVisible,
+                    hintText: context.tr('new_password'),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _newPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        color: AppColors.grey,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                           _newPasswordVisible = !_newPasswordVisible;
+                        });
                       },
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  
+                  // Confirm Password Field
+                  CustomTextField(
+                    controller: _confirmPasswordController,
+                    obscureText: !_confirmPasswordVisible,
+                    hintText: context.tr('confirm_password'),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        color: AppColors.grey,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                           _confirmPasswordVisible = !_confirmPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                  
+                  Consumer<AuthViewModel>(
+                    builder: (context, viewModel, child) {
+                      return PrimaryButton(
+                        text: context.tr('reset'),
+                        isLoading: viewModel.isLoading,
+                        height: AppDimensions.getButtonHeight(context),
+                        onPressed: () async {
+                          final token = _tokenController.text.trim();
+                          final newPass = _newPasswordController.text;
+                          final confirmPass = _confirmPasswordController.text;
+                          final email = widget.email ?? ''; 
+
+                          if (token.isEmpty || newPass.isEmpty || confirmPass.isEmpty) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(context.tr('please_fill_all_fields'))),
+                            );
+                            return;
+                          }
+                          
+                          if (email.isEmpty) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(context.tr('email_not_found'))),
+                            );
+                            return;
+                          }
+
+                          if (newPass != confirmPass) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(context.tr('passwords_do_not_match'))),
+                            );
+                            return;
+                          }
+
+                          final success = await viewModel.resetPassword(
+                            otp: token,
+                            email: email,
+                            password: newPass,
+                            confirmPassword: confirmPass,
+                          );
+                          
+                          if (!mounted) return;
+
+                          if (success) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(context.tr('password_reset_success'))),
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (_) => const PasswordChangedSuccessScreen()),
+                            );
+                          } else {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(viewModel.errorMessage ?? context.tr('reset_failed'))),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

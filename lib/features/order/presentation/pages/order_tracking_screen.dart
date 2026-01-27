@@ -19,16 +19,21 @@ class OrderTrackingScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           context.tr('track_order'),
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
             fontWeight: FontWeight.w600,
+            fontSize: AppDimensions.getH3Size(context),
           ),
         ),
         centerTitle: true,
         backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppColors.primaryText,
+            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -46,13 +51,20 @@ class OrderTrackingScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.error_outline, size: 48, color: AppColors.error),
-                      const SizedBox(height: AppDimensions.spacing16),
+                      Icon(
+                        Icons.error_outline,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 48, tablet: 60),
+                        color: AppColors.error,
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                       Text(
                         viewModel.errorMessage!,
-                        style: const TextStyle(color: AppColors.error),
+                        style: TextStyle(
+                          color: AppColors.error,
+                          fontSize: AppDimensions.getBodySize(context),
+                        ),
                       ),
-                      const SizedBox(height: AppDimensions.spacing16),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                       ElevatedButton(
                         onPressed: () => viewModel.trackOrder(orderId),
                         child: Text(context.tr('retry')),
@@ -64,183 +76,213 @@ class OrderTrackingScreen extends StatelessWidget {
 
               final trackingData = viewModel.orderTracking;
               if (trackingData == null) {
-                return Center(child: Text(context.tr('no_tracking_data')));
+                return Center(
+                  child: Text(
+                    context.tr('no_tracking_data'),
+                    style: TextStyle(
+                      fontSize: AppDimensions.getBodySize(context),
+                    ),
+                  ),
+                );
               }
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(AppDimensions.spacing24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Order Number and Status
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            '${context.tr('order_number')} #${trackingData.orderNumber}',
-                            style: const TextStyle(
-                              fontSize: AppDimensions.fontSize18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.spacing8),
-                          Text(
-                            trackingData.statusLabel,
-                            style: const TextStyle(
-                              fontSize: AppDimensions.fontSize16,
-                              color: AppColors.primaryAccent,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+              return Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: AppDimensions.getMaxContentWidth(context),
+                  ),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(
+                      AppDimensions.getResponsiveHorizontalPadding(context),
                     ),
-                    const SizedBox(height: AppDimensions.spacing32),
-
-                    // Horizontal Stepper
-                    _buildHorizontalStepper(context, trackingData.status),
-                    
-                    const SizedBox(height: AppDimensions.spacing32),
-
-                    // Estimated Delivery or Current Status Info
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(AppDimensions.spacing16),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            context.tr('delivery_status'),
-                            style: const TextStyle(
-                              fontSize: AppDimensions.fontSize16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primaryText,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.spacing16),
-                          _buildTimelineItem(
-                            context.tr('timeline_placed'),
-                            trackingData.timeline.placedAt,
-                            isCompleted: trackingData.timeline.placedAt != null,
-                            isLast: false,
-                          ),
-                          _buildTimelineItem(
-                            context.tr('status_confirmed'),
-                            trackingData.timeline.confirmedAt,
-                            isCompleted: trackingData.timeline.confirmedAt != null,
-                            isLast: false,
-                          ),
-                          _buildTimelineItem(
-                            context.tr('status_preparing'),
-                            trackingData.timeline.preparingAt,
-                            isCompleted: trackingData.timeline.preparingAt != null,
-                            isLast: false,
-                          ),
-                          _buildTimelineItem(
-                            context.tr('status_ready'),
-                            trackingData.timeline.readyAt,
-                            isCompleted: trackingData.timeline.readyAt != null,
-                            isLast: false,
-                          ),
-                          _buildTimelineItem(
-                            trackingData.deliveryType == 'pickup' ? context.tr('timeline_ready_pickup') : context.tr('status_out_for_delivery'),
-                            trackingData.deliveryType == 'pickup' ? trackingData.timeline.readyAt : null, // Logic might differ
-                            isCompleted: trackingData.status == 'delivered' || trackingData.status == 'out_for_delivery',
-                            isLast: false,
-                          ),
-                          _buildTimelineItem(
-                            context.tr('status_delivered'),
-                            trackingData.timeline.deliveredAt,
-                            isCompleted: trackingData.timeline.deliveredAt != null,
-                            isLast: true,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                     const SizedBox(height: AppDimensions.spacing24),
-
-                    // Branch Info
-                    Text(
-                      context.tr('branch_information'),
-                      style: const TextStyle(
-                        fontSize: AppDimensions.fontSize18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: AppDimensions.spacing12),
-                    Container(
-                      padding: const EdgeInsets.all(AppDimensions.spacing16),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                           Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.successLight,
-                              borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                              image: trackingData.branch.imageUrl != null
-                                  ? DecorationImage(
-                                      image: NetworkImage(trackingData.branch.imageUrl!),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : null,
-                            ),
-                            child: trackingData.branch.imageUrl == null
-                                ? const Icon(Icons.store, color: AppColors.primaryAccent)
-                                : null,
-                          ),
-                          const SizedBox(width: AppDimensions.spacing16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  trackingData.branch.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: AppDimensions.fontSize16,
-                                  ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Order Number and Status
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                '${context.tr('order_number')} #${trackingData.orderNumber}',
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getH3Size(context),
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                if (trackingData.branch.address != null) ...[
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    trackingData.branch.address!,
-                                    style: const TextStyle(
-                                      color: AppColors.grey600,
-                                      fontSize: AppDimensions.fontSize14,
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                              Text(
+                                trackingData.statusLabel,
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getBodySize(context),
+                                  color: AppColors.primaryAccent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                        // Horizontal Stepper
+                        _buildHorizontalStepper(context, trackingData.status),
+                        
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                        // Estimated Delivery or Current Status Info
+                        Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(
+                            AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primaryText.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                context.tr('delivery_status'),
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getBodySize(context),
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primaryText,
+                                ),
+                              ),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                              _buildTimelineItem(
+                                context,
+                                context.tr('timeline_placed'),
+                                trackingData.timeline.placedAt,
+                                isCompleted: trackingData.timeline.placedAt != null,
+                                isLast: false,
+                              ),
+                              _buildTimelineItem(
+                                context,
+                                context.tr('status_confirmed'),
+                                trackingData.timeline.confirmedAt,
+                                isCompleted: trackingData.timeline.confirmedAt != null,
+                                isLast: false,
+                              ),
+                              _buildTimelineItem(
+                                context,
+                                context.tr('status_preparing'),
+                                trackingData.timeline.preparingAt,
+                                isCompleted: trackingData.timeline.preparingAt != null,
+                                isLast: false,
+                              ),
+                              _buildTimelineItem(
+                                context,
+                                context.tr('status_ready'),
+                                trackingData.timeline.readyAt,
+                                isCompleted: trackingData.timeline.readyAt != null,
+                                isLast: false,
+                              ),
+                              _buildTimelineItem(
+                                context,
+                                trackingData.deliveryType == 'pickup' ? context.tr('timeline_ready_pickup') : context.tr('status_out_for_delivery'),
+                                trackingData.deliveryType == 'pickup' ? trackingData.timeline.readyAt : null, // Logic might differ
+                                isCompleted: trackingData.status == 'delivered' || trackingData.status == 'out_for_delivery',
+                                isLast: false,
+                              ),
+                              _buildTimelineItem(
+                                context,
+                                context.tr('status_delivered'),
+                                trackingData.timeline.deliveredAt,
+                                isCompleted: trackingData.timeline.deliveredAt != null,
+                                isLast: true,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                        // Branch Info
+                        Text(
+                          context.tr('branch_information'),
+                          style: TextStyle(
+                            fontSize: AppDimensions.getH3Size(context),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                        Container(
+                          padding: EdgeInsets.all(
+                            AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primaryText.withOpacity(0.05),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                               Container(
+                                width: AppDimensions.responsive(context, mobile: 50, tablet: 60),
+                                height: AppDimensions.responsive(context, mobile: 50, tablet: 60),
+                                decoration: BoxDecoration(
+                                  color: AppColors.successLight,
+                                  borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                                  image: trackingData.branch.imageUrl != null
+                                      ? DecorationImage(
+                                          image: NetworkImage(trackingData.branch.imageUrl!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                child: trackingData.branch.imageUrl == null
+                                    ? Icon(
+                                        Icons.store,
+                                        color: AppColors.primaryAccent,
+                                        size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                                      )
+                                    : null,
+                              ),
+                              SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      trackingData.branch.name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: AppDimensions.getBodySize(context),
+                                      ),
+                                    ),
+                                    if (trackingData.branch.address != null) ...[
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        trackingData.branch.address!,
+                                        style: TextStyle(
+                                          color: AppColors.grey600,
+                                          fontSize: AppDimensions.getSmallSize(context),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             },
@@ -275,8 +317,8 @@ class OrderTrackingScreen extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    width: 30,
-                    height: 30,
+                    width: AppDimensions.responsive(context, mobile: 30, tablet: 36),
+                    height: AppDimensions.responsive(context, mobile: 30, tablet: 36),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isCompleted ? AppColors.primaryAccent : AppColors.grey300,
@@ -284,14 +326,14 @@ class OrderTrackingScreen extends StatelessWidget {
                     child: Icon(
                       _getStepIcon(steps[index]),
                       color: AppColors.white,
-                      size: 16,
+                      size: AppDimensions.responsiveIconSize(context, mobile: 16, tablet: 20),
                     ),
                   ),
-                  const SizedBox(height: AppDimensions.spacing8),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
                   Text(
                     labels[index],
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: AppDimensions.responsive(context, mobile: 10, tablet: 12),
                       fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal,
                       color: isCompleted ? AppColors.primaryText : AppColors.grey,
                     ),
@@ -326,15 +368,15 @@ class OrderTrackingScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildTimelineItem(String title, DateTime? time, {required bool isCompleted, required bool isLast}) {
+  Widget _buildTimelineItem(BuildContext context, String title, DateTime? time, {required bool isCompleted, required bool isLast}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
           children: [
             Container(
-              width: 12,
-              height: 12,
+              width: AppDimensions.responsive(context, mobile: 12, tablet: 16),
+              height: AppDimensions.responsive(context, mobile: 12, tablet: 16),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isCompleted ? AppColors.primaryAccent : AppColors.grey300,
@@ -343,12 +385,12 @@ class OrderTrackingScreen extends StatelessWidget {
             if (!isLast)
               Container(
                 width: 2,
-                height: 40,
+                height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
                 color: AppColors.grey200,
               ),
           ],
         ),
-        const SizedBox(width: AppDimensions.spacing16),
+        SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -356,7 +398,7 @@ class OrderTrackingScreen extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontSize: AppDimensions.fontSize14,
+                  fontSize: AppDimensions.getSmallSize(context),
                   fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
                   color: isCompleted ? AppColors.primaryText : AppColors.grey,
                 ),
@@ -364,8 +406,8 @@ class OrderTrackingScreen extends StatelessWidget {
               if (time != null)
                 Text(
                   DateFormat('MMM d, h:mm a').format(time),
-                  style: const TextStyle(
-                    fontSize: AppDimensions.fontSize12,
+                  style: TextStyle(
+                    fontSize: AppDimensions.responsive(context, mobile: 12, tablet: 14),
                     color: AppColors.grey,
                   ),
                 ),

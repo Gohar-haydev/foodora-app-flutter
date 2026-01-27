@@ -71,80 +71,89 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: AppDimensions.spacing16),
-              // Header with back button and title
-              AuthHeader(
-                title: context.tr('sign_in'),
-                showBackButton: false,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
               ),
-              const SizedBox(height: 40),
-              // Welcome back heading
-              Center(
-                child: Text(
-                  context.tr('welcome_back'),
-                  style: const TextStyle(
-                    fontSize: AppDimensions.fontSize32,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryText,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                  // Header with back button and title
+                  AuthHeader(
+                    title: context.tr('sign_in'),
+                    showBackButton: false,
                   ),
-                ),
-              ),
-              const SizedBox(height: 40),
-              // Email input field
-              AuthTextField(
-                controller: _emailController,
-                hintText: context.tr('email_address'),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-              // Password input field with visibility toggle
-              PasswordTextField(
-                controller: _passwordController,
-                hintText: context.tr('password_placeholder'),
-              ),
-              const SizedBox(height: AppDimensions.spacing8),
-              // Forget Password link
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => const ForgotPasswordScreen()),
-                    );
-                  },
-                  child: Text(
-                    context.tr('forgot_password'),
-                    style: const TextStyle(
-                      fontSize: AppDimensions.fontSize14,
-                      color: AppColors.primaryText,
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                  // Welcome back heading
+                  Center(
+                    child: Text(
+                      context.tr('welcome_back'),
+                      style: TextStyle(
+                        fontSize: AppDimensions.getH1Size(context),
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryText,
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                  // Email input field
+                  AuthTextField(
+                    controller: _emailController,
+                    hintText: context.tr('email_address'),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  // Password input field with visibility toggle
+                  PasswordTextField(
+                    controller: _passwordController,
+                    hintText: context.tr('password_placeholder'),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 12)),
+                  // Forget Password link
+                  Align(
+                    alignment: Alignment.center,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const ForgotPasswordScreen()),
+                        );
+                      },
+                      child: Text(
+                        context.tr('forgot_password'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          color: AppColors.primaryText,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                  // Sign In button
+                  AuthButton(
+                    text: context.tr('sign_in'),
+                    onPressed: _onLoginPressed,
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  // Bottom text links
+                  AuthBottomLink(
+                    prefixText: context.tr('dont_have_account'),
+                    linkText: context.tr('create_account'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              const SizedBox(height: AppDimensions.spacing24),
-              // Sign In button
-              AuthButton(
-                text: context.tr('sign_in'),
-                onPressed: _onLoginPressed,
-              ),
-              const SizedBox(height: AppDimensions.spacing16),
-              // Bottom text links
-              AuthBottomLink(
-                prefixText: context.tr('dont_have_account'),
-                linkText: context.tr('create_account'),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const SignupScreen()),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),

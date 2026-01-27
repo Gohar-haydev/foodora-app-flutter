@@ -145,163 +145,183 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Stack(
-          children: [
-            // Layer 1: Full-screen PageView for gestures and images
-            PageView.builder(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
-              },
-              itemCount: pages.length,
-              itemBuilder: (context, index) {
-                return Column(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
+            ),
+            child: Stack(
+              children: [
+                // Layer 1: Full-screen PageView for gestures and images
+                PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemCount: pages.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        // The sliding image part
+                        Expanded(
+                          flex: 6,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(
+                                AppDimensions.responsive(context, mobile: 30, tablet: 40),
+                              ),
+                              bottomRight: Radius.circular(
+                                AppDimensions.responsive(context, mobile: 30, tablet: 40),
+                              ),
+                            ),
+                            child: Image.asset(
+                              pages[index].image,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: AppColors.grey300,
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.image,
+                                    size: AppDimensions.responsiveIconSize(context, mobile: 50, tablet: 70),
+                                    color: AppColors.grey,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        // Empty space for the text section to allow gestures to pass if needed
+                        // (Actually PageView treats the whole area as slidable)
+                        const Expanded(flex: 5, child: SizedBox.shrink()),
+                      ],
+                    );
+                  },
+                ),
+
+                // Layer 2: Static Overlay (Indicators, Text, Buttons)
+                Column(
                   children: [
-                    // The sliding image part
+                    // Top placeholder for images (gestures pass to PageView)
                     Expanded(
                       flex: 6,
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        ),
-                        child: Image.asset(
-                          pages[index].image,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: AppColors.grey300,
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.image, size: 50, color: AppColors.grey),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    // Empty space for the text section to allow gestures to pass if needed
-                    // (Actually PageView treats the whole area as slidable)
-                    const Expanded(flex: 5, child: SizedBox.shrink()),
-                  ],
-                );
-              },
-            ),
-
-            // Layer 2: Static Overlay (Indicators, Text, Buttons)
-            Column(
-              children: [
-                // Top placeholder for images (gestures pass to PageView)
-                Expanded(
-                  flex: 6,
-                  child: Stack(
-                    children: [
-                      // Page Indicator overlay (Static but reflects state)
-                      Positioned(
-                        bottom: 30,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: List.generate(
-                                pages.length,
-                                (index) => Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 300),
-                                    width: 16,
-                                    height: 6,
-                                    decoration: BoxDecoration(
-                                      color: index == _currentPage 
-                                          ? AppColors.primaryAccent 
-                                          : AppColors.grey300,
-                                      borderRadius: BorderRadius.circular(4),
+                      child: Stack(
+                        children: [
+                          // Page Indicator overlay (Static but reflects state)
+                          Positioned(
+                            bottom: AppDimensions.responsiveSpacing(context, mobile: 30, tablet: 40),
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
+                                  vertical: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 12),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: List.generate(
+                                    pages.length,
+                                    (index) => Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: AppDimensions.responsive(context, mobile: 16, tablet: 20),
+                                        height: AppDimensions.responsive(context, mobile: 6, tablet: 8),
+                                        decoration: BoxDecoration(
+                                          color: index == _currentPage 
+                                              ? AppColors.primaryAccent 
+                                              : AppColors.grey300,
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+
+                    // Bottom Section: Static Text and Buttons
+                    Expanded(
+                      flex: 5,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          AppDimensions.getResponsiveHorizontalPadding(context),
+                        ),
+                        child: Column(
+                          children: [
+                            // Wrap text in IgnorePointer so swipes here go to the PageView behind it
+                            Expanded(
+                              child: IgnorePointer(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      pages[_currentPage].title,
+                                      style: TextStyle(
+                                        fontSize: AppDimensions.getH1Size(context),
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primaryText,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                                    Text(
+                                      pages[_currentPage].description,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: AppDimensions.getBodySize(context),
+                                        color: AppColors.grey600,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            
+                            // Buttons (Interaction kept)
+                            SizedBox(
+                              width: double.infinity,
+                              height: AppDimensions.getButtonHeight(context),
+                              child: ElevatedButton(
+                                onPressed: _nextPage,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.backgroundLight,
+                                  foregroundColor: AppColors.primaryText,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: Text(
+                                  _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
+                                  style: TextStyle(
+                                    fontSize: AppDimensions.getBodySize(context),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                // Bottom Section: Static Text and Buttons
-                Expanded(
-                  flex: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimensions.spacing24),
-                    child: Column(
-                      children: [
-                        // Wrap text in IgnorePointer so swipes here go to the PageView behind it
-                        Expanded(
-                          child: IgnorePointer(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  pages[_currentPage].title,
-                                  style: const TextStyle(
-                                    fontSize: AppDimensions.fontSize32,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primaryText,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                                const SizedBox(height: AppDimensions.spacing16),
-                                Text(
-                                  pages[_currentPage].description,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: AppDimensions.fontSize16,
-                                    color: AppColors.grey600,
-                                    height: 1.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        
-                        // Buttons (Interaction kept)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: _nextPage,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.backgroundLight,
-                              foregroundColor: AppColors.primaryText,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              _currentPage == pages.length - 1 ? context.tr('get_started') : context.tr('next'),
-                              style: const TextStyle(
-                                fontSize: AppDimensions.fontSize18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

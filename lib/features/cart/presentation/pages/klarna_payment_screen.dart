@@ -56,208 +56,245 @@ class _KlarnaPaymentScreenState extends State<KlarnaPaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Klarna Payment'),
+        title: Text(
+          'Klarna Payment',
+          style: TextStyle(
+            fontSize: AppDimensions.getH3Size(context),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          // Status indicator
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.grey[100],
-            child: Row(
-              children: [
-                Icon(
-                  _paymentComplete
-                      ? Icons.check_circle
-                      : _isProcessing
-                          ? Icons.hourglass_empty
-                          : Icons.info_outline,
-                  color: _paymentComplete
-                      ? Colors.green
-                      : _isProcessing
-                          ? Colors.orange
-                          : AppColors.primaryAccent,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    _paymentComplete
-                        ? 'Payment successful!'
-                        : _isProcessing
-                            ? 'Processing payment...'
-                            : 'Complete your payment',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: _paymentComplete ? Colors.green : Colors.black87,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
           ),
-          
-          // Mock Klarna payment interface
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Klarna logo placeholder
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFB6C1).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'KLARNA',
+          child: Column(
+            children: [
+              // Status indicator
+              Container(
+                padding: EdgeInsets.all(
+                  AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                ),
+                color: Colors.grey[100],
+                child: Row(
+                  children: [
+                    Icon(
+                      _paymentComplete
+                          ? Icons.check_circle
+                          : _isProcessing
+                              ? Icons.hourglass_empty
+                              : Icons.info_outline,
+                      color: _paymentComplete
+                          ? Colors.green
+                          : _isProcessing
+                              ? Colors.orange
+                              : AppColors.primaryAccent,
+                      size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                    ),
+                    SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    Expanded(
+                      child: Text(
+                        _paymentComplete
+                            ? 'Payment successful!'
+                            : _isProcessing
+                                ? 'Processing payment...'
+                                : 'Complete your payment',
                         style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFFFB6C1),
-                          letterSpacing: 2,
+                          fontSize: AppDimensions.getSmallSize(context),
+                          color: _paymentComplete ? Colors.green : Colors.black87,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              
+              // Mock Klarna payment interface
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(
+                    AppDimensions.getResponsiveHorizontalPadding(context),
                   ),
-                  const SizedBox(height: 32),
-                  
-                  // Payment details
-                  const Text(
-                    'Buy Now, Pay Later',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[50],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Klarna logo placeholder
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.all(
+                            AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFB6C1).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'KLARNA',
+                            style: TextStyle(
+                              fontSize: AppDimensions.getH1Size(context),
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFFFB6C1),
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+                      
+                      // Payment details
+                      Text(
+                        'Buy Now, Pay Later',
+                        style: TextStyle(
+                          fontSize: AppDimensions.getH2Size(context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                      
+                      Container(
+                        padding: EdgeInsets.all(
+                          AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Total Amount:'),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Total Amount:',
+                                  style: TextStyle(
+                                    fontSize: AppDimensions.getBodySize(context),
+                                  ),
+                                ),
+                                Text(
+                                  '\$${widget.cartViewModel.grandTotal.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    fontSize: AppDimensions.getH3Size(context),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                            const Divider(),
+                            SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
                             Text(
-                              '\$${widget.cartViewModel.grandTotal.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                              'Pay in 4 interest-free installments',
+                              style: TextStyle(
+                                fontSize: AppDimensions.getSmallSize(context),
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                            Text(
+                              '4 payments of \$${(widget.cartViewModel.grandTotal / 4).toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodySize(context),
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryAccent,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        const Divider(),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'Pay in 4 interest-free installments',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black87,
-                          ),
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                      
+                      // Mock payment info
+                      Container(
+                        padding: EdgeInsets.all(
+                          AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '4 payments of \$${(widget.cartViewModel.grandTotal / 4).toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primaryAccent,
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ],
-                    ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.blue[700],
+                              size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                            ),
+                            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                            Expanded(
+                              child: Text(
+                                'This is a demo payment screen. No real payment will be processed.',
+                                style: TextStyle(
+                                  fontSize: AppDimensions.getSmallSize(context),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  
-                  // Mock payment info
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.info_outline, color: Colors.blue[700]),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Text(
-                            'This is a demo payment screen. No real payment will be processed.',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          
-          // Pay button
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: (_isProcessing || _paymentComplete) ? null : _handlePayment,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFB6C1),
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: _isProcessing
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : Text(
-                          _paymentComplete ? 'Payment Complete ✓' : 'Pay with Klarna',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                 ),
               ),
-            ),
+              
+              // Pay button
+              Container(
+                padding: EdgeInsets.all(
+                  AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                child: SafeArea(
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: AppDimensions.getButtonHeight(context),
+                    child: ElevatedButton(
+                      onPressed: (_isProcessing || _paymentComplete) ? null : _handlePayment,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFB6C1),
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: _isProcessing
+                          ? SizedBox(
+                              height: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              width: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              child: const CircularProgressIndicator(
+                                color: Colors.black,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              _paymentComplete ? 'Payment Complete ✓' : 'Pay with Klarna',
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodySize(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

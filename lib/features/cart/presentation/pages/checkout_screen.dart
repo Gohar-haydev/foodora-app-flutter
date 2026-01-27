@@ -114,7 +114,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 topRight: Radius.circular(24),
               ),
             ),
-            padding: const EdgeInsets.all(AppDimensions.spacing24),
+            padding: EdgeInsets.all(
+              AppDimensions.getResponsiveHorizontalPadding(context),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,16 +132,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
                 Text(
                   context.tr('select_payment_method'),
-                  style: const TextStyle(
-                    fontSize: AppDimensions.fontSize18,
+                  style: TextStyle(
+                    fontSize: AppDimensions.getH3Size(context),
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryText,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
 
                 // PayPal Option
                 _buildPaymentOption(
@@ -151,7 +153,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: AppDimensions.spacing12),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
 
                 // Klarna Option
                 _buildPaymentOption(
@@ -163,7 +165,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: AppDimensions.spacing12),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
 
                 // Cash on Delivery Option
                 _buildPaymentOption(
@@ -175,7 +177,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
               ],
             ),
           ),
@@ -187,8 +189,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
           sandboxMode: true,
-          clientId: "AZu9hsdQ5-kT6IDF7ItoUjcDoc1VCtaDMRYcPO8ru7ThpAx-XiaAyVFe6Pi88opZV79aTsRuC6Dhtd1k", // Replace with actual Client ID
-          secretKey: "EMZ5tcvuia--E7MB_6YhdE0FzqrmG37HoFx8LNXv15cPLSE2z6cFxKe6AjSeEkk4rf2naO36ifAu_xgW", // Replace with actual Secret Key
+          clientId: "AZu9hsdQ5-kT6IDF7ItoUjcDoc1VCtaDMRYcPO8ru7ThpAx-XiaAyVFe6Pi88opZV79aTsRuC6Dhtd1k",
+          secretKey: "EMZ5tcvuia--E7MB_6YhdE0FzqrmG37HoFx8LNXv15cPLSE2z6cFxKe6AjSeEkk4rf2naO36ifAu_xgW",
           transactions: [
             {
               "amount": {
@@ -217,7 +219,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           note: "Contact us for any questions on your order.",
           onSuccess: (Map params) async {
             debugPrint("onSuccess: $params");
-            // Proceed to create order on backend after successful payment
             _createOrder(cartViewModel, orderViewModel);
           },
           onError: (error) {
@@ -236,7 +237,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _handleKlarnaPayment(CartViewModel cartViewModel, OrderViewModel orderViewModel) async {
-    // Show loading indicator
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -246,41 +246,35 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
 
     try {
-      // Create Klarna payment datasource
       final apiService = ApiService();
       final klarnaDataSource = KlarnaPaymentDataSource(apiService: apiService);
 
-      // Prepare order lines for Klarna
       final orderLines = cartViewModel.cartItems.map((item) {
         return {
           'name': item.menuItem.name,
           'quantity': item.quantity,
-          'unit_price': (double.tryParse(item.menuItem.price) ?? 0.0) * 100, // Convert to cents
-          'total_amount': (item.totalPrice * 100).toInt(), // Convert to cents
+          'unit_price': (double.tryParse(item.menuItem.price) ?? 0.0) * 100,
+          'total_amount': (item.totalPrice * 100).toInt(),
         };
       }).toList();
 
-      // Create Klarna session
       final sessionResult = await klarnaDataSource.createKlarnaSession(
-        totalAmount: (cartViewModel.grandTotal * 100), // Convert to cents
+        totalAmount: (cartViewModel.grandTotal * 100),
         currency: 'USD',
         orderLines: orderLines,
         purchaseCountry: 'US',
       );
 
-      // Dismiss loading
       if (mounted) Navigator.of(context).pop();
 
       sessionResult.fold(
         (error) {
-          // Handle session creation failure
           context.showError(
             title: context.tr('session_creation_failed'),
             message: error.message,
           );
         },
         (sessionModel) {
-          // Navigate to Klarna payment screen
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => KlarnaPaymentScreen(
@@ -289,7 +283,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 cartViewModel: cartViewModel,
                 orderViewModel: orderViewModel,
                 onPaymentAuthorized: (authToken) async {
-                  // Authorize payment with backend
                   final authResult = await klarnaDataSource.authorizeKlarnaPayment(
                     authorizationToken: authToken,
                     sessionId: sessionModel.sessionId,
@@ -306,9 +299,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                     (authModel) {
                       if (authModel.approved) {
-                        // Payment authorized, create order
                         if (mounted) {
-                          Navigator.of(context).pop(); // Close Klarna screen
+                          Navigator.of(context).pop();
                           _createOrder(cartViewModel, orderViewModel);
                         }
                       } else {
@@ -331,7 +323,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         },
       );
     } catch (e) {
-      // Dismiss loading if still showing
       if (mounted) Navigator.of(context).pop();
       
       context.showError(
@@ -342,7 +333,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Future<void> _createOrder(CartViewModel cartViewModel, OrderViewModel orderViewModel) async {
-    // Build order request from cart
     final orderRequest = OrderRequestModel(
       deliveryType: "delivery",
       paymentMethod: _paymentMethod == AppStrings.cashOnDelivery ? "cash" : "card",
@@ -350,7 +340,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       deliveryLat: _latitude,
       deliveryLng: _longitude,
       customerName: await TokenStorage.getUserName() ?? "Guest",
-      customerPhone: "+1234567890", // TODO: Get from user profile
+      customerPhone: "+1234567890",
       notes: _notesController.text.isEmpty ? null : _notesController.text,
       items: cartViewModel.cartItems.map((cartItem) {
         return OrderItemRequestModel(
@@ -367,14 +357,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       }).toList(),
     );
 
-    // Call API
     final success = await orderViewModel.createOrder(orderRequest);
 
     if (success && mounted) {
-      // Clear cart
       cartViewModel.clearCart();
 
-      // Navigate to confirmation
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => OrderConfirmationScreen(
@@ -383,7 +370,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       );
     } else if (mounted) {
-      // Show error
       context.showError(
         title: context.tr('order_failed'),
         message: orderViewModel.errorMessage ?? context.tr('failed_to_place_order'),
@@ -401,7 +387,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppDimensions.spacing12),
       child: Container(
-        padding: const EdgeInsets.all(AppDimensions.spacing16),
+        padding: EdgeInsets.all(
+          AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryAccent.withOpacity(0.1) : AppColors.grey50,
           borderRadius: BorderRadius.circular(AppDimensions.spacing12),
@@ -413,7 +401,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(
+                AppDimensions.responsiveSpacing(context, mobile: 10, tablet: 12),
+              ),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primaryAccent : AppColors.grey200,
                 borderRadius: BorderRadius.circular(10),
@@ -421,25 +411,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Icon(
                 icon,
                 color: isSelected ? AppColors.white : AppColors.grey600,
-                size: 24,
+                size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
               ),
             ),
-            const SizedBox(width: AppDimensions.spacing16),
+            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
             Expanded(
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: AppDimensions.fontSize16,
+                  fontSize: AppDimensions.getBodySize(context),
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                   color: isSelected ? AppColors.primaryAccent : AppColors.black87,
                 ),
               ),
             ),
             if (isSelected)
-              const Icon(
+              Icon(
                 Icons.check_circle,
                 color: AppColors.primaryAccent,
-                size: 24,
+                size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
               ),
           ],
         ),
@@ -452,272 +442,329 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        title: Text(context.tr('checkout')),
+        title: Text(
+          context.tr('checkout'),
+          style: TextStyle(
+            fontSize: AppDimensions.getH3Size(context),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         backgroundColor: AppColors.white,
         foregroundColor: AppColors.primaryText,
         elevation: 0,
         centerTitle: true,
       ),
-      body: Consumer<CartViewModel>(
-        builder: (context, viewModel, child) {
-          if (viewModel.cartItems.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.remove_shopping_cart, size: 64,
-                      color: AppColors.mutedText),
-                  const SizedBox(height: AppDimensions.spacing16),
-                  Text(context.tr('your_cart_is_empty'), style: const TextStyle(
-                      color: AppColors.mutedText, fontSize: AppDimensions.fontSize18)),
-                ],
-              ),
-            );
-          }
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(AppDimensions.spacing24),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                // Delivery Address Section (Static for now)
-                _SectionHeader(title: context.tr('delivery_address')),
-            const SizedBox(height: AppDimensions.spacing12),
-            Container(
-              padding: const EdgeInsets.all(AppDimensions.spacing16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryText.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.location_on_outlined,
-                      color: AppColors.primaryAccent),
-                  const SizedBox(width: AppDimensions.spacing12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _addressLabel,
-                          style: const TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: AppDimensions.fontSize16),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: AppDimensions.getMaxContentWidth(context),
+          ),
+          child: Consumer<CartViewModel>(
+            builder: (context, viewModel, child) {
+              if (viewModel.cartItems.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.remove_shopping_cart,
+                        size: AppDimensions.responsiveIconSize(context, mobile: 64, tablet: 80),
+                        color: AppColors.mutedText,
+                      ),
+                      SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                      Text(
+                        context.tr('your_cart_is_empty'),
+                        style: TextStyle(
+                          color: AppColors.mutedText,
+                          fontSize: AppDimensions.getH3Size(context),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _addressText,
-                          style: const TextStyle(color: AppColors.grey),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: _changeAddress,
-                    child: Text(context.tr('change')),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spacing24),
+                );
+              }
 
-            // Payment Method Section (Static for now)
-            _SectionHeader(title: context.tr('payment_method')),
-            const SizedBox(height: AppDimensions.spacing12),
-            Container(
-              padding: const EdgeInsets.all(AppDimensions.spacing16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryText.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    _paymentMethod == AppStrings.paypal
-                        ? Icons.paypal
-                        : _paymentMethod == AppStrings.klarna
-                        ? Icons.credit_score
-                        : Icons.money,
-                    color: AppColors.primaryAccent,
-                  ),
-                  const SizedBox(width: AppDimensions.spacing12),
-                  Expanded(
-                    child: Text(
-                      _paymentMethod,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: AppDimensions.fontSize16),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _showPaymentMethodBottomSheet,
-                    child: Text(context.tr('change')),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spacing24),
-
-            // Order Notes Section
-            _SectionHeader(title: context.tr('order_notes')),
-            const SizedBox(height: AppDimensions.spacing12),
-            Container(
-              padding: const EdgeInsets.all(AppDimensions.spacing16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryText.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: _notesController,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  hintText: context.tr('order_notes_hint'),
-                  hintStyle: const TextStyle(color: AppColors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                    borderSide: const BorderSide(color: AppColors.grey300),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                    borderSide: const BorderSide(
-                        color: AppColors.primaryAccent, width: 2),
-                  ),
-                  contentPadding: const EdgeInsets.all(AppDimensions.spacing16),
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.only(left: 12, right: 8, top: 12),
-                    child: Icon(
-                        Icons.note_outlined, color: AppColors.primaryAccent),
-                  ),
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(
+                  AppDimensions.getResponsiveHorizontalPadding(context),
                 ),
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spacing24),
-
-            // Order Summary
-            _SectionHeader(title: context.tr('order_summary')),
-            const SizedBox(height: AppDimensions.spacing12),
-            Container(
-              padding: const EdgeInsets.all(AppDimensions.spacing16),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.primaryText.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  // List Items roughly (or just total count?)
-                  // Let's show list of items briefly
-                  ...viewModel.cartItems.map((item) =>
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${item.quantity}x ${item.menuItem.name}',
-                                style: const TextStyle(fontSize: AppDimensions.fontSize14)),
-                            Text('\$${item.totalPrice.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                      )).toList(),
-                  const Divider(height: AppDimensions.spacing24),
-                  _SummaryRow(label: context.tr('subtotal'),
-                      amount: viewModel.totalAmount),
-                  const SizedBox(height: AppDimensions.spacing8),
-                  _SummaryRow(label: context.tr('delivery_fee'),
-                      amount: viewModel.deliveryFee),
-                  const SizedBox(height: AppDimensions.spacing8),
-                  _SummaryRow(label: context.tr('tax'), amount: viewModel.tax),
-                  const Divider(height: AppDimensions.spacing24),
-                  _SummaryRow(label: context.tr('total'),
-                      amount: viewModel.grandTotal,
-                      isTotal: true),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppDimensions.spacing32),
-
-            // Place Order Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: Consumer<OrderViewModel>(
-                builder: (context, orderViewModel, _) {
-                  return ElevatedButton(
-                    onPressed: orderViewModel.isLoading ? null : () async {
-                      if (_paymentMethod == context.tr('paypal')) {
-                        _handlePayPalPayment(viewModel, orderViewModel);
-                      } else if (_paymentMethod == context.tr('klarna')) {
-                        _handleKlarnaPayment(viewModel, orderViewModel);
-                      } else {
-                        await _createOrder(viewModel, orderViewModel);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryAccent,
-                      foregroundColor: AppColors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Delivery Address Section
+                    _SectionHeader(title: context.tr('delivery_address')),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    Container(
+                      padding: EdgeInsets.all(
+                        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
                       ),
-                      elevation: 5,
-                    ),
-                    child: orderViewModel.isLoading
-                        ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
+                      decoration: BoxDecoration(
                         color: AppColors.white,
-                        strokeWidth: 2,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryText.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                    )
-                        : Text(
-                      context.tr('place_order'),
-                      style: const TextStyle(
-                        fontSize: AppDimensions.fontSize16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: AppColors.primaryAccent,
+                            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                          ),
+                          SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _addressLabel,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppDimensions.getBodySize(context),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  _addressText,
+                                  style: TextStyle(
+                                    color: AppColors.grey,
+                                    fontSize: AppDimensions.getSmallSize(context),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: _changeAddress,
+                            child: Text(context.tr('change')),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                    // Payment Method Section
+                    _SectionHeader(title: context.tr('payment_method')),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    Container(
+                      padding: EdgeInsets.all(
+                        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryText.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            _paymentMethod == AppStrings.paypal
+                                ? Icons.paypal
+                                : _paymentMethod == AppStrings.klarna
+                                ? Icons.credit_score
+                                : Icons.money,
+                            color: AppColors.primaryAccent,
+                            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                          ),
+                          SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                          Expanded(
+                            child: Text(
+                              _paymentMethod,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: AppDimensions.getBodySize(context),
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: _showPaymentMethodBottomSheet,
+                            child: Text(context.tr('change')),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                    // Order Notes Section
+                    _SectionHeader(title: context.tr('order_notes')),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    Container(
+                      padding: EdgeInsets.all(
+                        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryText.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _notesController,
+                        maxLines: 4,
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                        ),
+                        decoration: InputDecoration(
+                          hintText: context.tr('order_notes_hint'),
+                          hintStyle: TextStyle(
+                            color: AppColors.grey,
+                            fontSize: AppDimensions.getSmallSize(context),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                            borderSide: const BorderSide(color: AppColors.grey300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                            borderSide: const BorderSide(color: AppColors.grey300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                            borderSide: const BorderSide(
+                                color: AppColors.primaryAccent, width: 2),
+                          ),
+                          contentPadding: EdgeInsets.all(
+                            AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                          ),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(left: 12, right: 8, top: 12),
+                            child: Icon(
+                              Icons.note_outlined,
+                              color: AppColors.primaryAccent,
+                              size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+
+                    // Order Summary
+                    _SectionHeader(title: context.tr('order_summary')),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    Container(
+                      padding: EdgeInsets.all(
+                        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryText.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          ...viewModel.cartItems.map((item) =>
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${item.quantity}x ${item.menuItem.name}',
+                                        style: TextStyle(
+                                          fontSize: AppDimensions.getSmallSize(context),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '\$${item.totalPrice.toStringAsFixed(2)}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: AppDimensions.getSmallSize(context),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )).toList(),
+                          Divider(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                          _SummaryRow(label: context.tr('subtotal'), amount: viewModel.totalAmount),
+                          SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                          _SummaryRow(label: context.tr('delivery_fee'), amount: viewModel.deliveryFee),
+                          SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                          _SummaryRow(label: context.tr('tax'), amount: viewModel.tax),
+                          Divider(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                          _SummaryRow(label: context.tr('total'), amount: viewModel.grandTotal, isTotal: true),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
+
+                    // Place Order Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: AppDimensions.getButtonHeight(context),
+                      child: Consumer<OrderViewModel>(
+                        builder: (context, orderViewModel, _) {
+                          return ElevatedButton(
+                            onPressed: orderViewModel.isLoading ? null : () async {
+                              if (_paymentMethod == context.tr('paypal')) {
+                                _handlePayPalPayment(viewModel, orderViewModel);
+                              } else if (_paymentMethod == context.tr('klarna')) {
+                                _handleKlarnaPayment(viewModel, orderViewModel);
+                              } else {
+                                await _createOrder(viewModel, orderViewModel);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primaryAccent,
+                              foregroundColor: AppColors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(28),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: orderViewModel.isLoading
+                                ? SizedBox(
+                              height: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              width: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                              child: const CircularProgressIndicator(
+                                color: AppColors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                                : Text(
+                              context.tr('place_order'),
+                              style: TextStyle(
+                                fontSize: AppDimensions.getBodySize(context),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
-      );
-    },
-  ),
-);
+      ),
+    );
   }
 }
 
@@ -730,8 +777,8 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: AppDimensions.fontSize18,
+      style: TextStyle(
+        fontSize: AppDimensions.getH3Size(context),
         fontWeight: FontWeight.bold,
         color: AppColors.primaryText,
       ),
@@ -755,7 +802,7 @@ class _SummaryRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: isTotal ? AppDimensions.fontSize16 : AppDimensions.fontSize14,
+            fontSize: isTotal ? AppDimensions.getBodySize(context) : AppDimensions.getSmallSize(context),
             fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
             color: isTotal ? AppColors.primaryText : AppColors.grey600,
           ),
@@ -763,7 +810,7 @@ class _SummaryRow extends StatelessWidget {
         Text(
           '\$${amount.toStringAsFixed(2)}',
           style: TextStyle(
-            fontSize: isTotal ? AppDimensions.fontSize16 : AppDimensions.fontSize14,
+            fontSize: isTotal ? AppDimensions.getBodySize(context) : AppDimensions.getSmallSize(context),
             fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
             color: AppColors.primaryText,
           ),

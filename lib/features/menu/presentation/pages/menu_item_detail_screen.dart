@@ -6,6 +6,7 @@ import 'package:foodora/features/cart/presentation/viewmodels/cart_viewmodel.dar
 import 'package:foodora/features/menu/domain/entities/addon_entity.dart';
 import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/constants/app_colors.dart';
+import 'package:foodora/core/constants/app_dimensions.dart';
 import 'package:foodora/features/menu/presentation/widgets/addon_row.dart';
 import 'package:foodora/features/menu/presentation/widgets/ingredient_row.dart';
 import 'package:foodora/features/menu/presentation/widgets/nutrition_item.dart';
@@ -117,7 +118,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: 350,
+                height: AppDimensions.responsive(context, mobile: 350, tablet: 400, desktop: 450),
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -132,17 +133,19 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
               
               // Action Buttons (Close & Favorite)
               Positioned(
-                top: 50,
-                left: 20,
-                right: 20,
+                top: AppDimensions.responsiveSpacing(context, mobile: 50, tablet: 60),
+                left: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
+                right: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildCircleAction(
+                      context: context,
                       icon: Icons.close,
                       onTap: () => Navigator.of(context).pop(),
                     ),
                     _buildCircleAction(
+                      context: context,
                       icon: viewModel.isFavorite(item.id) ? Icons.favorite : Icons.favorite_border,
                       iconColor: viewModel.isFavorite(item.id) ? Colors.red : AppColors.primaryText,
                       onTap: () async {
@@ -155,7 +158,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
               // Draggable/Scrollable Content
               Positioned.fill(
-                top: 280,
+                top: AppDimensions.responsive(context, mobile: 280, tablet: 320, desktop: 360),
                 child: Container(
                   decoration: const BoxDecoration(
                     color: AppColors.white,
@@ -166,7 +169,12 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                       // Handle Bar & Content
                       Expanded(
                         child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 100), // Extra padding for bottom bar
+                          padding: EdgeInsets.fromLTRB(
+                            AppDimensions.getResponsiveHorizontalPadding(context),
+                            AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
+                            AppDimensions.getResponsiveHorizontalPadding(context),
+                            100, // Extra padding for bottom bar
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -181,7 +189,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 20),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
 
                               // Title & Time
                               Row(
@@ -190,8 +198,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   Expanded(
                                     child: Text(
                                       item.name,
-                                      style: const TextStyle(
-                                        fontSize: 24,
+                                      style: TextStyle(
+                                        fontSize: AppDimensions.getH2Size(context),
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.primaryText,
                                       ),
@@ -199,17 +207,24 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                                      Icon(
+                                        Icons.access_time,
+                                        size: AppDimensions.responsiveIconSize(context, mobile: 16, tablet: 20),
+                                        color: Colors.grey,
+                                      ),
                                       const SizedBox(width: 4),
                                       Text(
                                         '30 ${context.tr('min')}', 
-                                        style: TextStyle(color: Colors.grey[600]),
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: AppDimensions.getSmallSize(context),
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
 
                               // Description
                               Text(
@@ -217,9 +232,10 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   height: 1.5,
+                                  fontSize: AppDimensions.getBodySize(context),
                                 ),
                               ),
-                              const SizedBox(height: 24),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
                               // Nutrition Info Grid
                               LayoutBuilder(
@@ -227,8 +243,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   // ignore: unused_local_variable
                                   double itemWidth = (constraints.maxWidth - 16) / 2;
                                   return Wrap(
-                                    spacing: 16,
-                                    runSpacing: 16,
+                                    spacing: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                                    runSpacing: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
                                     children: [
                                       NutritionItem(icon: Icons.grass, value: '65g', label: context.tr('carbs')), 
                                       NutritionItem(icon: Icons.local_fire_department, value: '120', label: context.tr('kcal')), 
@@ -238,18 +254,18 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   );
                                 }
                               ),
-                              const SizedBox(height: 32),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
 
                               // Ingredients Header
                               Text(
                                 context.tr('ingredients'),
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: AppDimensions.getH3Size(context),
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primaryText,
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
 
                               // Ingredients List (Static/Free items)
                               if (item.ingredients != null && item.ingredients!.isNotEmpty) ...[
@@ -262,18 +278,18 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 const IngredientRow(name: "Peanuts"),
                                 const IngredientRow(name: "Red Onions"),
                               ],
-                              const SizedBox(height: 32),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
 
                               // Add-ons Header
                               Text(
                                 context.tr('addons'),
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: AppDimensions.getH3Size(context),
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primaryText,
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
 
                               // Add-ons List
                               if (item.addons != null && item.addons!.isNotEmpty) ...[
@@ -287,30 +303,39 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   );
                                 }).toList(),
                               ] else ...[
-                                Text(context.tr('no_addons_available'), style: TextStyle(color: Colors.grey[500])),
+                                Text(
+                                  context.tr('no_addons_available'),
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: AppDimensions.getBodySize(context),
+                                  ),
+                                ),
                               ],
-                              const SizedBox(height: 32),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 32, tablet: 40)),
 
                               // Special Instructions
                               Text(
                                 context.tr('special_instructions'),
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: AppDimensions.getH3Size(context),
                                   fontWeight: FontWeight.bold,
                                   color: AppColors.primaryText,
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
                               Text(
                                 context.tr('special_instructions_hint'),
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: AppDimensions.getSmallSize(context),
                                   color: Colors.grey,
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppColors.white,
                                   borderRadius: BorderRadius.circular(16),
@@ -327,12 +352,21 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                   controller: _instructionsController,
                                   maxLines: 4,
                                   minLines: 3,
+                                  style: TextStyle(
+                                    fontSize: AppDimensions.getBodySize(context),
+                                  ),
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: context.tr('instructions_example'),
-                                    hintStyle: TextStyle(color: Colors.grey[400]),
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey[400],
+                                      fontSize: AppDimensions.getSmallSize(context),
+                                    ),
                                     labelText: context.tr('instructions_label'),
-                                    labelStyle: TextStyle(color: Colors.grey[600]),
+                                    labelStyle: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: AppDimensions.getBodySize(context),
+                                    ),
                                     floatingLabelBehavior: FloatingLabelBehavior.always, 
                                   ),
                                 ),
@@ -344,7 +378,9 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                       
                       // Bottom Bar
                       Container(
-                        padding: const EdgeInsets.all(24),
+                        padding: EdgeInsets.all(
+                          AppDimensions.getResponsiveHorizontalPadding(context),
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           boxShadow: [
@@ -359,31 +395,31 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                           children: [
                             // Quantity Counter
                             Container(
-                              height: 50,
+                              height: AppDimensions.responsive(context, mobile: 50, tablet: 56),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
                                 children: [
-                                  _buildSmallCounterBtn(Icons.remove, _decrementQuantity),
+                                  _buildSmallCounterBtn(context, Icons.remove, _decrementQuantity),
                                   SizedBox(
-                                    width: 40, 
+                                    width: AppDimensions.responsive(context, mobile: 40, tablet: 50), 
                                     child: Center(
                                       child: Text(
                                         '$_quantity',
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                        style: TextStyle(
+                                          fontSize: AppDimensions.getH3Size(context),
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.primaryText,
                                         ),
                                       ),
                                     )
                                   ),
-                                  _buildSmallCounterBtn(Icons.add, _incrementQuantity, isPlus: true),
+                                  _buildSmallCounterBtn(context, Icons.add, _incrementQuantity, isPlus: true),
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 20),
+                            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
                             // Add to Cart Button
                             Expanded(
                               child: ElevatedButton(
@@ -410,7 +446,9 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryAccent,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
@@ -419,7 +457,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 child: Text(
                                   context.tr('add_to_cart'),
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: AppDimensions.getBodySize(context),
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.white,
                                   ),
@@ -440,34 +478,43 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
     );
   }
 
-  Widget _buildCircleAction({required IconData icon, required VoidCallback onTap, Color iconColor = AppColors.primaryText}) {
+  Widget _buildCircleAction({
+    required BuildContext context,
+    required IconData icon,
+    required VoidCallback onTap,
+    Color iconColor = AppColors.primaryText,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: AppDimensions.responsive(context, mobile: 40, tablet: 48),
+        height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
         decoration: const BoxDecoration(
           color: AppColors.white,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, size: 20, color: iconColor),
+        child: Icon(
+          icon,
+          size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+          color: iconColor,
+        ),
       ),
     );
   }
 
-  Widget _buildSmallCounterBtn(IconData icon, VoidCallback onTap, {bool isPlus = false}) {
+  Widget _buildSmallCounterBtn(BuildContext context, IconData icon, VoidCallback onTap, {bool isPlus = false}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 40,
-        height: 40,
+        width: AppDimensions.responsive(context, mobile: 40, tablet: 48),
+        height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withOpacity(0.4)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
           icon, 
-          size: 20, 
+          size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24), 
           color: isPlus ? AppColors.primaryAccent : Colors.grey[700]
         ),
       ),
@@ -477,4 +524,3 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
 // Imports added at the top
 // Inline classes removed at the bottom
-
