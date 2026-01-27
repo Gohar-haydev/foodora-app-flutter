@@ -1,7 +1,6 @@
 
 import 'package:foodora/core/network/api_service.dart';
 import 'package:foodora/core/utils/result.dart';
-import 'package:foodora/core/utils/token_storage.dart';
 
 import '../models/user_model.dart';
 
@@ -183,7 +182,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       endpoint: '/auth/logout',
       body: {},
       requireAuth: true,
-      fromJson: (json) => null,
+      fromJson: (json) {},
     );
   }
 }

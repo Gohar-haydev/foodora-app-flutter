@@ -6,10 +6,10 @@ class ApplyFilterButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const ApplyFilterButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

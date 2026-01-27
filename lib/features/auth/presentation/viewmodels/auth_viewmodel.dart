@@ -312,7 +312,7 @@ class AuthViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final result = await logoutUseCase();
+    await logoutUseCase();
 
     _isLoading = false;
 

@@ -2,9 +2,9 @@ import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart'
 
 class CategoryInfoModel extends CategoryInfo {
   CategoryInfoModel({
-    required int id,
-    required String name,
-  }) : super(id: id, name: name);
+    required super.id,
+    required super.name,
+  });
 
   factory CategoryInfoModel.fromJson(Map<String, dynamic> json) {
     return CategoryInfoModel(
@@ -16,10 +16,10 @@ class CategoryInfoModel extends CategoryInfo {
 
 class BranchInfoModel extends BranchInfo {
   BranchInfoModel({
-    required int id,
-    required String name,
-    required String code,
-  }) : super(id: id, name: name, code: code);
+    required super.id,
+    required super.name,
+    required super.code,
+  });
 
   factory BranchInfoModel.fromJson(Map<String, dynamic> json) {
     return BranchInfoModel(
@@ -32,30 +32,18 @@ class BranchInfoModel extends BranchInfo {
 
 class FavoriteItemModel extends FavoriteItemEntity {
   FavoriteItemModel({
-    required int id,
-    required String name,
-    required String slug,
-    required String description,
-    required String price,
-    String? formattedPrice,
-    String? image,
-    String? imageUrl,
-    required CategoryInfo category,
-    required BranchInfo branch,
-    required DateTime addedAt,
-  }) : super(
-          id: id,
-          name: name,
-          slug: slug,
-          description: description,
-          price: price,
-          formattedPrice: formattedPrice,
-          image: image,
-          imageUrl: imageUrl,
-          category: category,
-          branch: branch,
-          addedAt: addedAt,
-        );
+    required super.id,
+    required super.name,
+    required super.slug,
+    required super.description,
+    required super.price,
+    super.formattedPrice,
+    super.image,
+    super.imageUrl,
+    required super.category,
+    required super.branch,
+    required super.addedAt,
+  });
 
   factory FavoriteItemModel.fromJson(Map<String, dynamic> json) {
     return FavoriteItemModel(

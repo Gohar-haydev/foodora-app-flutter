@@ -71,35 +71,35 @@ class OrderViewModel extends ChangeNotifier {
   }
 
   Future<OrderEntity?> getOrderById(int orderId) async {
-    print('🟡 [ViewModel] getOrderById called with orderId: $orderId');
+      print('🟡 [ViewModel] getOrderById called with orderId: $orderId');
     
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
-    print('🟡 [ViewModel] Loading state set to true, notified listeners');
+      print('🟡 [ViewModel] Loading state set to true, notified listeners');
 
     final result = await getOrderByIdUseCase(orderId);
-    print('🟡 [ViewModel] Use case returned result');
+      print('🟡 [ViewModel] Use case returned result');
 
     return result.fold(
       (failure) {
-        print('❌ [ViewModel] Failure occurred: ${failure.message}');
+          print('❌ [ViewModel] Failure occurred: ${failure.message}');
         _isLoading = false;
         _errorMessage = failure.message;
         notifyListeners();
-        print('❌ [ViewModel] Error state set, notified listeners');
+          print('❌ [ViewModel] Error state set, notified listeners');
         return null;
       },
       (order) {
-        print('✅ [ViewModel] Success! Order fetched');
-        print('✅ [ViewModel] Order ID: ${order.id}');
-        print('✅ [ViewModel] Order Number: ${order.orderNumber}');
-        print('✅ [ViewModel] Status: ${order.status}');
-        print('✅ [ViewModel] Total Amount: ${order.totalAmount}');
-        print('✅ [ViewModel] Items count: ${order.items.length}');
+          print('✅ [ViewModel] Success! Order fetched');
+          print('✅ [ViewModel] Order ID: ${order.id}');
+          print('✅ [ViewModel] Order Number: ${order.orderNumber}');
+          print('✅ [ViewModel] Status: ${order.status}');
+          print('✅ [ViewModel] Total Amount: ${order.totalAmount}');
+          print('✅ [ViewModel] Items count: ${order.items.length}');
         _isLoading = false;
         notifyListeners();
-        print('✅ [ViewModel] Loading state set to false, notified listeners');
+          print('✅ [ViewModel] Loading state set to false, notified listeners');
         return order;
       },
     );
@@ -128,7 +128,7 @@ class OrderViewModel extends ChangeNotifier {
   }
 
   Future<OrderTrackingEntity?> trackOrder(int orderId) async {
-    print('🟡 [ViewModel] trackOrder called with orderId: $orderId');
+      print('🟡 [ViewModel] trackOrder called with orderId: $orderId');
     _isLoading = true;
     _errorMessage = null;
     _orderTracking = null;
@@ -138,14 +138,14 @@ class OrderViewModel extends ChangeNotifier {
 
     return result.fold(
       (failure) {
-        print('❌ [ViewModel] Track order failure: ${failure.message}');
+          print('❌ [ViewModel] Track order failure: ${failure.message}');
         _isLoading = false;
         _errorMessage = failure.message;
         notifyListeners();
         return null;
       },
       (trackingData) {
-        print('✅ [ViewModel] Track order success: ${trackingData.status}');
+          print('✅ [ViewModel] Track order success: ${trackingData.status}');
         _isLoading = false;
         _orderTracking = trackingData;
         notifyListeners();
@@ -155,7 +155,7 @@ class OrderViewModel extends ChangeNotifier {
   }
 
   Future<bool> cancelOrder(int orderId, String reason) async {
-    print('🟡 [ViewModel] cancelOrder called with orderId: $orderId');
+      print('🟡 [ViewModel] cancelOrder called with orderId: $orderId');
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -164,14 +164,14 @@ class OrderViewModel extends ChangeNotifier {
 
     return result.fold(
       (failure) {
-        print('❌ [ViewModel] Cancel order failure: ${failure.message}');
+          print('❌ [ViewModel] Cancel order failure: ${failure.message}');
         _errorMessage = failure.message;
         _isLoading = false;
         notifyListeners();
         return false;
       },
       (_) {
-        print('✅ [ViewModel] Cancel order success');
+          print('✅ [ViewModel] Cancel order success');
         _isLoading = false;
         // Refresh orders to show updated status
         fetchOrders(); 

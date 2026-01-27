@@ -13,7 +13,6 @@ import 'package:foodora/features/menu/domain/usecases/get_favorites_usecase.dart
 import 'package:foodora/features/menu/domain/usecases/search_menu_items_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_items_by_category_filter_usecase.dart';
 import 'package:foodora/features/menu/domain/usecases/get_menu_item_details_usecase.dart';
-import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart';
 import 'package:foodora/features/menu/domain/usecases/check_favorite_status_usecase.dart';
 
 class MenuViewModel extends ChangeNotifier {
@@ -56,7 +55,7 @@ class MenuViewModel extends ChangeNotifier {
   String? _menuItemsError;
 
   // Favorites state
-  Set<int> _favoriteItemIds = {};
+  final Set<int> _favoriteItemIds = {};
   bool _isAddingToFavorites = false;
   String? _favoritesError;
 
@@ -388,7 +387,7 @@ class MenuViewModel extends ChangeNotifier {
     result.fold(
       (failure) {
         // Log failure but don't disrupt UI flow significantly as this is often a background check
-        print('Check favorite status failed: ${failure.message}');
+        debugPrint('Check favorite status failed: ${failure.message}');
       },
       (isFavorite) {
         if (isFavorite) {

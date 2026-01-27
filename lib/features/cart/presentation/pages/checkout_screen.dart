@@ -18,7 +18,7 @@ import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:foodora/core/widgets/error_dialog.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({Key? key}) : super(key: key);
+  const CheckoutScreen({super.key});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -218,18 +218,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ],
           note: "Contact us for any questions on your order.",
           onSuccess: (Map params) async {
-            debugPrint("onSuccess: $params");
+              print("onSuccess: $params");
             _createOrder(cartViewModel, orderViewModel);
           },
           onError: (error) {
-            debugPrint("onError: $error");
+              print("onError: $error");
             context.showError(
               title: context.tr('payment_error'),
               message: context.tr('paypal_payment_error'),
             );
           },
           onCancel: () {
-            debugPrint('cancelled');
+              print('cancelled');
           },
         ),
       ),
@@ -315,7 +315,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   );
                 },
                 onPaymentCancelled: () {
-                  debugPrint('Klarna payment cancelled by user');
+                    print('Klarna payment cancelled by user');
                 },
               ),
             ),
@@ -391,7 +391,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
         ),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryAccent.withOpacity(0.1) : AppColors.grey50,
+          color: isSelected ? AppColors.primaryAccent.withValues(alpha: 0.1) : AppColors.grey50,
           borderRadius: BorderRadius.circular(AppDimensions.spacing12),
           border: Border.all(
             color: isSelected ? AppColors.primaryAccent : AppColors.grey300,
@@ -503,7 +503,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
+                            color: AppColors.primaryText.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -560,7 +560,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
+                            color: AppColors.primaryText.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -608,7 +608,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
+                            color: AppColors.primaryText.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -667,7 +667,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryText.withOpacity(0.05),
+                            color: AppColors.primaryText.withValues(alpha: 0.05),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -698,7 +698,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                                   ],
                                 ),
-                              )).toList(),
+                              )),
                           Divider(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
                           _SummaryRow(label: context.tr('subtotal'), amount: viewModel.totalAmount),
                           SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),

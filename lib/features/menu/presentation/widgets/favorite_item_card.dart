@@ -6,10 +6,10 @@ class FavoriteItemCard extends StatelessWidget {
   final VoidCallback onRemove;
 
   const FavoriteItemCard({
-    Key? key,
+    super.key,
     required this.item,
     required this.onRemove,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class FavoriteItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           )

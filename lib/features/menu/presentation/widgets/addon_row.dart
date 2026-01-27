@@ -9,13 +9,13 @@ class AddonRow extends StatelessWidget {
   final VoidCallback onRemove;
 
   const AddonRow({
-    Key? key,
+    super.key,
     required this.name,
     required this.price,
     required this.count,
     required this.onAdd,
     required this.onRemove,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,10 @@ class AddonRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -102,7 +102,7 @@ class AddonRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           border: isPlus 
             ? Border.all(color: AppColors.primaryAccent) 
-            : Border.all(color: Colors.grey.withOpacity(0.4)),
+            : Border.all(color: Colors.grey.withValues(alpha: 0.4)),
           color: AppColors.white,
         ),
         child: Icon(

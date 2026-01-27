@@ -14,14 +14,14 @@ class KlarnaPaymentScreen extends StatefulWidget {
   final VoidCallback onPaymentCancelled;
 
   const KlarnaPaymentScreen({
-    Key? key,
+    super.key,
     required this.clientToken,
     required this.sessionId,
     required this.cartViewModel,
     required this.orderViewModel,
     required this.onPaymentAuthorized,
     required this.onPaymentCancelled,
-  }) : super(key: key);
+  });
 
   @override
   State<KlarnaPaymentScreen> createState() => _KlarnaPaymentScreenState();
@@ -130,7 +130,7 @@ class _KlarnaPaymentScreenState extends State<KlarnaPaymentScreen> {
                             AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFB6C1).withOpacity(0.1),
+                            color: const Color(0xFFFFB6C1).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -252,7 +252,7 @@ class _KlarnaPaymentScreenState extends State<KlarnaPaymentScreen> {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),

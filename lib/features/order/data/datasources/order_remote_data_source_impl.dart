@@ -28,8 +28,8 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   @override
   Future<OrderModel> getOrderById(int orderId) async {
-    print('🟣 [DataSource] getOrderById called with orderId: $orderId');
-    print('🟣 [DataSource] Endpoint: /orders/$orderId');
+      print('🟣 [DataSource] getOrderById called with orderId: $orderId');
+      print('🟣 [DataSource] Endpoint: /orders/$orderId');
     
     final result = await apiService.get<OrderResponseModel>(
       endpoint: '/orders/$orderId',
@@ -37,19 +37,19 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       fromJson: (json) => OrderResponseModel.fromJson(json),
     );
 
-    print('🟣 [DataSource] API service returned result');
+      print('🟣 [DataSource] API service returned result');
     
     return result.fold(
       (failure) {
-        print('❌ [DataSource] API failure: ${failure.message}');
+          print('❌ [DataSource] API failure: ${failure.message}');
         throw Exception(failure.message);
       },
       (response) {
-        print('✅ [DataSource] API success!');
-        print('✅ [DataSource] Response success: ${response.success}');
-        print('✅ [DataSource] Response message: ${response.message}');
-        print('✅ [DataSource] Order ID: ${response.data.order.id}');
-        print('✅ [DataSource] Order Number: ${response.data.order.orderNumber}');
+          print('✅ [DataSource] API success!');
+          print('✅ [DataSource] Response success: ${response.success}');
+          print('✅ [DataSource] Response message: ${response.message}');
+          print('✅ [DataSource] Order ID: ${response.data.order.id}');
+          print('✅ [DataSource] Order Number: ${response.data.order.orderNumber}');
         return response.data.order;
       },
     );
@@ -61,7 +61,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       endpoint: '/orders?page=$page',
       requireAuth: true,
       fromJson: (json) {
-        print('🟣 [DataSource] Raw Orders List JSON: $json');
+          print('🟣 [DataSource] Raw Orders List JSON: $json');
         return OrderListResponseModel.fromJson(json);
       },
     );
@@ -74,7 +74,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   @override
   Future<OrderTrackingModel> trackOrder(int orderId) async {
-    print('🟣 [DataSource] trackOrder called with orderId: $orderId');
+      print('🟣 [DataSource] trackOrder called with orderId: $orderId');
     final result = await apiService.get<OrderTrackingResponseModel>(
       endpoint: '/orders/$orderId/track',
       requireAuth: true,
@@ -83,11 +83,11 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
     return result.fold(
       (failure) {
-        print('❌ [DataSource] Track API failure: ${failure.message}');
+          print('❌ [DataSource] Track API failure: ${failure.message}');
         throw Exception(failure.message);
       },
       (response) {
-        print('✅ [DataSource] Track API success for order ${response.data.orderNumber}');
+          print('✅ [DataSource] Track API success for order ${response.data.orderNumber}');
         return response.data;
       },
     );
@@ -95,21 +95,21 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
   @override
   Future<void> cancelOrder(int orderId, String reason) async {
-    print('🟣 [DataSource] cancelOrder called for order: $orderId');
+      print('🟣 [DataSource] cancelOrder called for order: $orderId');
     final result = await apiService.post<void>(
       endpoint: '/orders/$orderId/cancel',
       body: {'reason': reason},
       requireAuth: true,
-      fromJson: (json) => null,
+      fromJson: (json) {},
     );
 
     return result.fold(
       (failure) {
-        print('❌ [DataSource] Cancel API failure: ${failure.message}');
+          print('❌ [DataSource] Cancel API failure: ${failure.message}');
         throw Exception(failure.message);
       },
       (_) {
-         print('✅ [DataSource] Cancel API success');
+           print('✅ [DataSource] Cancel API success');
       },
     );
   }

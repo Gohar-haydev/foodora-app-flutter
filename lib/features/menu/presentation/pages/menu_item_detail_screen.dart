@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
 import 'package:foodora/features/cart/presentation/viewmodels/cart_viewmodel.dart';
 import 'package:foodora/features/menu/domain/entities/addon_entity.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/constants/app_colors.dart';
 import 'package:foodora/core/constants/app_dimensions.dart';
 import 'package:foodora/features/menu/presentation/widgets/addon_row.dart';
@@ -16,7 +14,7 @@ import 'package:foodora/core/extensions/context_extensions.dart';
 class MenuItemDetailScreen extends StatefulWidget {
   final int menuItemId;
 
-  const MenuItemDetailScreen({Key? key, required this.menuItemId}) : super(key: key);
+  const MenuItemDetailScreen({super.key, required this.menuItemId});
 
   @override
   State<MenuItemDetailScreen> createState() => _MenuItemDetailScreenState();
@@ -269,7 +267,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
                               // Ingredients List (Static/Free items)
                               if (item.ingredients != null && item.ingredients!.isNotEmpty) ...[
-                                ...item.ingredients!.map((ing) => IngredientRow(name: ing)).toList(),
+                                ...item.ingredients!.map((ing) => IngredientRow(name: ing)),
                               ] else ...[
                                 // Placeholder
                                 const IngredientRow(name: "Tortilla Chips"),
@@ -301,7 +299,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                     onAdd: () => _incrementAddon(addon.id),
                                     onRemove: () => _decrementAddon(addon.id),
                                   );
-                                }).toList(),
+                                }),
                               ] else ...[
                                 Text(
                                   context.tr('no_addons_available'),
@@ -339,10 +337,10 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                                 decoration: BoxDecoration(
                                   color: AppColors.white,
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                                  border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.02),
+                                      color: Colors.black.withValues(alpha: 0.02),
                                       blurRadius: 10,
                                       offset: const Offset(0, 4),
                                     ),
@@ -385,7 +383,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                           color: AppColors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 20,
                               offset: const Offset(0, -5),
                             ),
@@ -509,7 +507,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
         width: AppDimensions.responsive(context, mobile: 40, tablet: 48),
         height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withOpacity(0.4)),
+          border: Border.all(color: Colors.grey.withValues(alpha: 0.4)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(

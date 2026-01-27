@@ -14,7 +14,7 @@ import 'package:foodora/features/menu/presentation/pages/currency_selection_scre
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 class ProfileMenuScreen extends StatelessWidget {
-  const ProfileMenuScreen({Key? key}) : super(key: key);
+  const ProfileMenuScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

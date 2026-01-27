@@ -4,14 +4,11 @@ import 'package:foodora/features/menu/presentation/pages/branch_selection_screen
 import 'package:foodora/features/menu/presentation/pages/profile_menu_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/search_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/notification_screen.dart';
-import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 
 
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
-import '../widgets/bottom_nav_clipper.dart';
-import '../widgets/bottom_nav_item.dart';
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
@@ -177,14 +174,13 @@ class BottomNavItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const BottomNavItem({
-    Key? key,
+    super.key,
     this.icon,
     this.imagePath,
     required this.label,
     required this.isActive,
     required this.onTap,
-  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided'),
-       super(key: key);
+  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -201,19 +197,19 @@ class BottomNavItem extends StatelessWidget {
                 imagePath!,
                 width: 24,
                 height: 24,
-                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
+                color: isActive ? AppColors.white : AppColors.white.withValues(alpha: 0.6),
               )
             else
               Icon(
                 icon,
-                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
+                color: isActive ? AppColors.white : AppColors.white.withValues(alpha: 0.6),
                 size: 24,
               ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isActive ? AppColors.white : AppColors.white.withOpacity(0.6),
+                color: isActive ? AppColors.white : AppColors.white.withValues(alpha: 0.6),
                 fontSize: AppDimensions.fontSize12,
                 fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
               ),

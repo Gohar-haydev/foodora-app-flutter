@@ -9,10 +9,10 @@ class ChangeAddressScreen extends StatefulWidget {
   final String? currentLabel;
 
   const ChangeAddressScreen({
-    Key? key,
+    super.key,
     this.currentAddress,
     this.currentLabel,
-  }) : super(key: key);
+  });
 
   @override
   State<ChangeAddressScreen> createState() => _ChangeAddressScreenState();
@@ -28,7 +28,6 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
   final _countryController = TextEditingController();
   
   String _selectedAddressType = 'Home';
-  final List<String> _addressTypes = ['Home', 'Work', 'Other'];
   bool _isLoadingLocation = false;
   double? _latitude;
   double? _longitude;
@@ -156,7 +155,7 @@ class _ChangeAddressScreenState extends State<ChangeAddressScreen> {
         
         setState(() {
           // Populate address fields
-          _streetController.text = '${place.street ?? ''}';
+          _streetController.text = place.street ?? '';
           _cityController.text = place.locality ?? '';
           _stateController.text = place.administrativeArea ?? '';
           _zipController.text = place.postalCode ?? '';

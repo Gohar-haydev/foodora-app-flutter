@@ -7,11 +7,11 @@ class PriceRowWidget extends StatelessWidget {
   final bool isBold;
 
   const PriceRowWidget({
-    Key? key,
+    super.key,
     required this.label,
     required this.amount,
     this.isBold = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

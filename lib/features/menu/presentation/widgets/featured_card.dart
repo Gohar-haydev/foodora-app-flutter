@@ -36,7 +36,7 @@ class FeaturedCard extends StatelessWidget {
              child: Container(
                width: 10,
                height: 10,
-               decoration: BoxDecoration(color: Colors.white.withOpacity(0.6), shape: BoxShape.circle),
+               decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.6), shape: BoxShape.circle),
              )
            ),
            
@@ -103,7 +103,7 @@ class FeaturedCard extends StatelessWidget {
               height: 120,
               decoration: BoxDecoration(
                  shape: BoxShape.circle,
-                 color: Colors.white.withOpacity(0.2),
+                 color: Colors.white.withValues(alpha: 0.2),
               ),
                child: const Icon(Icons.rice_bowl, color: Colors.white70, size: 60), // Placeholder for image
             ),

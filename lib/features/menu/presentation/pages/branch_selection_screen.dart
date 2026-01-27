@@ -5,9 +5,7 @@ import 'package:foodora/features/menu/presentation/pages/menu_screen.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/widgets/primary_button.dart';
-import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 import '../widgets/branch_card.dart';

@@ -2,20 +2,13 @@ import 'package:foodora/features/menu/domain/entities/addon_entity.dart';
 
 class AddonModel extends AddonEntity {
   const AddonModel({
-    required int id,
-    required String name,
-    required String price,
-    required bool isActive,
-    required int sortOrder,
-    required String formattedPrice,
-  }) : super(
-          id: id,
-          name: name,
-          price: price,
-          isActive: isActive,
-          sortOrder: sortOrder,
-          formattedPrice: formattedPrice,
-        );
+    required super.id,
+    required super.name,
+    required super.price,
+    required super.isActive,
+    required super.sortOrder,
+    required super.formattedPrice,
+  });
 
   factory AddonModel.fromJson(Map<String, dynamic> json) {
     return AddonModel(

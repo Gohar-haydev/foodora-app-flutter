@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../../domain/entities/cart_item_entity.dart';
 import '../../../menu/domain/entities/menu_item_entity.dart';
 import '../../../menu/domain/entities/addon_entity.dart';
-import '../../../order/domain/entities/order_entity.dart';
 import '../../domain/repositories/cart_repository.dart';
 import '../../../../core/utils/token_storage.dart';
 
@@ -45,7 +44,7 @@ class CartViewModel extends ChangeNotifier {
         _cartItems.addAll(items);
       }
     } catch (e) {
-      debugPrint('Error loading cart from storage: $e');
+        print('Error loading cart from storage: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -60,7 +59,7 @@ class CartViewModel extends ChangeNotifier {
         await cartRepository.saveCartItems(userId, _cartItems);
       }
     } catch (e) {
-      debugPrint('Error saving cart to storage: $e');
+        print('Error saving cart to storage: $e');
     }
   }
 
@@ -109,7 +108,7 @@ class CartViewModel extends ChangeNotifier {
         await cartRepository.clearCartItems(userId);
       }
     } catch (e) {
-      debugPrint('Error clearing cart from storage: $e');
+        print('Error clearing cart from storage: $e');
     }
   }
 

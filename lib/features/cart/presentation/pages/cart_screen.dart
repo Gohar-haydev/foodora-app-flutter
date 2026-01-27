@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
@@ -9,7 +8,7 @@ import 'package:foodora/features/cart/presentation/widgets/cart_price_row.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen({super.key});
 
 
   @override
@@ -78,7 +77,7 @@ class CartScreen extends StatelessWidget {
                       onDecrement: () => viewModel.decrementItem(cartItem.id),
                       onRemove: () => viewModel.removeFromCart(cartItem.id),
                     );
-                  }).toList(),
+                  }),
 
                   SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 

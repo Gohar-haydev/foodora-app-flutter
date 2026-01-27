@@ -45,15 +45,15 @@ class OrderApiExample {
     if (success) {
       // Order created successfully
       final order = orderViewModel.lastCreatedOrder;
-      debugPrint('✅ Order created successfully!');
-      debugPrint('Order Number: ${order?.orderNumber}');
-      debugPrint('Total Amount: \$${order?.totalAmount}');
-      debugPrint('Status: ${order?.status}');
-      debugPrint('Branch: ${order?.branchName}');
+        print('✅ Order created successfully!');
+        print('Order Number: ${order?.orderNumber}');
+        print('Total Amount: \$${order?.totalAmount}');
+        print('Status: ${order?.status}');
+        print('Branch: ${order?.branchName}');
     } else {
       // Handle error
-      debugPrint('❌ Order creation failed');
-      debugPrint('Error: ${orderViewModel.errorMessage}');
+        print('❌ Order creation failed');
+        print('Error: ${orderViewModel.errorMessage}');
     }
   }
 
@@ -97,6 +97,8 @@ class OrderApiExample {
           onPressed: () async {
             await createExampleOrder();
             
+            if (!context.mounted) return;
+            
             if (orderViewModel.errorMessage != null) {
               // Show error snackbar
               ScaffoldMessenger.of(context).showSnackBar(
@@ -126,32 +128,32 @@ class OrderApiExample {
 
     if (order != null) {
       // Order fetched successfully
-      debugPrint('✅ Order fetched successfully!');
-      debugPrint('Order ID: ${order.id}');
-      debugPrint('Order Number: ${order.orderNumber}');
-      debugPrint('Status: ${order.status}');
-      debugPrint('Total Amount: \$${order.totalAmount}');
-      debugPrint('Customer: ${order.customerName}');
-      debugPrint('Phone: ${order.customerPhone}');
-      debugPrint('Delivery Type: ${order.deliveryType}');
-      debugPrint('Delivery Address: ${order.deliveryAddress}');
-      debugPrint('Payment Method: ${order.paymentMethod}');
-      debugPrint('Payment Status: ${order.paymentStatus}');
-      debugPrint('Branch: ${order.branchName}');
-      debugPrint('Branch Address: ${order.branchAddress}');
-      debugPrint('Number of Items: ${order.items.length}');
+        print('✅ Order fetched successfully!');
+        print('Order ID: ${order.id}');
+        print('Order Number: ${order.orderNumber}');
+        print('Status: ${order.status}');
+        print('Total Amount: \$${order.totalAmount}');
+        print('Customer: ${order.customerName}');
+        print('Phone: ${order.customerPhone}');
+        print('Delivery Type: ${order.deliveryType}');
+        print('Delivery Address: ${order.deliveryAddress}');
+        print('Payment Method: ${order.paymentMethod}');
+        print('Payment Status: ${order.paymentStatus}');
+        print('Branch: ${order.branchName}');
+        print('Branch Address: ${order.branchAddress}');
+        print('Number of Items: ${order.items.length}');
       
       // Print item details
       for (var item in order.items) {
-        debugPrint('  - ${item.itemName} x${item.quantity} = \$${item.subtotal}');
+          print('  - ${item.itemName} x${item.quantity} = \$${item.subtotal}');
         for (var addon in item.addons) {
-          debugPrint('    + ${addon.addonName} x${addon.quantity} = \$${addon.subtotal}');
+            print('    + ${addon.addonName} x${addon.quantity} = \$${addon.subtotal}');
         }
       }
     } else {
       // Handle error
-      debugPrint('❌ Failed to fetch order');
-      debugPrint('Error: ${orderViewModel.errorMessage}');
+        print('❌ Failed to fetch order');
+        print('Error: ${orderViewModel.errorMessage}');
     }
   }
 
@@ -214,6 +216,8 @@ class OrderApiExample {
 
     final order = await orderViewModel.getOrderById(orderId);
 
+    if (!context.mounted) return;
+
     // Close loading dialog
     Navigator.of(context).pop();
 
@@ -225,7 +229,7 @@ class OrderApiExample {
       //     builder: (context) => OrderDetailsScreen(order: order),
       //   ),
       // );
-      debugPrint('Navigate to order details screen');
+        print('Navigate to order details screen');
     } else {
       // Show error dialog
       showDialog(

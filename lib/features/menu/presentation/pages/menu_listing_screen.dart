@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/extensions/context_extensions.dart';
 
 class MenuListingScreen extends StatelessWidget {
-  const MenuListingScreen({Key? key}) : super(key: key);
+  const MenuListingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

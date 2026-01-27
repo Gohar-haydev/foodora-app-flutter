@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:foodora/core/errors/failure.dart';
 import 'package:foodora/core/utils/result.dart';
 import 'package:foodora/features/order/data/datasources/order_remote_data_source.dart';
@@ -23,20 +24,20 @@ class OrderRepositoryImpl implements OrderRepository {
 
   @override
   Future<Result<OrderEntity>> getOrderById(int orderId) async {
-    print('🟠 [Repository] getOrderById called with orderId: $orderId');
+    debugPrint('🟠 [Repository] getOrderById called with orderId: $orderId');
     try {
-      print('🟠 [Repository] Calling remote data source...');
+      debugPrint('🟠 [Repository] Calling remote data source...');
       final orderModel = await remoteDataSource.getOrderById(orderId);
-      print('✅ [Repository] Remote data source returned order model');
-      print('✅ [Repository] Order ID: ${orderModel.id}');
-      print('✅ [Repository] Order Number: ${orderModel.orderNumber}');
+      debugPrint('✅ [Repository] Remote data source returned order model');
+      debugPrint('✅ [Repository] Order ID: ${orderModel.id}');
+      debugPrint('✅ [Repository] Order Number: ${orderModel.orderNumber}');
       
       final entity = orderModel.toEntity();
-      print('✅ [Repository] Converted to entity successfully');
+      debugPrint('✅ [Repository] Converted to entity successfully');
       return Result.success(entity);
     } catch (e) {
-      print('❌ [Repository] Exception caught: $e');
-      print('❌ [Repository] Exception type: ${e.runtimeType}');
+      debugPrint('❌ [Repository] Exception caught: $e');
+      debugPrint('❌ [Repository] Exception type: ${e.runtimeType}');
       return Result.failure(ServerFailure(e.toString()));
     }
   }
@@ -54,26 +55,26 @@ class OrderRepositoryImpl implements OrderRepository {
 
   @override
   Future<Result<OrderTrackingEntity>> trackOrder(int orderId) async {
-    print('🟠 [Repository] trackOrder called with orderId: $orderId');
+    debugPrint('🟠 [Repository] trackOrder called with orderId: $orderId');
     try {
       final trackingModel = await remoteDataSource.trackOrder(orderId);
-      print('✅ [Repository] Parsed tracking model successfully');
+      debugPrint('✅ [Repository] Parsed tracking model successfully');
       return Result.success(trackingModel.toEntity());
     } catch (e) {
-      print('❌ [Repository] Track order exception: $e');
+      debugPrint('❌ [Repository] Track order exception: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }
 
   @override
   Future<Result<void>> cancelOrder(int orderId, String reason) async {
-    print('🟠 [Repository] cancelOrder called: $orderId, reason: $reason');
+    debugPrint('🟠 [Repository] cancelOrder called: $orderId, reason: $reason');
     try {
       await remoteDataSource.cancelOrder(orderId, reason);
-      print('✅ [Repository] Cancel successful');
+      debugPrint('✅ [Repository] Cancel successful');
       return Result.success(null);
     } catch (e) {
-      print('❌ [Repository] Cancel exception: $e');
+      debugPrint('❌ [Repository] Cancel exception: $e');
       return Result.failure(ServerFailure(e.toString()));
     }
   }

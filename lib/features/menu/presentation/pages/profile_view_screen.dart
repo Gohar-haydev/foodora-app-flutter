@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodora/features/order/presentation/pages/order_history_screen.dart';
-import 'package:foodora/features/auth/presentation/pages/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
@@ -259,6 +256,8 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                             confirmPassword: confirmPassword,
                           );
                         }
+
+                        if (!mounted) return;
 
                         // 3. Feedback
                         if (profileSuccess && passwordSuccess) {

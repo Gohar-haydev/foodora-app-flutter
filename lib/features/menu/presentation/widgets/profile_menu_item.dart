@@ -9,15 +9,14 @@ class ProfileMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const ProfileMenuItem({
-    Key? key,
+    super.key,
     this.icon,
     this.imagePath,
     required this.iconColor,
     required this.iconBackground,
     required this.title,
     required this.onTap,
-  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided'),
-       super(key: key);
+  }) : assert(icon != null || imagePath != null, 'Either icon or imagePath must be provided');
 
   @override
   Widget build(BuildContext context) {

@@ -8,9 +8,9 @@ class OrderConfirmationScreen extends StatelessWidget {
   final OrderEntity order;
 
   const OrderConfirmationScreen({
-    Key? key,
+    super.key,
     required this.order,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

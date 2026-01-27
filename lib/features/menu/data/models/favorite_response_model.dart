@@ -2,12 +2,9 @@ import 'package:foodora/features/menu/domain/entities/favorite_entity.dart';
 
 class FavoriteResponseModel extends FavoriteEntity {
   FavoriteResponseModel({
-    required int menuItemId,
-    required String message,
-  }) : super(
-          menuItemId: menuItemId,
-          message: message,
-        );
+    required super.menuItemId,
+    required super.message,
+  });
 
   factory FavoriteResponseModel.fromJson(Map<String, dynamic> json) {
     final data = json['data'] as Map<String, dynamic>;

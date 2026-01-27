@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
-import 'package:foodora/core/constants/app_strings.dart';
-import 'package:foodora/features/order/domain/entities/order_tracking_entity.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
@@ -139,7 +137,7 @@ class OrderTrackingScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryText.withOpacity(0.05),
+                                color: AppColors.primaryText.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -223,7 +221,7 @@ class OrderTrackingScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryText.withOpacity(0.05),
+                                color: AppColors.primaryText.withValues(alpha: 0.05),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),

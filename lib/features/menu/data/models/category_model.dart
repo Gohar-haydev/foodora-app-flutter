@@ -2,16 +2,11 @@ import 'package:foodora/features/menu/domain/entities/category_entity.dart';
 
 class CategoryModel extends CategoryEntity {
   CategoryModel({
-    required int id,
-    required String name,
-    required String description,
-    String? image,
-  }) : super(
-          id: id,
-          name: name,
-          description: description,
-          image: image,
-        );
+    required super.id,
+    required super.name,
+    required super.description,
+    super.image,
+  });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(

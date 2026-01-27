@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 class BranchCard extends StatelessWidget {
@@ -9,12 +8,12 @@ class BranchCard extends StatelessWidget {
   final VoidCallback onSelect;
 
   const BranchCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.address,
     required this.imageUrl,
     required this.onSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class BranchCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE6E6E6)), // Add border
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

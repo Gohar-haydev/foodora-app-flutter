@@ -2,16 +2,11 @@ import 'package:foodora/features/menu/domain/entities/pagination_entity.dart';
 
 class PaginationModel extends PaginationEntity {
   PaginationModel({
-    required int currentPage,
-    required int lastPage,
-    required int perPage,
-    required int total,
-  }) : super(
-          currentPage: currentPage,
-          lastPage: lastPage,
-          perPage: perPage,
-          total: total,
-        );
+    required super.currentPage,
+    required super.lastPage,
+    required super.perPage,
+    required super.total,
+  });
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) {
     return PaginationModel(

@@ -2,18 +2,12 @@ import 'package:foodora/features/menu/domain/entities/branch_entity.dart';
 
 class BranchModel extends BranchEntity {
   BranchModel({
-    required int id,
-    required String name,
-    required String code,
-    required String address,
-    required String phone,
-  }) : super(
-          id: id,
-          name: name,
-          code: code,
-          address: address,
-          phone: phone,
-        );
+    required super.id,
+    required super.name,
+    required super.code,
+    required super.address,
+    required super.phone,
+  });
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
     return BranchModel(

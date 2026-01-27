@@ -8,12 +8,12 @@ class OrderItemWidget extends StatelessWidget {
   final String imageUrl;
 
   const OrderItemWidget({
-    Key? key,
+    super.key,
     required this.name,
     required this.code,
     required this.price,
     required this.imageUrl,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

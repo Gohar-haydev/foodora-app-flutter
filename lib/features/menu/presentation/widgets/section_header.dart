@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foodora/core/constants/app_strings.dart';
-import '';
 class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback onSeeAll;

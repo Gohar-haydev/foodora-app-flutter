@@ -9,11 +9,11 @@ class CartPriceRow extends StatelessWidget {
   final bool isTotal;
 
   const CartPriceRow({
-    Key? key,
+    super.key,
     required this.label,
     required this.amount,
     this.isTotal = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

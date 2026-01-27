@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodora/core/constants/app_constants.dart';
-
 /// Reusable logout button widget with consistent styling
 class LogoutButton extends StatelessWidget {
   final String text;

@@ -3,13 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/pages/order_details_screen.dart';
 import 'package:foodora/features/order/presentation/viewmodels/order_viewmodel.dart';
-import 'package:foodora/core/constants/app_strings.dart';
 import 'package:foodora/features/order/presentation/widgets/past_order_card.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/core/providers/currency_provider.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
-  const OrderHistoryScreen({Key? key}) : super(key: key);
+  const OrderHistoryScreen({super.key});
 
   @override
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();

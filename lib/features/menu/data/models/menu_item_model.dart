@@ -3,34 +3,20 @@ import 'package:foodora/features/menu/data/models/addon_model.dart';
 
 class MenuItemModel extends MenuItemEntity {
   MenuItemModel({
-    required int id,
-    required int branchId,
-    required int categoryId,
-    required String name,
-    required String slug,
-    required String description,
-    required String price,
-    String? image,
-    required bool isActive,
-    required int sortOrder,
-    String? categoryName,
-    List<String>? ingredients,
-    List<AddonModel>? addons,
-  }) : super(
-          id: id,
-          branchId: branchId,
-          categoryId: categoryId,
-          name: name,
-          slug: slug,
-          description: description,
-          price: price,
-          image: image,
-          isActive: isActive,
-          sortOrder: sortOrder,
-          categoryName: categoryName,
-          ingredients: ingredients,
-          addons: addons,
-        );
+    required super.id,
+    required super.branchId,
+    required super.categoryId,
+    required super.name,
+    required super.slug,
+    required super.description,
+    required super.price,
+    super.image,
+    required super.isActive,
+    required super.sortOrder,
+    super.categoryName,
+    super.ingredients,
+    List<AddonModel>? super.addons,
+  });
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
     return MenuItemModel(
