@@ -659,124 +659,124 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
                     // Promo Code Section
-                    _SectionHeader(title: context.tr('promo_code')),
-                    SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
-                    Container(
-                      padding: EdgeInsets.all(
-                        AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryText.withValues(alpha: 0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _promoCodeController,
-                              style: TextStyle(
-                                fontSize: AppDimensions.getBodySize(context),
-                              ),
-                              decoration: InputDecoration(
-                                hintText: context.tr('promo_code_hint'),
-                                hintStyle: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: AppDimensions.getSmallSize(context),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                                  borderSide: const BorderSide(color: AppColors.grey300),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                                  borderSide: const BorderSide(color: AppColors.grey300),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                                  borderSide: const BorderSide(
-                                      color: AppColors.primaryAccent, width: 2),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
-                                  vertical: AppDimensions.responsiveSpacing(context, mobile: 14, tablet: 16),
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.local_offer_outlined,
-                                  color: _appliedPromoCode != null ? AppColors.success : AppColors.primaryAccent,
-                                  size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
-                                ),
-                                suffixIcon: _appliedPromoCode != null
-                                    ? IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            _appliedPromoCode = null;
-                                            _promoCodeController.clear();
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: AppColors.grey,
-                                          size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
-                                        ),
-                                      )
-                                    : null,
-                              ),
-                              enabled: _appliedPromoCode == null,
-                            ),
-                          ),
-                          SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
-                          SizedBox(
-                            height: AppDimensions.responsive(context, mobile: 50, tablet: 56),
-                            child: ElevatedButton(
-                              onPressed: _appliedPromoCode != null
-                                  ? null
-                                  : () {
-                                      if (_promoCodeController.text.isNotEmpty) {
-                                        setState(() {
-                                          _appliedPromoCode = _promoCodeController.text;
-                                        });
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(context.tr('promo_code_applied')),
-                                            backgroundColor: AppColors.success,
-                                            duration: const Duration(seconds: 2),
-                                          ),
-                                        );
-                                      }
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _appliedPromoCode != null
-                                    ? AppColors.success
-                                    : AppColors.primaryAccent,
-                                foregroundColor: AppColors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(AppDimensions.spacing12),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
-                                ),
-                              ),
-                              child: Text(
-                                _appliedPromoCode != null
-                                    ? context.tr('applied')
-                                    : context.tr('apply'),
-                                style: TextStyle(
-                                  fontSize: AppDimensions.getBodySize(context),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // _SectionHeader(title: context.tr('promo_code')),
+                    // SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    // Container(
+                    //   padding: EdgeInsets.all(
+                    //     AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: AppColors.white,
+                    //     borderRadius: BorderRadius.circular(16),
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: AppColors.primaryText.withValues(alpha: 0.05),
+                    //         blurRadius: 10,
+                    //         offset: const Offset(0, 2),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: TextField(
+                    //           controller: _promoCodeController,
+                    //           style: TextStyle(
+                    //             fontSize: AppDimensions.getBodySize(context),
+                    //           ),
+                    //           decoration: InputDecoration(
+                    //             hintText: context.tr('promo_code_hint'),
+                    //             hintStyle: TextStyle(
+                    //               color: AppColors.grey,
+                    //               fontSize: AppDimensions.getSmallSize(context),
+                    //             ),
+                    //             border: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    //               borderSide: const BorderSide(color: AppColors.grey300),
+                    //             ),
+                    //             enabledBorder: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    //               borderSide: const BorderSide(color: AppColors.grey300),
+                    //             ),
+                    //             focusedBorder: OutlineInputBorder(
+                    //               borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    //               borderSide: const BorderSide(
+                    //                   color: AppColors.primaryAccent, width: 2),
+                    //             ),
+                    //             contentPadding: EdgeInsets.symmetric(
+                    //               horizontal: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                    //               vertical: AppDimensions.responsiveSpacing(context, mobile: 14, tablet: 16),
+                    //             ),
+                    //             prefixIcon: Icon(
+                    //               Icons.local_offer_outlined,
+                    //               color: _appliedPromoCode != null ? AppColors.success : AppColors.primaryAccent,
+                    //               size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                    //             ),
+                    //             suffixIcon: _appliedPromoCode != null
+                    //                 ? IconButton(
+                    //                     onPressed: () {
+                    //                       setState(() {
+                    //                         _appliedPromoCode = null;
+                    //                         _promoCodeController.clear();
+                    //                       });
+                    //                     },
+                    //                     icon: Icon(
+                    //                       Icons.close,
+                    //                       color: AppColors.grey,
+                    //                       size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                    //                     ),
+                    //                   )
+                    //                 : null,
+                    //           ),
+                    //           enabled: _appliedPromoCode == null,
+                    //         ),
+                    //       ),
+                    //       SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16)),
+                    //       SizedBox(
+                    //         height: AppDimensions.responsive(context, mobile: 50, tablet: 56),
+                    //         child: ElevatedButton(
+                    //           onPressed: _appliedPromoCode != null
+                    //               ? null
+                    //               : () {
+                    //                   if (_promoCodeController.text.isNotEmpty) {
+                    //                     setState(() {
+                    //                       _appliedPromoCode = _promoCodeController.text;
+                    //                     });
+                    //                     ScaffoldMessenger.of(context).showSnackBar(
+                    //                       SnackBar(
+                    //                         content: Text(context.tr('promo_code_applied')),
+                    //                         backgroundColor: AppColors.success,
+                    //                         duration: const Duration(seconds: 2),
+                    //                       ),
+                    //                     );
+                    //                   }
+                    //                 },
+                    //           style: ElevatedButton.styleFrom(
+                    //             backgroundColor: _appliedPromoCode != null
+                    //                 ? AppColors.success
+                    //                 : AppColors.primaryAccent,
+                    //             foregroundColor: AppColors.white,
+                    //             shape: RoundedRectangleBorder(
+                    //               borderRadius: BorderRadius.circular(AppDimensions.spacing12),
+                    //             ),
+                    //             padding: EdgeInsets.symmetric(
+                    //               horizontal: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28),
+                    //             ),
+                    //           ),
+                    //           child: Text(
+                    //             _appliedPromoCode != null
+                    //                 ? context.tr('applied')
+                    //                 : context.tr('apply'),
+                    //             style: TextStyle(
+                    //               fontSize: AppDimensions.getBodySize(context),
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
                     // Order Summary
