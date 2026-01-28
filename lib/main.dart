@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'core/network/api_service.dart';
@@ -155,7 +156,8 @@ class FoodieApp extends StatelessWidget {
           return MaterialApp(
             title: AppStrings.appName,
             theme: ThemeData(
-              fontFamily: 'Plus Jakarta Sans',
+              fontFamily: 'Raleway',
+              textTheme: GoogleFonts.ralewayTextTheme(),
               scaffoldBackgroundColor: AppColors.white,
               useMaterial3: true,
               pageTransitionsTheme: const PageTransitionsTheme(
