@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:foodora/core/widgets/error_dialog.dart';
+import 'package:foodora/core/providers/currency_provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -813,12 +814,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      '\$${item.totalPrice.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: AppDimensions.getSmallSize(context),
-                                      ),
+                                    Consumer<CurrencyProvider>(
+                                      builder: (context, currencyProvider, _) {
+                                        return Text(
+                                          currencyProvider.formatPrice(item.totalPrice),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: AppDimensions.getSmallSize(context),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -931,13 +936,17 @@ class _SummaryRow extends StatelessWidget {
             color: isTotal ? AppColors.primaryText : AppColors.grey600,
           ),
         ),
-        Text(
-          '\$${amount.toStringAsFixed(2)}',
-          style: TextStyle(
-            fontSize: isTotal ? AppDimensions.getBodySize(context) : AppDimensions.getSmallSize(context),
-            fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
-            color: AppColors.primaryText,
-          ),
+        Consumer<CurrencyProvider>(
+          builder: (context, currencyProvider, _) {
+            return Text(
+              currencyProvider.formatPrice(amount),
+              style: TextStyle(
+                fontSize: isTotal ? AppDimensions.getBodySize(context) : AppDimensions.getSmallSize(context),
+                fontWeight: isTotal ? FontWeight.bold : FontWeight.w600,
+                color: AppColors.primaryText,
+              ),
+            );
+          },
         ),
       ],
     );

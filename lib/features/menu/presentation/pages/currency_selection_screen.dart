@@ -29,7 +29,8 @@ class CurrencySelectionScreen extends StatelessWidget {
           icon: Icon(
             Icons.arrow_back,
             color: Colors.black,
-            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+            size: AppDimensions.responsiveIconSize(context,
+                mobile: 24, tablet: 28),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -50,23 +51,42 @@ class CurrencySelectionScreen extends StatelessWidget {
                   currencyCode: 'SEK',
                   symbol: 'kr',
                   isSelected: currencyProvider.currencyCode == 'SEK',
-                  onTap: () => currencyProvider.setCurrency('SEK'),
+                  onTap: () {
+                    currencyProvider.setCurrency('SEK');
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                SizedBox(
+                    height: AppDimensions.responsiveSpacing(context,
+                        mobile: 16, tablet: 20)),
                 _CurrencyOption(
                   currencyName: 'US Dollar',
                   currencyCode: 'USD',
                   symbol: '\$',
                   isSelected: currencyProvider.currencyCode == 'USD',
-                  onTap: () => currencyProvider.setCurrency('USD'),
+                  onTap: () {
+                    currencyProvider.setCurrency('USD');
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                SizedBox(
+                    height: AppDimensions.responsiveSpacing(context,
+                        mobile: 16, tablet: 20)),
                 _CurrencyOption(
                   currencyName: 'Euro',
                   currencyCode: 'EUR',
                   symbol: '€',
                   isSelected: currencyProvider.currencyCode == 'EUR',
-                  onTap: () => currencyProvider.setCurrency('EUR'),
+                  onTap: () {
+                    currencyProvider.setCurrency('EUR');
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
               ],
             ),
@@ -132,12 +152,15 @@ class _CurrencyOption extends StatelessWidget {
                   style: TextStyle(
                     fontSize: AppDimensions.getH2Size(context),
                     fontWeight: FontWeight.bold,
-                    color: isSelected ? const Color(0xFF4CAF50) : Colors.black54,
+                    color:
+                        isSelected ? const Color(0xFF4CAF50) : Colors.black54,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+            SizedBox(
+                width: AppDimensions.responsiveSpacing(context,
+                    mobile: 16, tablet: 20)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,8 +169,10 @@ class _CurrencyOption extends StatelessWidget {
                     currencyName,
                     style: TextStyle(
                       fontSize: AppDimensions.getH3Size(context),
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                      color: isSelected ? const Color(0xFF4CAF50) : Colors.black87,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w600,
+                      color:
+                          isSelected ? const Color(0xFF4CAF50) : Colors.black87,
                     ),
                   ),
                   Text(
@@ -164,7 +189,8 @@ class _CurrencyOption extends StatelessWidget {
               Icon(
                 Icons.check_circle,
                 color: const Color(0xFF4CAF50),
-                size: AppDimensions.responsiveIconSize(context, mobile: 28, tablet: 32),
+                size: AppDimensions.responsiveIconSize(context,
+                    mobile: 28, tablet: 32),
               ),
           ],
         ),
