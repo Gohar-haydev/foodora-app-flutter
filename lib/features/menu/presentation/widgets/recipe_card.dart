@@ -46,13 +46,21 @@ class RecipeCard extends StatelessWidget {
                     width: double.infinity,
                     height: double.infinity,
                     color: Colors.grey[100],
-                    child: Image.asset(
-                      image,
-                      fit: BoxFit.cover,
-                      errorBuilder: (ctx, err, stack) => const Center(
-                        child: Icon(Icons.local_pizza, color: Colors.grey, size: 40),
-                      ),
-                    ),
+                    child: image.startsWith('http')
+                        ? Image.network(
+                            image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (ctx, err, stack) => const Center(
+                              child: Icon(Icons.local_pizza, color: Colors.grey, size: 40),
+                            ),
+                          )
+                        : Image.asset(
+                            image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (ctx, err, stack) => const Center(
+                              child: Icon(Icons.local_pizza, color: Colors.grey, size: 40),
+                            ),
+                          ),
                   ),
                 ),
                 Positioned(

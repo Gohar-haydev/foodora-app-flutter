@@ -456,7 +456,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                 child: RecipeCard(
                                   title: itemsToShow[i].name,
                                   price: '${context.tr('from')} ${currencyProvider.formatPrice(double.tryParse(itemsToShow[i].price.toString()) ?? 0)}',
-                                  image: itemsToShow[i].image ?? 'assets/images/kebabpizza.jpg',
+                                  image: itemsToShow[i].imageUrl ?? 'assets/images/kebabpizza.jpg',
                                     menuItemId: itemsToShow[i].id,
                                   isFavorite: viewModel.isFavorite(itemsToShow[i].id),
                                   onFavoriteTap: () async {

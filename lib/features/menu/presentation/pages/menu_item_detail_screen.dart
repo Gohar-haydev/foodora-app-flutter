@@ -122,7 +122,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                        item.image ?? 'https://thumbs.dreamstime.com/b/pizza-pepperoni-cheese-salami-vegetables-58914487.jpg',
+                        item.imageUrl ?? 'https://thumbs.dreamstime.com/b/pizza-pepperoni-cheese-salami-vegetables-58914487.jpg',
                       ),
                       fit: BoxFit.cover,
                     ),

@@ -60,20 +60,35 @@ class BranchCard extends StatelessWidget {
                           child: Icon(Icons.store, size: 48, color: Colors.grey),
                         ),
                         // Positioned Image
-                        Image.asset(
-                          imageUrl,
-                          width: double.infinity,
-                          height: 140,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[200],
-                              child: const Center(
-                                child: Icon(Icons.store, size: 48, color: Colors.grey),
+                        imageUrl.startsWith('http')
+                            ? Image.network(
+                                imageUrl,
+                                width: double.infinity,
+                                height: 140,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[200],
+                                    child: const Center(
+                                      child: Icon(Icons.store, size: 48, color: Colors.grey),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Image.asset(
+                                imageUrl,
+                                width: double.infinity,
+                                height: 140,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[200],
+                                    child: const Center(
+                                      child: Icon(Icons.store, size: 48, color: Colors.grey),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
                         // Selected checkmark badge
                         if (isSelected)
                           Positioned(

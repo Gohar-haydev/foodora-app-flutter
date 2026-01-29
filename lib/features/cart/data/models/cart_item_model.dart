@@ -29,7 +29,7 @@ class CartItemModel {
         slug: entity.menuItem.slug,
         description: entity.menuItem.description,
         price: entity.menuItem.price,
-        image: entity.menuItem.image,
+        imageUrl: entity.menuItem.imageUrl,
         isActive: entity.menuItem.isActive,
         sortOrder: entity.menuItem.sortOrder,
         categoryName: entity.menuItem.categoryName,

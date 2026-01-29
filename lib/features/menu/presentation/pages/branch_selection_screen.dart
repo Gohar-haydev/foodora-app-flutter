@@ -196,7 +196,7 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                           return BranchCard(
                             name: branch.name,
                             address: branch.address,
-                            imageUrl: 'assets/images/branch_placeholder.jpg',
+                            imageUrl: branch.imageUrl ?? 'assets/images/branch_placeholder.jpg',
                             isSelected: isSelected,
                             onSelect: () {
                               viewModel.selectBranch(branch.id);

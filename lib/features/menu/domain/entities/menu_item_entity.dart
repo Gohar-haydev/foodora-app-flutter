@@ -8,7 +8,7 @@ class MenuItemEntity {
   final String slug;
   final String description;
   final String price;
-  final String? image;
+  final String? imageUrl;
   final bool isActive;
   final int sortOrder;
   final String? categoryName;
@@ -21,7 +21,7 @@ class MenuItemEntity {
     required this.slug,
     required this.description,
     required this.price,
-    this.image,
+    this.imageUrl,
     required this.isActive,
     required this.sortOrder,
     this.categoryName,

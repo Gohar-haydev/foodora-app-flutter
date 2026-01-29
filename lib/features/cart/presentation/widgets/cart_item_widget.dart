@@ -55,9 +55,9 @@ class CartItemWidget extends StatelessWidget {
                   width: 60,
                   height: 60,
                   color: AppColors.grey300,
-                  child: cartItem.menuItem.image != null
+                  child: cartItem.menuItem.imageUrl != null
                       ? Image.network(
-                          cartItem.menuItem.image!,
+                          cartItem.menuItem.imageUrl!,
                           fit: BoxFit.cover,
                           errorBuilder: (ctx, err, stack) => const Icon(Icons.fastfood, color: AppColors.grey),
                         )

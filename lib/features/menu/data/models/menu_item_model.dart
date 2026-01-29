@@ -10,7 +10,7 @@ class MenuItemModel extends MenuItemEntity {
     required super.slug,
     required super.description,
     required super.price,
-    super.image,
+    super.imageUrl,
     required super.isActive,
     required super.sortOrder,
     super.categoryName,
@@ -27,7 +27,7 @@ class MenuItemModel extends MenuItemEntity {
       slug: json['slug'] as String,
       description: (json['description'] as String?) ?? '',
       price: json['price']?.toString() ?? '0.00',
-      image: json['image'] as String?,
+      imageUrl: json['image_url'] as String?,
       isActive: (json['is_active'] as bool?) ?? true,
       sortOrder: (json['sort_order'] as int?) ?? 0,
       categoryName: json['category'] != null ? json['category']['name'] as String? : null,
@@ -47,7 +47,7 @@ class MenuItemModel extends MenuItemEntity {
       'slug': slug,
       'description': description,
       'price': price,
-      'image': image,
+      'image_url': imageUrl,
       'is_active': isActive,
       'sort_order': sortOrder,
       'category_name': categoryName,
@@ -56,3 +56,4 @@ class MenuItemModel extends MenuItemEntity {
     };
   }
 }
+

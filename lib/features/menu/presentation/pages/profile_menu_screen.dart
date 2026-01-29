@@ -117,107 +117,107 @@ class ProfileMenuScreen extends StatelessWidget {
                       ),
                       
                       // Language Menu Item
-                      ProfileMenuItem(
-                        icon: Icons.language,
-                        iconColor: AppColors.primaryAccent,
-                        iconBackground: AppColors.successLight,
-                        title: context.tr('language'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const LanguageSelectionScreen(),
-                            ),
-                          );
-                        },
-                      ),
+                      // ProfileMenuItem(
+                      //   icon: Icons.language,
+                      //   iconColor: AppColors.primaryAccent,
+                      //   iconBackground: AppColors.successLight,
+                      //   title: context.tr('language'),
+                      //   onTap: () {
+                      //     Navigator.of(context).push(
+                      //       MaterialPageRoute(
+                      //         builder: (_) => const LanguageSelectionScreen(),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
 
                       // Divider after Language
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.divider,
-                      ),
+                      // const Divider(
+                      //   height: 1,
+                      //   thickness: 1,
+                      //   color: AppColors.divider,
+                      // ),
 
                       // Currency Menu Item
-                      ProfileMenuItem(
-                        icon: Icons.attach_money,
-                        iconColor: AppColors.primaryAccent,
-                        iconBackground: AppColors.successLight,
-                        title: context.tr('currency'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const CurrencySelectionScreen(),
-                            ),
-                          );
-                        },
-                      ),
+                      // ProfileMenuItem(
+                      //   icon: Icons.attach_money,
+                      //   iconColor: AppColors.primaryAccent,
+                      //   iconBackground: AppColors.successLight,
+                      //   title: context.tr('currency'),
+                      //   onTap: () {
+                      //     Navigator.of(context).push(
+                      //       MaterialPageRoute(
+                      //         builder: (_) => const CurrencySelectionScreen(),
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
 
                       // Divider after Currency
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.divider,
-                      ),
+                      // const Divider(
+                      //   height: 1,
+                      //   thickness: 1,
+                      //   color: AppColors.divider,
+                      // ),
 
                       // Delete Account Menu Item
-                      ProfileMenuItem(
-                        icon: Icons.delete_outline,
-                        iconColor: AppColors.error,
-                        iconBackground: AppColors.errorLight,
-                        title: context.tr('delete_account'),
-                        onTap: () async {
-                          final shouldDelete = await showDialog<bool>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text(
-                                context.tr('delete_account_confirm_title'),
-                                style: TextStyle(
-                                  fontSize: AppDimensions.getH3Size(context),
-                                ),
-                              ),
-                              content: Text(
-                                context.tr('delete_account_confirm_message'),
-                                style: TextStyle(
-                                  fontSize: AppDimensions.getBodySize(context),
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
-                                  child: Text(context.tr('cancel')),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
-                                  child: Text(
-                                    context.tr('delete_account'),
-                                    style: const TextStyle(color: AppColors.error),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-
-                          if (shouldDelete == true && context.mounted) {
-                            // TODO: Implement actual delete account API call
-                            await context.read<AuthViewModel>().logout();
-                            if (context.mounted) {
-                              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                                (route) => false,
-                              );
-                            }
-                          }
-                        },
-                      ),
+                      // ProfileMenuItem(
+                      //   icon: Icons.delete_outline,
+                      //   iconColor: AppColors.error,
+                      //   iconBackground: AppColors.errorLight,
+                      //   title: context.tr('delete_account'),
+                      //   onTap: () async {
+                      //     final shouldDelete = await showDialog<bool>(
+                      //       context: context,
+                      //       builder: (context) => AlertDialog(
+                      //         title: Text(
+                      //           context.tr('delete_account_confirm_title'),
+                      //           style: TextStyle(
+                      //             fontSize: AppDimensions.getH3Size(context),
+                      //           ),
+                      //         ),
+                      //         content: Text(
+                      //           context.tr('delete_account_confirm_message'),
+                      //           style: TextStyle(
+                      //             fontSize: AppDimensions.getBodySize(context),
+                      //           ),
+                      //         ),
+                      //         actions: [
+                      //           TextButton(
+                      //             onPressed: () => Navigator.of(context).pop(false),
+                      //             child: Text(context.tr('cancel')),
+                      //           ),
+                      //           TextButton(
+                      //             onPressed: () => Navigator.of(context).pop(true),
+                      //             child: Text(
+                      //               context.tr('delete_account'),
+                      //               style: const TextStyle(color: AppColors.error),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     );
+                      //
+                      //     if (shouldDelete == true && context.mounted) {
+                      //       // TODO: Implement actual delete account API call
+                      //       await context.read<AuthViewModel>().logout();
+                      //       if (context.mounted) {
+                      //         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                      //           MaterialPageRoute(
+                      //             builder: (context) => const LoginScreen(),
+                      //           ),
+                      //           (route) => false,
+                      //         );
+                      //       }
+                      //     }
+                      //   },
+                      // ),
                       
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.divider,
-                      ),
+                      // const Divider(
+                      //   height: 1,
+                      //   thickness: 1,
+                      //   color: AppColors.divider,
+                      // ),
                   ]),
                 ),
                 // Logout Button

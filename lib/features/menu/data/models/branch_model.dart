@@ -7,6 +7,7 @@ class BranchModel extends BranchEntity {
     required super.code,
     required super.address,
     required super.phone,
+    super.imageUrl,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class BranchModel extends BranchEntity {
       code: json['code'],
       address: json['address'],
       phone: json['phone'],
+      imageUrl: json['image_url'] as String?,
     );
   }
 
@@ -26,6 +28,7 @@ class BranchModel extends BranchEntity {
       'code': code,
       'address': address,
       'phone': phone,
+      'image_url': imageUrl,
     };
   }
 }

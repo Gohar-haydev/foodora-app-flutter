@@ -4,6 +4,7 @@ class BranchEntity {
   final String code;
   final String address;
   final String phone;
+  final String? imageUrl;
 
   BranchEntity({
     required this.id,
@@ -11,5 +12,6 @@ class BranchEntity {
     required this.code,
     required this.address,
     required this.phone,
+    this.imageUrl,
   });
 }

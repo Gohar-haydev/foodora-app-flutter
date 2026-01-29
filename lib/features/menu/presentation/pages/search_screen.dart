@@ -234,14 +234,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(AppDimensions.spacing12),
                                         color: AppColors.grey200,
-                                        image: item.image != null
+                                        image: item.imageUrl != null
                                             ? DecorationImage(
-                                                image: NetworkImage(item.image!),
+                                                image: NetworkImage(item.imageUrl!),
                                                 fit: BoxFit.cover,
                                               )
                                             : null,
                                       ),
-                                      child: item.image == null
+                                      child: item.imageUrl == null
                                           ? Icon(
                                               Icons.local_pizza,
                                               color: AppColors.grey,

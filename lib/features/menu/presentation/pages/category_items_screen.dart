@@ -145,7 +145,7 @@ class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
                   child: RecipeCard(
                     title: item.name,
                     price: '${context.tr('from')} ${currencyProvider.formatPrice(double.tryParse(item.price.toString()) ?? 0)}',
-                    image: item.image ?? 'assets/images/kebabpizza.jpg',
+                    image: item.imageUrl ?? 'assets/images/kebabpizza.jpg',
                     menuItemId: item.id,
                     isFavorite: viewModel.isFavorite(item.id),
                     onFavoriteTap: () async {
