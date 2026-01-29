@@ -40,6 +40,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    // Clear search results when leaving the screen
+    context.read<MenuViewModel>().clearSearch();
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();

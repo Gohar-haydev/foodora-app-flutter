@@ -80,22 +80,6 @@ class _MenuScreenState extends State<MenuScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.white,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.primaryText,
-              size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
-            ),
-            onPressed: () {
-              // Logic to go back or switch to home tab if at root
-              final navigator = Navigator.of(context);
-              if (navigator.canPop()) {
-                navigator.pop();
-              } else {
-                Navigator.of(context).maybePop();
-              }
-            },
-          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -112,54 +96,24 @@ class _MenuScreenState extends State<MenuScreen> {
                   Text(
                     _getGreeting(),
                     style: TextStyle(
-                      fontSize: AppDimensions.responsiveFontSize(context, mobile: 12, tablet: 14),
+                      fontSize: AppDimensions.responsiveFontSize(context, mobile: 18, tablet: 20),
                       color: Colors.grey[600],
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                 ],
               ),
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: AppDimensions.getBodySize(context),
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryText,
-                ),
-              ),
+              // Text(
+              //   userName,
+              //   style: TextStyle(
+              //     fontSize: AppDimensions.getBodySize(context),
+              //     fontWeight: FontWeight.bold,
+              //     color: AppColors.primaryText,
+              //   ),
+              // ),
             ],
           ),
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const FavoritesScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryAccent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/fav.png',
-                      width: 22,
-                      height: 22,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
       body: SafeArea(
         child: Center(
@@ -194,43 +148,72 @@ class _MenuScreenState extends State<MenuScreen> {
                   //   ],
                   // ),
                   // SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: Text(
-                  //         context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
-                  //         style: TextStyle(
-                  //           fontSize: AppDimensions.getH1Size(context),
-                  //           fontWeight: FontWeight.bold,
-                  //           color: AppColors.darkText,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         Navigator.of(context).push(
-                  //           MaterialPageRoute(
-                  //             builder: (_) => const FavoritesScreen(),
-                  //           ),
-                  //         );
-                  //       },
-                  //       child: Container(
-                  //         padding: EdgeInsets.all(
-                  //           AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10),
-                  //         ),
-                  //         decoration: const BoxDecoration(
-                  //           color: AppColors.greyLight,
-                  //           shape: BoxShape.circle,
-                  //         ),
-                  //         child: Icon(
-                  //           Icons.favorite_border,
-                  //           color: AppColors.primaryAccent,
-                  //           size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
+                          style: TextStyle(
+                            fontSize: AppDimensions.getH1Size(context),
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkText,
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const FavoritesScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryAccent,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                'assets/images/fav.png',
+                                width: 22,
+                                height: 22,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.of(context).push(
+                      //       MaterialPageRoute(
+                      //         builder: (_) => const FavoritesScreen(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Container(
+                      //     padding: EdgeInsets.all(
+                      //       AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10),
+                      //     ),
+                      //     decoration: const BoxDecoration(
+                      //       color: AppColors.greyLight,
+                      //       shape: BoxShape.circle,
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.favorite_border,
+                      //       color: AppColors.primaryAccent,
+                      //       size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
 
                   SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
@@ -368,7 +351,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       }
                       
                       return SectionHeader(
-                        title: context.tr('popular_recipes'),
+                        title: categoryName,
                         onSeeAll: _selectedCategoryId != null
                             ? () {
                                 Navigator.of(context).push(
