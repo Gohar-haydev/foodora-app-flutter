@@ -46,24 +46,16 @@ class MainLayoutState extends State<MainLayout> {
   ];
 
   @override
+  @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
-    _forceBranchSelection = widget.forceBranchSelection;
-  }
-
-  void showBranchSelection() {
-    setState(() {
-      _forceBranchSelection = true;
-      _currentIndex = 0;
-    });
-  }
-
-  void showMenu() {
-    setState(() {
-      _forceBranchSelection = false;
-      _currentIndex = 0;
-    });
+    // Force branch selection logic moved to ViewModel
+    if (widget.forceBranchSelection) {
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+         context.read<MenuViewModel>().showBranchSelection();
+       });
+    }
   }
 
   void switchToTab(int index) {
@@ -129,7 +121,7 @@ class MainLayoutState extends State<MainLayout> {
           children: [
             _buildTabNavigator(0, Consumer<MenuViewModel>(
               builder: (context, viewModel, child) {
-                if (!_forceBranchSelection && viewModel.selectedBranchId != null) {
+                if (!viewModel.forceBranchSelection && viewModel.selectedBranchId != null) {
                   return MenuScreen(branchId: viewModel.selectedBranchId!);
                 }
                 return const BranchSelectionScreen();

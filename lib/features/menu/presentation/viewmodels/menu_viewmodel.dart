@@ -81,9 +81,17 @@ class MenuViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   int? get selectedBranchId => _selectedBranchId;
+  bool _forceBranchSelection = false;
+  bool get forceBranchSelection => _forceBranchSelection;
 
   void selectBranch(int branchId) {
     _selectedBranchId = branchId;
+    _forceBranchSelection = false;
+    notifyListeners();
+  }
+
+  void showBranchSelection() {
+    _forceBranchSelection = true;
     notifyListeners();
   }
 

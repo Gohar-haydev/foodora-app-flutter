@@ -203,13 +203,15 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                               // Navigate to home tab which will show menu
                               final mainLayout = MainLayout.of(context);
                               if (mainLayout != null) {
-                                mainLayout.showMenu();
+                                mainLayout.switchToTab(0);
                               } else {
-                                // Fallback just in case
-                                Navigator.of(context).push(
+                                // Fallback just in case, though logically shouldn't happen inside MainLayout
+                                // Ensure we are NOT forcing branch selection anymore since we selected one
+                                Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                    builder: (_) => MenuScreen(branchId: branch.id),
+                                    builder: (_) => const MainLayout(initialIndex: 0),
                                   ),
+                                  (route) => false,
                                 );
                               }
                             },

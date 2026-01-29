@@ -104,10 +104,12 @@ class ProfileMenuScreen extends StatelessWidget {
                         iconBackground: AppColors.successLight,
                         title: context.tr('change_branch'),
                         onTap: () {
-                          // Switch to home tab and force show branch selection
+                          // Switch to home tab and force show branch selection via ViewModel
+                          context.read<MenuViewModel>().showBranchSelection();
+                          
                           final mainLayout = MainLayout.of(context);
                           if (mainLayout != null) {
-                            mainLayout.showBranchSelection();
+                            mainLayout.switchToTab(0);
                           } else {
                             // Fallback - restart app to branch selection state
                             Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
@@ -116,7 +118,6 @@ class ProfileMenuScreen extends StatelessWidget {
                               ),
                               (route) => false,
                             );
-
                           }
                         },
                       ),
