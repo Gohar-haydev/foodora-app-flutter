@@ -155,40 +155,57 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                 ),
               ),
 
-              // Draggable/Scrollable Content
-              Positioned.fill(
-                top: AppDimensions.responsive(context, mobile: 280, tablet: 320, desktop: 360),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  ),
-                  child: Column(
-                    children: [
-                      // Handle Bar & Content
-                      Expanded(
-                        child: SingleChildScrollView(
-                          padding: EdgeInsets.fromLTRB(
-                            AppDimensions.getResponsiveHorizontalPadding(context),
-                            AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32),
-                            AppDimensions.getResponsiveHorizontalPadding(context),
-                            100, // Extra padding for bottom bar
+              // Draggable Bottom Sheet
+              DraggableScrollableSheet(
+                initialChildSize: 0.55,
+                minChildSize: 0.55,
+                maxChildSize: 0.95,
+                snap: true,
+                snapSizes: const [0.55, 0.75, 0.95],
+                builder: (context, scrollController) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          offset: Offset(0, -2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Handle Bar (non-scrolling)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: AppDimensions.responsiveSpacing(context, mobile: 12, tablet: 16),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Handle Bar
-                              Center(
-                                child: Container(
-                                  width: 40,
-                                  height: 4,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300], // Keep mild grey for handle
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
+                          child: Center(
+                            child: Container(
+                              width: 40,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(2),
                               ),
-                              SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
+                            ),
+                          ),
+                        ),
+                        // Scrollable Content
+                        Expanded(
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            padding: EdgeInsets.fromLTRB(
+                              AppDimensions.getResponsiveHorizontalPadding(context),
+                              AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24),
+                              AppDimensions.getResponsiveHorizontalPadding(context),
+                              100, // Extra padding for bottom bar
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
 
                               // Title & Time
                               Row(
@@ -469,13 +486,14 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                         ),
                     ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
   }
 
   Widget _buildCircleAction({
