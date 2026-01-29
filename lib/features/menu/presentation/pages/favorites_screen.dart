@@ -131,9 +131,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.favorite_border,
-                        size: AppDimensions.responsiveIconSize(context, mobile: 80, tablet: 100),
+                      Image.asset(
+                        'assets/images/fav.png',
+                        width: AppDimensions.responsiveIconSize(context, mobile: 80, tablet: 100),
+                        height: AppDimensions.responsiveIconSize(context, mobile: 80, tablet: 100),
                         color: AppColors.grey300,
                       ),
                       SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_colors.dart';
 
 class RecipeCard extends StatelessWidget {
   final String title;
@@ -61,14 +62,15 @@ class RecipeCard extends StatelessWidget {
                     onTap: onFavoriteTap,
                     child: Container(
                       padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        size: 16,
-                        color: isFavorite ? Colors.red : Colors.grey,
+                      child: Image.asset(
+                        'assets/images/fav.png',
+                        width: 16,
+                        height: 16,
+                        color: isFavorite ? AppColors.primaryAccent : Colors.grey,
                       ),
                     ),
                   ),

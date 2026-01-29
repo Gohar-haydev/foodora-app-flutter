@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/features/menu/domain/entities/favorite_item_entity.dart';
 
+import '../../../../core/constants/app_colors.dart';
+
 class FavoriteItemCard extends StatelessWidget {
   final FavoriteItemEntity item;
   final VoidCallback onRemove;
@@ -57,14 +59,15 @@ class FavoriteItemCard extends StatelessWidget {
                     onTap: onRemove,
                     child: Container(
                       padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.favorite,
-                        size: 18,
-                        color: Colors.red,
+                      child: Image.asset(
+                        'assets/images/fav.png',
+                        width: 18,
+                        height: 18,
+                        color: AppColors.primaryAccent,
                       ),
                     ),
                   ),

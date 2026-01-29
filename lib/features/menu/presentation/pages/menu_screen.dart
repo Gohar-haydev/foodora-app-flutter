@@ -148,10 +148,13 @@ class _MenuScreenState extends State<MenuScreen> {
                     color: AppColors.primaryAccent,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.favorite_outline,
-                    color: Colors.white,
-                    size: 22,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/fav.png',
+                      width: 22,
+                      height: 22,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

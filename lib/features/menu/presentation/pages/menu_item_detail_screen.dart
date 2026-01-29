@@ -145,8 +145,8 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                     ),
                     _buildCircleAction(
                       context: context,
-                      icon: viewModel.isFavorite(item.id) ? Icons.favorite : Icons.favorite_border,
-                      iconColor: viewModel.isFavorite(item.id) ? Colors.red : AppColors.primaryText,
+                      imageAsset: 'assets/images/fav.png',
+                      iconColor: viewModel.isFavorite(item.id) ? AppColors.primaryAccent : AppColors.primaryText,
                       onTap: () async {
                          await viewModel.toggleFavorite(item.id);
                       },
@@ -498,24 +498,35 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
   Widget _buildCircleAction({
     required BuildContext context,
-    required IconData icon,
+    IconData? icon,
+    String? imageAsset,
     required VoidCallback onTap,
     Color iconColor = AppColors.primaryText,
+    Color backgroundColor = AppColors.white,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: AppDimensions.responsive(context, mobile: 40, tablet: 48),
         height: AppDimensions.responsive(context, mobile: 40, tablet: 48),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          shape: BoxShape.circle,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(
-          icon,
-          size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
-          color: iconColor,
-        ),
+        child: imageAsset != null
+            ? Center(
+                child: Image.asset(
+                  imageAsset,
+                  width: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                  height: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                  color: iconColor,
+                ),
+              )
+            : Icon(
+                icon,
+                size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                color: iconColor,
+              ),
       ),
     );
   }
