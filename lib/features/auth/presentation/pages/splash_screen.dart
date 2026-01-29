@@ -167,30 +167,20 @@ class _SplashScreenState extends State<SplashScreen> {
                         // The sliding image part
                         Expanded(
                           flex: 6,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(
-                                AppDimensions.responsive(context, mobile: 30, tablet: 40),
-                              ),
-                              bottomRight: Radius.circular(
-                                AppDimensions.responsive(context, mobile: 30, tablet: 40),
-                              ),
-                            ),
-                            child: Image.asset(
-                              pages[index].image,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: AppColors.grey300,
-                                  alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.image,
-                                    size: AppDimensions.responsiveIconSize(context, mobile: 50, tablet: 70),
-                                    color: AppColors.grey,
-                                  ),
-                                );
-                              },
-                            ),
+                          child: Image.asset(
+                            pages[index].image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: AppColors.grey300,
+                                alignment: Alignment.center,
+                                child: Icon(
+                                  Icons.image,
+                                  size: AppDimensions.responsiveIconSize(context, mobile: 50, tablet: 70),
+                                  color: AppColors.grey,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         // Empty space for the text section to allow gestures to pass if needed

@@ -48,6 +48,7 @@ dependencies:
   flutter_paypal_payment: ^1.0.8
   flutter_paypal_native: ^2.1.0
   google_fonts:
+  webview_flutter: ^4.10.0
 
 dev_dependencies:
   flutter_test:

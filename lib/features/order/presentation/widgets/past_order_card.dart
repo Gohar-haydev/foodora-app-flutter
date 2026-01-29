@@ -91,12 +91,12 @@ class PastOrderCard extends StatelessWidget {
               ],
             ),
           ),
-          if (onCancel != null)
-             IconButton(
-              onPressed: onCancel,
-              icon: const Icon(Icons.cancel_outlined, color: AppColors.error),
-              tooltip: 'Cancel Order',
-            ),
+          // if (onCancel != null)
+          //    IconButton(
+          //     onPressed: onCancel,
+          //     icon: const Icon(Icons.cancel_outlined, color: AppColors.error),
+          //     tooltip: 'Cancel Order',
+          //   ),
         ],
       ),
     );
