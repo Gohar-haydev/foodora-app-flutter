@@ -67,10 +67,9 @@ class RecipeCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Image.asset(
-                        'assets/images/fav.png',
+                        isFavorite ? 'assets/images/fav_checked.png' : 'assets/images/fav.png',
                         width: 16,
                         height: 16,
-                        color: isFavorite ? AppColors.primaryAccent : Colors.grey,
                       ),
                     ),
                   ),

@@ -145,8 +145,9 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                     ),
                     _buildCircleAction(
                       context: context,
-                      imageAsset: 'assets/images/fav.png',
-                      iconColor: viewModel.isFavorite(item.id) ? AppColors.primaryAccent : AppColors.primaryText,
+                      imageAsset: viewModel.isFavorite(item.id) 
+                          ? 'assets/images/fav_checked.png' 
+                          : 'assets/images/fav.png',
                       onTap: () async {
                          await viewModel.toggleFavorite(item.id);
                       },
@@ -501,7 +502,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
     IconData? icon,
     String? imageAsset,
     required VoidCallback onTap,
-    Color iconColor = AppColors.primaryText,
+    Color? iconColor,
     Color backgroundColor = AppColors.white,
   }) {
     return GestureDetector(
@@ -519,13 +520,13 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                   imageAsset,
                   width: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
                   height: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
-                  color: iconColor,
+                  color: iconColor, // null means no tinting, use original colors
                 ),
               )
             : Icon(
                 icon,
                 size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
-                color: iconColor,
+                color: iconColor ?? AppColors.primaryText,
               ),
       ),
     );

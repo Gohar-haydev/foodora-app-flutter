@@ -64,10 +64,9 @@ class FavoriteItemCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Image.asset(
-                        'assets/images/fav.png',
+                        'assets/images/fav_checked.png',
                         width: 18,
                         height: 18,
-                        color: AppColors.primaryAccent,
                       ),
                     ),
                   ),
