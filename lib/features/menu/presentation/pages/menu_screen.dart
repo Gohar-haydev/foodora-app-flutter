@@ -10,6 +10,7 @@ import 'package:foodora/features/menu/presentation/widgets/section_header.dart';
 import 'package:foodora/features/menu/presentation/widgets/featured_card.dart';
 import 'package:foodora/features/menu/presentation/widgets/category_chip.dart';
 import 'package:foodora/features/menu/presentation/widgets/recipe_card.dart';
+import 'package:foodora/features/menu/presentation/pages/category_items_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 import 'package:foodora/core/providers/currency_provider.dart';
 
@@ -71,6 +72,9 @@ class _MenuScreenState extends State<MenuScreen> {
     // Watch currency provider to rebuild on change
     final currencyProvider = Provider.of<CurrencyProvider>(context);
     
+    // Get user name from auth
+    final userName = context.watch<AuthViewModel>().userName ?? "Foodie";
+    
     return Scaffold(
       backgroundColor: AppColors.white,
         appBar: AppBar(
@@ -92,7 +96,67 @@ class _MenuScreenState extends State<MenuScreen> {
               }
             },
           ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    _getGreetingIcon(),
+                    size: AppDimensions.responsiveIconSize(context, mobile: 16, tablet: 18),
+                    color: Colors.grey[600],
+                  ),
+                  SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 6, tablet: 8)),
+                  Text(
+                    _getGreeting(),
+                    style: TextStyle(
+                      fontSize: AppDimensions.responsiveFontSize(context, mobile: 12, tablet: 14),
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                userName,
+                style: TextStyle(
+                  fontSize: AppDimensions.getBodySize(context),
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryText,
+                ),
+              ),
+            ],
+          ),
           centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const FavoritesScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryAccent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.favorite_outline,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       body: SafeArea(
         child: Center(
@@ -108,62 +172,62 @@ class _MenuScreenState extends State<MenuScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header / Greeting
-                  Row(
-                    children: [
-                       Icon(
-                        _getGreetingIcon(),
-                        color: AppColors.grey600,
-                        size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
-                      ),
-                      SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
-                      Text(
-                        _getGreeting(),
-                        style: TextStyle(
-                          fontSize: AppDimensions.getBodySize(context),
-                          color: AppColors.grey600,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
-                          style: TextStyle(
-                            fontSize: AppDimensions.getH1Size(context),
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.darkText,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const FavoritesScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(
-                            AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10),
-                          ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.greyLight,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.favorite_border,
-                            color: AppColors.primaryAccent,
-                            size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //      Icon(
+                  //       _getGreetingIcon(),
+                  //       color: AppColors.grey600,
+                  //       size: AppDimensions.responsiveIconSize(context, mobile: 20, tablet: 24),
+                  //     ),
+                  //     SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                  //     Text(
+                  //       _getGreeting(),
+                  //       style: TextStyle(
+                  //         fontSize: AppDimensions.getBodySize(context),
+                  //         color: AppColors.grey600,
+                  //         fontWeight: FontWeight.w500,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10)),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: Text(
+                  //         context.watch<AuthViewModel>().userName ?? 'Alena Sabyan',
+                  //         style: TextStyle(
+                  //           fontSize: AppDimensions.getH1Size(context),
+                  //           fontWeight: FontWeight.bold,
+                  //           color: AppColors.darkText,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.of(context).push(
+                  //           MaterialPageRoute(
+                  //             builder: (_) => const FavoritesScreen(),
+                  //           ),
+                  //         );
+                  //       },
+                  //       child: Container(
+                  //         padding: EdgeInsets.all(
+                  //           AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 10),
+                  //         ),
+                  //         decoration: const BoxDecoration(
+                  //           color: AppColors.greyLight,
+                  //           shape: BoxShape.circle,
+                  //         ),
+                  //         child: Icon(
+                  //           Icons.favorite_border,
+                  //           color: AppColors.primaryAccent,
+                  //           size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
 
                   SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
@@ -285,7 +349,38 @@ class _MenuScreenState extends State<MenuScreen> {
                   SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
 
                   // Popular Recipes Section
-                  SectionHeader(title: context.tr('popular_recipes'), onSeeAll: () {}),
+                  Consumer<MenuViewModel>(
+                    builder: (context, viewModel, _) {
+                      // Get the selected category name
+                      String categoryName = context.tr('popular_recipes');
+                      if (_selectedCategoryId != null && viewModel.categories.isNotEmpty) {
+                        final index = viewModel.categories.indexWhere(
+                          (cat) => cat.id == _selectedCategoryId,
+                        );
+                        if (index != -1) {
+                          categoryName = viewModel.categories[index].name;
+                        } else if (viewModel.categories.isNotEmpty) {
+                          categoryName = viewModel.categories.first.name;
+                        }
+                      }
+                      
+                      return SectionHeader(
+                        title: context.tr('popular_recipes'),
+                        onSeeAll: _selectedCategoryId != null
+                            ? () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => CategoryItemsScreen(
+                                      categoryId: _selectedCategoryId!,
+                                      categoryName: categoryName,
+                                    ),
+                                  ),
+                                );
+                              }
+                            : null,
+                      );
+                    },
+                  ),
                   SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                   
                   Consumer<MenuViewModel>(

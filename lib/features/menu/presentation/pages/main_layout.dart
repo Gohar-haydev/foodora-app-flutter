@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/pages/branch_selection_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/profile_menu_screen.dart';
@@ -78,6 +79,9 @@ class _MainLayoutState extends State<MainLayout> {
           setState(() {
             _currentIndex = 0;
           });
+        } else {
+          // On home tab with nothing to pop, exit the app
+          SystemNavigator.pop();
         }
       },
       child: Scaffold(
@@ -92,35 +96,38 @@ class _MainLayoutState extends State<MainLayout> {
             _buildTabNavigator(4, const ProfileMenuScreen()),
           ],
         ),
-        floatingActionButton: SizedBox(
-          width: 70, // Slightly larger to accommodate text if needed, or standard 56
-          height: 70,
-          child: FloatingActionButton(
-            onPressed: () => _onTabTapped(2),
-            backgroundColor: AppColors.darkText, // Dark green
-            shape: const CircleBorder(),
-            elevation: 4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppColors.white,
-                  size: _currentIndex == 2 ? 26 : 24,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  context.tr('cart'),
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 10,
-                    fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
+        // Hide FAB when keyboard is visible
+        floatingActionButton: MediaQuery.of(context).viewInsets.bottom > 0
+            ? null
+            : SizedBox(
+                width: 70,
+                height: 70,
+                child: FloatingActionButton(
+                  onPressed: () => _onTabTapped(2),
+                  backgroundColor: AppColors.darkText,
+                  shape: const CircleBorder(),
+                  elevation: 4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        color: AppColors.white,
+                        size: _currentIndex == 2 ? 26 : 24,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        context.tr('cart'),
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 10,
+                          fontWeight: _currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
           shape: const CircularNotchedRectangle(),

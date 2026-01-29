@@ -45,6 +45,7 @@ class MenuViewModel extends ChangeNotifier {
   List<BranchEntity> _branches = [];
   bool _isLoading = false;
   String? _error;
+  int? _selectedBranchId;
 
   List<CategoryEntity> _categories = [];
   bool _isCategoriesLoading = false;
@@ -79,6 +80,12 @@ class MenuViewModel extends ChangeNotifier {
   List<BranchEntity> get branches => _branches;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  int? get selectedBranchId => _selectedBranchId;
+
+  void selectBranch(int branchId) {
+    _selectedBranchId = branchId;
+    notifyListeners();
+  }
 
   List<CategoryEntity> get categories => _categories;
   bool get isCategoriesLoading => _isCategoriesLoading;

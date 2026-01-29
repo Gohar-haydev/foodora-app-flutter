@@ -81,6 +81,7 @@ class AppLocalizations {
     // Branch Selection
     'select_branch': 'Select Branch',
     'select_button': 'Select',
+    'selected': 'Selected',
     'change_branch': 'Change Branch',
     
     // Cart
@@ -328,6 +329,7 @@ class AppLocalizations {
     // Branch Selection
     'select_branch': 'Välj filial',
     'select_button': 'Välj',
+    'selected': 'Vald',
     'change_branch': 'Byt filial',
     
     // Cart

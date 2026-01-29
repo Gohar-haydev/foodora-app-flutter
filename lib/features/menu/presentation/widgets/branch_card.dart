@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
+import 'package:foodora/core/constants/app_colors.dart';
 
 class BranchCard extends StatelessWidget {
   final String name;
   final String address;
   final String imageUrl;
   final VoidCallback onSelect;
+  final bool isSelected;
 
   const BranchCard({
     super.key,
@@ -13,6 +15,7 @@ class BranchCard extends StatelessWidget {
     required this.address,
     required this.imageUrl,
     required this.onSelect,
+    this.isSelected = false,
   });
 
   @override
@@ -21,7 +24,10 @@ class BranchCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE6E6E6)), // Add border
+        border: Border.all(
+          color: isSelected ? AppColors.primaryAccent : const Color(0xFFE6E6E6),
+          width: isSelected ? 2 : 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -68,6 +74,25 @@ class BranchCard extends StatelessWidget {
                             );
                           },
                         ),
+                        // Selected checkmark badge
+                        if (isSelected)
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 28,
+                              height: 28,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primaryAccent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -115,20 +140,29 @@ class BranchCard extends StatelessWidget {
                     ElevatedButton(
                       onPressed: onSelect,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4CAF50),
-                        foregroundColor: Colors.white,
+                        backgroundColor: isSelected ? AppColors.grey300 : AppColors.primaryAccent,
+                        foregroundColor: isSelected ? AppColors.primaryText : Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       ),
-                      child: Text(
-                        context.tr('select_button'),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isSelected) ...[
+                            const Icon(Icons.check, size: 16),
+                            const SizedBox(width: 4),
+                          ],
+                          Text(
+                            isSelected ? context.tr('selected') : context.tr('select_button'),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

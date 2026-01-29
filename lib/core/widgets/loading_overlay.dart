@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodora/core/constants/app_colors.dart';
 
 /// A beautiful, reusable loading overlay with a white container and green indicator
 /// Shows a semi-transparent overlay with a centered white card containing a loading spinner
@@ -40,7 +41,7 @@ class LoadingOverlay extends StatelessWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 4,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    indicatorColor ?? const Color(0xFF4CAF50),
+                    indicatorColor ?? AppColors.primaryAccent,
                   ),
                 ),
               ),
@@ -73,9 +74,16 @@ class LoadingOverlay extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.transparent,
-      builder: (context) => LoadingOverlay(
-        message: message,
-        indicatorColor: indicatorColor,
+      useSafeArea: false,
+      builder: (context) => PopScope(
+        canPop: false,
+        child: Material(
+          type: MaterialType.transparency,
+          child: LoadingOverlay(
+            message: message,
+            indicatorColor: indicatorColor,
+          ),
+        ),
       ),
     );
   }

@@ -109,6 +109,7 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
 
         return Scaffold(
           backgroundColor: AppColors.white,
+          resizeToAvoidBottomInset: false,
           body: Stack(
             children: [
               // Background Image (Top)
@@ -374,97 +375,98 @@ class _MenuItemDetailScreenState extends State<MenuItemDetailScreen> {
                         ),
                       ),
                       
-                      // Bottom Bar
-                      Container(
-                        padding: EdgeInsets.all(
-                          AppDimensions.getResponsiveHorizontalPadding(context),
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 20,
-                              offset: const Offset(0, -5),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            // Quantity Counter
-                            Container(
-                              height: AppDimensions.responsive(context, mobile: 50, tablet: 56),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
+                      // Bottom Bar - Hide when keyboard is visible
+                      if (MediaQuery.of(context).viewInsets.bottom == 0)
+                        Container(
+                          padding: EdgeInsets.all(
+                            AppDimensions.getResponsiveHorizontalPadding(context),
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 20,
+                                offset: const Offset(0, -5),
                               ),
-                              child: Row(
-                                children: [
-                                  _buildSmallCounterBtn(context, Icons.remove, _decrementQuantity),
-                                  SizedBox(
-                                    width: AppDimensions.responsive(context, mobile: 40, tablet: 50), 
-                                    child: Center(
-                                      child: Text(
-                                        '$_quantity',
-                                        style: TextStyle(
-                                          fontSize: AppDimensions.getH3Size(context),
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primaryText,
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              // Quantity Counter
+                              Container(
+                                height: AppDimensions.responsive(context, mobile: 50, tablet: 56),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    _buildSmallCounterBtn(context, Icons.remove, _decrementQuantity),
+                                    SizedBox(
+                                      width: AppDimensions.responsive(context, mobile: 40, tablet: 50), 
+                                      child: Center(
+                                        child: Text(
+                                          '$_quantity',
+                                          style: TextStyle(
+                                            fontSize: AppDimensions.getH3Size(context),
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primaryText,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  ),
-                                  _buildSmallCounterBtn(context, Icons.add, _incrementQuantity, isPlus: true),
-                                ],
+                                      )
+                                    ),
+                                    _buildSmallCounterBtn(context, Icons.add, _incrementQuantity, isPlus: true),
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
-                            // Add to Cart Button
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  final List<AddonEntity> selectedAddons = [];
-                                  if (item.addons != null) {
-                                    for (var addon in item.addons!) {
-                                      final count = _addonCounts[addon.id] ?? 0;
-                                      for (int i = 0; i < count; i++) {
-                                         selectedAddons.add(addon); 
+                              SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 20, tablet: 28)),
+                              // Add to Cart Button
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    final List<AddonEntity> selectedAddons = [];
+                                    if (item.addons != null) {
+                                      for (var addon in item.addons!) {
+                                        final count = _addonCounts[addon.id] ?? 0;
+                                        for (int i = 0; i < count; i++) {
+                                           selectedAddons.add(addon); 
+                                        }
                                       }
                                     }
-                                  }
-                                  
-                                  context.read<CartViewModel>().addToCart(item, _quantity, selectedAddons);
-                                  
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('${item.name} ${context.tr('added_to_cart')}'),
-                                      backgroundColor: AppColors.primaryAccent,
-                                      duration: const Duration(seconds: 1),
+                                    
+                                    context.read<CartViewModel>().addToCart(item, _quantity, selectedAddons);
+                                    
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('${item.name} ${context.tr('added_to_cart')}'),
+                                        backgroundColor: AppColors.primaryAccent,
+                                        duration: const Duration(seconds: 1),
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primaryAccent,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
                                     ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primaryAccent,
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    elevation: 0,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  context.tr('add_to_cart'),
-                                  style: TextStyle(
-                                    fontSize: AppDimensions.getBodySize(context),
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.white,
+                                  child: Text(
+                                    context.tr('add_to_cart'),
+                                    style: TextStyle(
+                                      fontSize: AppDimensions.getBodySize(context),
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/features/menu/presentation/pages/menu_screen.dart';
+import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
 import 'package:foodora/features/menu/presentation/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
@@ -191,11 +192,15 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                         ),
                         itemBuilder: (context, index) {
                           final branch = viewModel.branches[index];
+                          final isSelected = viewModel.selectedBranchId == branch.id;
                           return BranchCard(
                             name: branch.name,
                             address: branch.address,
                             imageUrl: 'assets/images/branch_placeholder.jpg',
+                            isSelected: isSelected,
                             onSelect: () {
+                              viewModel.selectBranch(branch.id);
+                              // Navigate to MenuScreen for selected branch
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => MenuScreen(branchId: branch.id),

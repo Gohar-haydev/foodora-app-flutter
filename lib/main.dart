@@ -160,6 +160,13 @@ class FoodieApp extends StatelessWidget {
               textTheme: GoogleFonts.ralewayTextTheme(),
               scaffoldBackgroundColor: AppColors.white,
               useMaterial3: true,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: AppColors.white,
+                foregroundColor: AppColors.primaryText,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                surfaceTintColor: Colors.transparent,
+              ),
               pageTransitionsTheme: const PageTransitionsTheme(
                 builders: {
                   TargetPlatform.android: SharedAxisPageTransitionsBuilder(
