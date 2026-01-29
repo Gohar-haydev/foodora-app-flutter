@@ -200,12 +200,18 @@ class _BranchSelectionScreenState extends State<BranchSelectionScreen> {
                             isSelected: isSelected,
                             onSelect: () {
                               viewModel.selectBranch(branch.id);
-                              // Navigate to MenuScreen for selected branch
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => MenuScreen(branchId: branch.id),
-                                ),
-                              );
+                              // Navigate to home tab which will show menu
+                              final mainLayout = MainLayout.of(context);
+                              if (mainLayout != null) {
+                                mainLayout.showMenu();
+                              } else {
+                                // Fallback just in case
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MenuScreen(branchId: branch.id),
+                                  ),
+                                );
+                              }
                             },
                           );
                         },

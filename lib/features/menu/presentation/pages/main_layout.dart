@@ -7,24 +7,34 @@ import 'package:foodora/features/menu/presentation/pages/search_screen.dart';
 import 'package:foodora/features/menu/presentation/pages/notification_screen.dart';
 
 
+import 'package:provider/provider.dart';
+import 'package:foodora/features/menu/presentation/viewmodels/menu_viewmodel.dart';
+import 'package:foodora/features/menu/presentation/pages/menu_screen.dart';
 import 'package:foodora/features/cart/presentation/pages/cart_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
 
 class MainLayout extends StatefulWidget {
   final int initialIndex;
+  final bool forceBranchSelection;
 
   const MainLayout({
     super.key,
     this.initialIndex = 0,
+    this.forceBranchSelection = false,
   });
 
+  static MainLayoutState? of(BuildContext context) {
+    return context.findAncestorStateOfType<MainLayoutState>();
+  }
+
   @override
-  State<MainLayout> createState() => _MainLayoutState();
+  State<MainLayout> createState() => MainLayoutState();
 }
 
-class _MainLayoutState extends State<MainLayout> {
+class MainLayoutState extends State<MainLayout> {
   late int _currentIndex;
+  late bool _forceBranchSelection;
   
   // Keys for each tab's navigator
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
@@ -39,6 +49,34 @@ class _MainLayoutState extends State<MainLayout> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+    _forceBranchSelection = widget.forceBranchSelection;
+  }
+
+  void showBranchSelection() {
+    setState(() {
+      _forceBranchSelection = true;
+      _currentIndex = 0;
+    });
+  }
+
+  void showMenu() {
+    setState(() {
+      _forceBranchSelection = false;
+      _currentIndex = 0;
+    });
+  }
+
+  void switchToTab(int index) {
+    if (index >= 0 && index < _navigatorKeys.length) {
+      if (_currentIndex == index) {
+        // If switching to the same tab, pop to root
+        _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
+      } else {
+        setState(() {
+          _currentIndex = index;
+        });
+      }
+    }
   }
 
   void _onTabTapped(int index) {
@@ -89,7 +127,14 @@ class _MainLayoutState extends State<MainLayout> {
         body: IndexedStack(
           index: _currentIndex,
           children: [
-            _buildTabNavigator(0, const BranchSelectionScreen()),
+            _buildTabNavigator(0, Consumer<MenuViewModel>(
+              builder: (context, viewModel, child) {
+                if (!_forceBranchSelection && viewModel.selectedBranchId != null) {
+                  return MenuScreen(branchId: viewModel.selectedBranchId!);
+                }
+                return const BranchSelectionScreen();
+              },
+            )),
             _buildTabNavigator(1, const SearchScreen()),
             _buildTabNavigator(2, const CartScreen()),
             _buildTabNavigator(3, const NotificationScreen()),

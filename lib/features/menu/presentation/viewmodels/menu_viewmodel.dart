@@ -87,6 +87,8 @@ class MenuViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   List<CategoryEntity> get categories => _categories;
   bool get isCategoriesLoading => _isCategoriesLoading;
   String? get categoriesError => _categoriesError;

@@ -13,6 +13,9 @@ import 'package:foodora/features/menu/presentation/pages/language_selection_scre
 import 'package:foodora/features/menu/presentation/pages/currency_selection_screen.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
 
+import '../viewmodels/menu_viewmodel.dart';
+import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
+
 class ProfileMenuScreen extends StatelessWidget {
   const ProfileMenuScreen({super.key});
 
@@ -101,11 +104,20 @@ class ProfileMenuScreen extends StatelessWidget {
                         iconBackground: AppColors.successLight,
                         title: context.tr('change_branch'),
                         onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const BranchSelectionScreen(),
-                            ),
-                          );
+                          // Switch to home tab and force show branch selection
+                          final mainLayout = MainLayout.of(context);
+                          if (mainLayout != null) {
+                            mainLayout.showBranchSelection();
+                          } else {
+                            // Fallback - restart app to branch selection state
+                            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => const MainLayout(initialIndex: 0, forceBranchSelection: true),
+                              ),
+                              (route) => false,
+                            );
+
+                          }
                         },
                       ),
 
