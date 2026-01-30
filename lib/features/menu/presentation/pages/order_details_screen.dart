@@ -141,26 +141,45 @@ class OrderDetailsScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        width: AppDimensions.responsive(context, mobile: 50, tablet: 60),
-                        height: AppDimensions.responsive(context, mobile: 50, tablet: 60),
-                        decoration: BoxDecoration(
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          width: AppDimensions.responsive(context, mobile: 50, tablet: 60),
+                          height: AppDimensions.responsive(context, mobile: 50, tablet: 60),
                           color: const Color(0xFFE8F5E9),
-                          borderRadius: BorderRadius.circular(12),
-                          image: order.branchImageUrl != null && order.branchImageUrl!.isNotEmpty
-                              ? DecorationImage(
-                                  image: NetworkImage(order.branchImageUrl!),
+                          child: order.branchImageUrl != null && order.branchImageUrl!.isNotEmpty
+                              ? Image.network(
+                                  order.branchImageUrl!,
                                   fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: const Color(0xFF4CAF50),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(
+                                      Icons.restaurant,
+                                      color: const Color(0xFF4CAF50),
+                                      size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                                    );
+                                  },
                                 )
-                              : null,
+                              : Icon(
+                                  Icons.restaurant,
+                                  color: const Color(0xFF4CAF50),
+                                  size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
+                                ),
                         ),
-                        child: order.branchImageUrl != null && order.branchImageUrl!.isNotEmpty
-                            ? null
-                            : Icon(
-                                Icons.restaurant,
-                                color: const Color(0xFF4CAF50),
-                                size: AppDimensions.responsiveIconSize(context, mobile: 24, tablet: 28),
-                              ),
                       ),
                       SizedBox(width: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
                       Expanded(
