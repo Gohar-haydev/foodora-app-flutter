@@ -39,6 +39,7 @@ class ProfileMenuItem extends StatelessWidget {
                         imagePath!,
                         width: 24,
                         height: 24,
+                        fit: BoxFit.contain,
                         color: iconColor,
                       )
                     : Icon(

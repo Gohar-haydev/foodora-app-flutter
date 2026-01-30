@@ -99,7 +99,7 @@ class ProfileMenuScreen extends StatelessWidget {
                       ),
                       // Change Branch Menu Item
                       ProfileMenuItem(
-                        icon: Icons.store_outlined,
+                        imagePath: 'assets/images/change_branch.png',
                         iconColor: AppColors.primaryAccent,
                         iconBackground: AppColors.successLight,
                         title: context.tr('change_branch'),
