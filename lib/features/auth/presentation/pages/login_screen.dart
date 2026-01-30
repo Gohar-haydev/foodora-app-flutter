@@ -68,93 +68,96 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child:         ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: AppDimensions.getMaxContentWidth(context),
-          ),
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+    return PopScope(
+      canPop: false, // Prevent back button from navigating to splash screen
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: AppDimensions.getMaxContentWidth(context),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
-                // Header with back button and title
-                AuthHeader(
-                  title: context.tr('sign_in'),
-                  showBackButton: false,
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
-                // Welcome back heading
-                Center(
-                  child: Text(
-                    context.tr('welcome_back'),
-                    style: TextStyle(
-                      fontSize: AppDimensions.getH1Size(context),
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryText,
-                    ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.getResponsiveHorizontalPadding(context),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 24)),
+                  // Header with back button and title
+                  AuthHeader(
+                    title: context.tr('sign_in'),
+                    showBackButton: false,
                   ),
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
-                // Email input field
-                AuthTextField(
-                  controller: _emailController,
-                  hintText: context.tr('email_address'),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-                // Password input field with visibility toggle
-                PasswordTextField(
-                  controller: _passwordController,
-                  hintText: context.tr('password_placeholder'),
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 12)),
-                // Forget Password link
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const ForgotPasswordScreen()),
-                      );
-                    },
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                  // Welcome back heading
+                  Center(
                     child: Text(
-                      context.tr('forgot_password'),
+                      context.tr('welcome_back'),
                       style: TextStyle(
-                        fontSize: AppDimensions.getBodySize(context),
+                        fontSize: AppDimensions.getH1Size(context),
+                        fontWeight: FontWeight.bold,
                         color: AppColors.primaryText,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
-                // Sign In button
-                AuthButton(
-                  text: context.tr('sign_in'),
-                  onPressed: _onLoginPressed,
-                ),
-                SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
-                // Bottom text links
-                AuthBottomLink(
-                  prefixText: context.tr('dont_have_account'),
-                  linkText: context.tr('create_account'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SignupScreen()),
-                    );
-                  },
-                ),
-              ],
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 40, tablet: 56)),
+                  // Email input field
+                  AuthTextField(
+                    controller: _emailController,
+                    hintText: context.tr('email_address'),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  // Password input field with visibility toggle
+                  PasswordTextField(
+                    controller: _passwordController,
+                    hintText: context.tr('password_placeholder'),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 8, tablet: 12)),
+                  // Forget Password link
+                  Align(
+                    alignment: Alignment.center,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const ForgotPasswordScreen()),
+                        );
+                      },
+                      child: Text(
+                        context.tr('forgot_password'),
+                        style: TextStyle(
+                          fontSize: AppDimensions.getBodySize(context),
+                          color: AppColors.primaryText,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 24, tablet: 32)),
+                  // Sign In button
+                  AuthButton(
+                    text: context.tr('sign_in'),
+                    onPressed: _onLoginPressed,
+                  ),
+                  SizedBox(height: AppDimensions.responsiveSpacing(context, mobile: 16, tablet: 20)),
+                  // Bottom text links
+                  AuthBottomLink(
+                    prefixText: context.tr('dont_have_account'),
+                    linkText: context.tr('create_account'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        )
         ),
+      ),
     );
   }
 }
