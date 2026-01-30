@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:foodora/core/utils/result.dart';
 
 import '../entities/user_entity.dart';
@@ -14,7 +15,7 @@ abstract class AuthRepository {
   });
   Future<Result<UserEntity>> refreshToken();
   Future<Result<UserEntity>> getUser();
-  Future<Result<UserEntity>> updateProfile({required String name, required String phone});
+  Future<Result<UserEntity>> updateProfile({required String name, required String phone, File? image});
   Future<Result<void>> updatePassword({
     required String currentPassword,
     required String newPassword,

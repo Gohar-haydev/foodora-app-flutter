@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:foodora/core/utils/token_storage.dart';
 import '../../domain/entities/user_entity.dart';
@@ -196,12 +197,12 @@ class AuthViewModel extends ChangeNotifier {
     return false;
   }
 
-  Future<bool> updateProfile({required String name, required String phone}) async {
+  Future<bool> updateProfile({required String name, required String phone, File? image}) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await updateProfileUseCase(name: name, phone: phone);
+    final result = await updateProfileUseCase(name: name, phone: phone, image: image);
 
     _isLoading = false;
 

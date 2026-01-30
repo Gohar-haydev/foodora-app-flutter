@@ -13,6 +13,7 @@ class UserModel extends UserEntity {
     required super.token,
     required super.tokenType,
     required super.expiresIn,
+    super.image,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +33,7 @@ class UserModel extends UserEntity {
       token: data['token'] as String,
       tokenType: data['token_type'] as String,
       expiresIn: data['expires_in'] as int,
+      image: user['image_url'] as String?,
     );
 
   }
@@ -52,6 +54,7 @@ class UserModel extends UserEntity {
       token: '', 
       tokenType: '',
       expiresIn: 0,
+      image: json['image_url'] as String?,
     );
   }
 

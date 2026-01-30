@@ -35,26 +35,44 @@ class PastOrderCard extends StatelessWidget {
       child: Row(
         children: [
           // Order Image
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
+          ClipOval(
+            child: Container(
+              width: 60,
+              height: 60,
               color: AppColors.grey200,
-              image: imageUrl.isNotEmpty
-                  ? DecorationImage(
-                      image: NetworkImage(imageUrl),
+              child: imageUrl.isNotEmpty
+                  ? Image.network(
+                      imageUrl,
                       fit: BoxFit.cover,
+                      width: 60,
+                      height: 60,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.primaryAccent,
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.restaurant,
+                          color: AppColors.grey,
+                          size: 30,
+                        );
+                      },
                     )
-                  : null,
+                  : const Icon(
+                      Icons.restaurant,
+                      color: AppColors.grey,
+                      size: 30,
+                    ),
             ),
-            child: imageUrl.isEmpty
-                ? const Icon(
-                    Icons.restaurant,
-                    color: AppColors.grey,
-                    size: 30,
-                  )
-                : null,
           ),
           const SizedBox(width: AppDimensions.spacing16),
           // Order Details

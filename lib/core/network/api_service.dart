@@ -114,6 +114,55 @@ class ApiService {
     }
   }
 
+  /// PUT request with multipart/form-data for file uploads
+  Future<Result<T>> putMultipart<T>({
+    required String endpoint,
+    required Map<String, String> fields,
+    required T Function(Map<String, dynamic>) fromJson,
+    File? file,
+    String fileFieldName = 'image',
+    bool requireAuth = false,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return Result.failure(const NetworkFailure('No Internet Connection'));
+    }
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}$endpoint');
+      final request = http.MultipartRequest('PUT', uri);
+      
+      // Add auth header if required
+      if (requireAuth) {
+        final authHeader = await TokenStorage.getAuthorizationHeader();
+        if (authHeader != null) {
+          request.headers['Authorization'] = authHeader;
+        }
+      }
+      request.headers['Accept'] = 'application/json';
+      
+      // Add text fields
+      request.fields.addAll(fields);
+      
+      // Add file if provided
+      if (file != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          fileFieldName,
+          file.path,
+        ));
+      }
+      
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      
+      return _handleResponse(response, fromJson);
+    } on SocketException catch (e) {
+      debugPrint('ApiService SocketException [PUT MULTIPART $endpoint]: ${e.message}');
+      return Result.failure(NetworkFailure('Network Error: ${e.message}'));
+    } catch (e) {
+      debugPrint('ApiService Exception [PUT MULTIPART $endpoint]: $e');
+      return Result.failure(ServerFailure(e.toString()));
+    }
+  }
+
   Future<Result<T>> delete<T>({
     required String endpoint,
     required T Function(Map<String, dynamic>) fromJson,

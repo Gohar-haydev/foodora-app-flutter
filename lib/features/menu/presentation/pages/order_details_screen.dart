@@ -229,7 +229,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           name: item.itemName,
                           code: '${context.tr('qty')}: ${item.quantity}',
                           price: item.totalPrice,
-                          imageUrl: item.branchImageUrl ?? '',
+                          imageUrl: item.menuItemImageUrl ?? item.branchImageUrl ?? '',
                         ),
                       );
                     }).toList(),

@@ -10,6 +10,7 @@ class UserEntity {
   final String token;
   final String tokenType;
   final int expiresIn;
+  final String? image;
 
   const UserEntity({
     required this.id,
@@ -23,5 +24,6 @@ class UserEntity {
     required this.token,
     required this.tokenType,
     required this.expiresIn,
+    this.image,
   });
 }

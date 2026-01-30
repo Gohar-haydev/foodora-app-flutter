@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:foodora/core/utils/result.dart';
 
 import '../../domain/entities/user_entity.dart';
@@ -65,8 +66,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Result<UserEntity>> updateProfile({required String name, required String phone}) async {
-    final result = await remoteDataSource.updateProfile(name: name, phone: phone);
+  Future<Result<UserEntity>> updateProfile({required String name, required String phone, File? image}) async {
+    final result = await remoteDataSource.updateProfile(name: name, phone: phone, image: image);
     
     return result.fold(
       (error) => Result.failure(error),

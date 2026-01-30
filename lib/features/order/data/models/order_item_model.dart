@@ -17,6 +17,7 @@ class OrderItemModel extends Equatable {
   final String createdAt;
   final String updatedAt;
   final BranchInfoModel? branch;
+  final String? menuItemImageUrl;
   final List<OrderAddonModel> addons;
 
   const OrderItemModel({
@@ -33,6 +34,7 @@ class OrderItemModel extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.branch,
+    this.menuItemImageUrl,
     required this.addons,
   });
 
@@ -53,6 +55,7 @@ class OrderItemModel extends Equatable {
       branch: json['branch'] != null 
           ? BranchInfoModel.fromJson(json['branch'] as Map<String, dynamic>)
           : null,
+      menuItemImageUrl: (json['menu_item'] as Map<String, dynamic>?)?['image_url']?.toString(),
       addons: (json['addons'] as List<dynamic>)
           .map((addon) => OrderAddonModel.fromJson(addon as Map<String, dynamic>))
           .toList(),
@@ -75,6 +78,7 @@ class OrderItemModel extends Equatable {
       updatedAt: DateTime.parse(updatedAt),
       branchName: branch?.name ?? '',
       branchImageUrl: branch?.imageUrl,
+      menuItemImageUrl: menuItemImageUrl,
       addons: addons.map((addon) => addon.toEntity()).toList(),
     );
   }
@@ -94,6 +98,7 @@ class OrderItemModel extends Equatable {
         createdAt,
         updatedAt,
         branch,
+        menuItemImageUrl,
         addons,
       ];
 }

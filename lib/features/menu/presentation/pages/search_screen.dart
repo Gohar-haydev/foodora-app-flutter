@@ -16,32 +16,40 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   int? _selectedCategoryId;
+  MenuViewModel? _viewModel;
 
   @override
   void initState() {
     super.initState();
-    // Fetch categories on init
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<MenuViewModel>().fetchCategories(3); // Assuming branch ID 3
-    });
-    
     // Add search listener with debouncing
     _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Cache the ViewModel reference for safe access in dispose
+    _viewModel = context.read<MenuViewModel>();
+    
+    // Fetch categories on first dependency change
+    if (_viewModel != null) {
+      _viewModel!.fetchCategories(3); // Assuming branch ID 3
+    }
   }
 
   void _onSearchChanged() {
     final query = _searchController.text;
     if (query.length > 2) {
-      context.read<MenuViewModel>().searchMenuItems(query);
+      _viewModel?.searchMenuItems(query);
     } else if (query.isEmpty) {
-      context.read<MenuViewModel>().clearSearch();
+      _viewModel?.clearSearch();
     }
   }
 
   @override
   void dispose() {
-    // Clear search results when leaving the screen
-    context.read<MenuViewModel>().clearSearch();
+    // Clear search results when leaving the screen using cached reference
+    _viewModel?.clearSearch();
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();

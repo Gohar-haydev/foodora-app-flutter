@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:foodora/core/network/api_service.dart';
 import 'package:foodora/core/utils/result.dart';
 
@@ -15,7 +16,7 @@ abstract class AuthRemoteDataSource {
   });
   Future<Result<UserModel>> refreshToken();
   Future<Result<UserModel>> getUser();
-  Future<Result<UserModel>> updateProfile({required String name, required String phone});
+  Future<Result<UserModel>> updateProfile({required String name, required String phone, File? image});
   Future<Result<void>> updatePassword({
     required String currentPassword,
     required String newPassword,
@@ -106,13 +107,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<Result<UserModel>> updateProfile({required String name, required String phone}) async {
-    return await apiService.put<UserModel>(
+  Future<Result<UserModel>> updateProfile({required String name, required String phone, File? image}) async {
+    return await apiService.putMultipart<UserModel>(
       endpoint: '/auth/profile',
-      body: {
+      fields: {
         'name': name,
         'phone': phone,
       },
+      file: image,
+      fileFieldName: 'image',
       requireAuth: true,
       fromJson: (json) {
          // Similar to getUser, user data is wrapped in 'data'

@@ -16,6 +16,7 @@ class OrderItemEntity extends Equatable {
   final DateTime updatedAt;
   final String branchName;
   final String? branchImageUrl;
+  final String? menuItemImageUrl;
   final List<OrderAddonEntity> addons;
 
   const OrderItemEntity({
@@ -33,6 +34,7 @@ class OrderItemEntity extends Equatable {
     required this.updatedAt,
     required this.branchName,
     this.branchImageUrl,
+    this.menuItemImageUrl,
     required this.addons,
   });
 
@@ -54,6 +56,7 @@ class OrderItemEntity extends Equatable {
         updatedAt,
         branchName,
         branchImageUrl,
+        menuItemImageUrl,
         addons,
       ];
 }

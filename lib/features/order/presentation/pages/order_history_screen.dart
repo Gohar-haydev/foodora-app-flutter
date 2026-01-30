@@ -178,7 +178,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                                 return PastOrderCard(
                                   title: title,
                                   price: currencyProvider.formatPrice(order.totalAmount),
-                                  imageUrl: firstItem.branchImageUrl ?? '',
+                                  imageUrl: firstItem.menuItemImageUrl ?? firstItem.branchImageUrl ?? '',
                                   onCancel: (order.status.trim().toLowerCase() == 'pending')
                                       ? () => _showCancelDialog(context, viewModel, order.id)
                                       : null,

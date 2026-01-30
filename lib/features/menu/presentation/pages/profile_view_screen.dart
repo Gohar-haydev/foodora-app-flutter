@@ -1,11 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:foodora/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/auth/presentation/widgets/widgets.dart';
 import 'package:foodora/core/extensions/context_extensions.dart';
-
 
 class ProfileViewScreen extends StatefulWidget {
   const ProfileViewScreen({super.key});
@@ -23,6 +24,24 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  
+  // Image picker
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      maxHeight: 800,
+      imageQuality: 85,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -108,34 +127,69 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                         children: [
                           Stack(
                             children: [
-                              Container(
-                                width: AppDimensions.responsive(context, mobile: 100, tablet: 120),
-                                height: AppDimensions.responsive(context, mobile: 100, tablet: 120),
-                                decoration: BoxDecoration(
+                              ClipOval(
+                                child: Container(
+                                  width: AppDimensions.responsive(context, mobile: 100, tablet: 120),
+                                  height: AppDimensions.responsive(context, mobile: 100, tablet: 120),
                                   color: Colors.grey[300],
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.person,
-                                  size: AppDimensions.responsiveIconSize(context, mobile: 60, tablet: 72),
-                                  color: Colors.grey,
+                                  child: _selectedImage != null
+                                      ? Image.file(
+                                          _selectedImage!,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        )
+                                      : (viewModel.user?.image != null && viewModel.user!.image!.isNotEmpty)
+                                          ? Image.network(
+                                              viewModel.user!.image!,
+                                              fit: BoxFit.cover,
+                                              width: double.infinity,
+                                              height: double.infinity,
+                                              loadingBuilder: (context, child, loadingProgress) {
+                                                if (loadingProgress == null) return child;
+                                                return Center(
+                                                  child: CircularProgressIndicator(
+                                                    value: loadingProgress.expectedTotalBytes != null
+                                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                                        : null,
+                                                    strokeWidth: 2,
+                                                    color: const Color(0xFF4CAF50),
+                                                  ),
+                                                );
+                                              },
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Icon(
+                                                  Icons.person,
+                                                  size: AppDimensions.responsiveIconSize(context, mobile: 60, tablet: 72),
+                                                  color: Colors.grey,
+                                                );
+                                              },
+                                            )
+                                          : Icon(
+                                              Icons.person,
+                                              size: AppDimensions.responsiveIconSize(context, mobile: 60, tablet: 72),
+                                              color: Colors.grey,
+                                            ),
                                 ),
                               ),
                               Positioned(
                                 right: 0,
                                 bottom: 0,
-                                child: Container(
-                                  padding: EdgeInsets.all(
-                                    AppDimensions.responsiveSpacing(context, mobile: 4, tablet: 6),
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFF4CAF50), // Green color
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                    size: AppDimensions.responsiveIconSize(context, mobile: 16, tablet: 20),
+                                child: GestureDetector(
+                                  onTap: _pickImage,
+                                  child: Container(
+                                    padding: EdgeInsets.all(
+                                      AppDimensions.responsiveSpacing(context, mobile: 4, tablet: 6),
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF4CAF50), // Green color
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: AppDimensions.responsiveIconSize(context, mobile: 16, tablet: 20),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -224,10 +278,11 @@ class _ProfileViewScreenState extends State<ProfileViewScreen> {
                         bool profileSuccess = true;
                         bool passwordSuccess = true;
 
-                        // 1. Update Profile if needed
-                        if (name.isNotEmpty && phone.isNotEmpty) {
+                        // 1. Update Profile if any field has changed
+                        final hasProfileChanges = name.isNotEmpty || phone.isNotEmpty || _selectedImage != null;
+                        if (hasProfileChanges) {
                           profileSuccess = await viewModel.updateProfile(
-                              name: name, phone: phone);
+                              name: name, phone: phone, image: _selectedImage);
                         }
 
                         // 2. Update Password if fields are filled
