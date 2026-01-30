@@ -80,6 +80,12 @@ class _MenuScreenState extends State<MenuScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.white,
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              context.read<MenuViewModel>().showBranchSelection();
+            },
+          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
