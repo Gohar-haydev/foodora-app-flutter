@@ -5,6 +5,13 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "com.example.foodora"
     compileSdk = 36
@@ -33,6 +40,15 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     packagingOptions {
         jniLibs {
             useLegacyPackaging = false
@@ -45,7 +61,8 @@ android {
             shrinkResources false
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+
             ndk {
                 debugSymbolLevel 'FULL'
             }
