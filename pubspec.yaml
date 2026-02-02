@@ -50,6 +50,7 @@ dependencies:
   google_fonts:
   webview_flutter: ^4.10.0
   image_picker:
+  image_cropper: ^8.0.2
 
 dev_dependencies:
   flutter_test:
