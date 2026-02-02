@@ -45,6 +45,9 @@ class MainLayoutState extends State<MainLayout> {
     GlobalKey<NavigatorState>(),
   ];
 
+  // Key to access SearchScreen state
+  final GlobalKey<SearchScreenState> _searchScreenKey = GlobalKey<SearchScreenState>();
+
   @override
   @override
   void initState() {
@@ -58,12 +61,21 @@ class MainLayoutState extends State<MainLayout> {
     }
   }
 
+  void _clearSearchState() {
+    // Clear search state using the GlobalKey
+    _searchScreenKey.currentState?.clearSearchState();
+  }
+
   void switchToTab(int index) {
     if (index >= 0 && index < _navigatorKeys.length) {
       if (_currentIndex == index) {
         // If switching to the same tab, pop to root
         _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
       } else {
+        // Clear search state when leaving the search tab (index 1)
+        if (_currentIndex == 1) {
+          _clearSearchState();
+        }
         setState(() {
           _currentIndex = index;
         });
@@ -76,6 +88,10 @@ class MainLayoutState extends State<MainLayout> {
       // If tapping the same tab, pop to root of that tab
       _navigatorKeys[index].currentState?.popUntil((route) => route.isFirst);
     } else {
+      // Clear search state when leaving the search tab (index 1)
+      if (_currentIndex == 1) {
+        _clearSearchState();
+      }
       setState(() {
         _currentIndex = index;
       });
@@ -106,6 +122,10 @@ class MainLayoutState extends State<MainLayout> {
           currentNavigator.pop();
         } else if (_currentIndex != 0) {
           // If not in home tab and can't pop anymore, switch to home tab
+          // Also clear search state if leaving search tab
+          if (_currentIndex == 1) {
+            _clearSearchState();
+          }
           setState(() {
             _currentIndex = 0;
           });
@@ -127,7 +147,7 @@ class MainLayoutState extends State<MainLayout> {
                 return const BranchSelectionScreen();
               },
             )),
-            _buildTabNavigator(1, const SearchScreen()),
+            _buildTabNavigator(1, SearchScreen(key: _searchScreenKey)),
             _buildTabNavigator(2, const CartScreen()),
             _buildTabNavigator(3, const NotificationScreen()),
             _buildTabNavigator(4, const ProfileMenuScreen()),

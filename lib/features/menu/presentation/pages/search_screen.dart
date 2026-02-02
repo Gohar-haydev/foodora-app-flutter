@@ -10,13 +10,23 @@ class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchScreen> createState() => SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   int? _selectedCategoryId;
   MenuViewModel? _viewModel;
+  bool _isInitialized = false;
+
+  /// Public method to clear search state - called by MainLayout when switching tabs
+  void clearSearchState() {
+    _viewModel?.clearSearch();
+    _searchController.clear();
+    setState(() {
+      _selectedCategoryId = null;
+    });
+  }
 
   @override
   void initState() {
@@ -31,9 +41,19 @@ class _SearchScreenState extends State<SearchScreen> {
     // Cache the ViewModel reference for safe access in dispose
     _viewModel = context.read<MenuViewModel>();
     
-    // Fetch categories on first dependency change
-    if (_viewModel != null) {
-      _viewModel!.fetchCategories(3); // Assuming branch ID 3
+    // Clear previous search state and fetch categories on first dependency change
+    // Use addPostFrameCallback to defer until after build phase completes
+    if (_viewModel != null && !_isInitialized) {
+      _isInitialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Clear any existing search state
+          _viewModel!.clearSearch();
+          _searchController.clear();
+          _selectedCategoryId = null;
+          _viewModel!.fetchCategories(3); // Assuming branch ID 3
+        }
+      });
     }
   }
 
