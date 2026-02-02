@@ -210,10 +210,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               "description": "Foodora Order",
               "item_list": {
                 "items": cartViewModel.cartItems.map((item) {
+                  // Calculate effective unit price (Base + Addons)
+                  double basePrice = double.tryParse(item.menuItem.price) ?? 0.0;
+                  double addonsPrice = item.selectedAddons.fold(0.0, (sum, addon) {
+                    return sum + (double.tryParse(addon.price.toString()) ?? 0.0);
+                  });
+                  double unitPrice = basePrice + addonsPrice;
+
                   return {
                     "name": item.menuItem.name,
                     "quantity": item.quantity,
-                    "price": (double.tryParse(item.menuItem.price) ?? 0.0).toStringAsFixed(2),
+                    "price": unitPrice.toStringAsFixed(2),
                     "currency": "USD"
                   };
                 }).toList(),
