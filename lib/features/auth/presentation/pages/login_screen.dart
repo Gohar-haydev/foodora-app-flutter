@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodora/core/constants/app_constants.dart';
 import 'package:foodora/core/widgets/widgets.dart';
 import 'package:foodora/features/menu/presentation/pages/main_layout.dart';
@@ -70,6 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false, // Prevent back button from navigating to splash screen
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // Close the app when back button is pressed
+          SystemNavigator.pop();
+        }
+      },
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: SafeArea(
